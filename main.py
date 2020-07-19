@@ -8,12 +8,15 @@ Objectives:
 	- open pcap files and parse data according to the 5 tuple
 """
 
-from scapy.all import sniff
+from utils.parse_args import _parse_args
 from datetime import datetime
+from src.net_sniff import NetSniff
 import sys
 
 def main():
-	pass
+	args = _parse_args()
+	capture = NetSniff(interf="eth0")
+	capture.capture()
 
 if __name__ == "__main__":
     try:
