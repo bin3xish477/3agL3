@@ -43,7 +43,8 @@ class NetSniff:
 	    	f" {pkt[0].src}" \
 	    	f" {pkt[0].dst}" \
 	    	f" %s{str(pkt[1].payload.name).upper()}%s" \
-	    	f" {pkt[1].src} %s\u2192%s {pkt[1].dst}" % (fg(150), attr(0), fg(9), attr(0))
+	    	f" {pkt[1].src}:{pkt[2].sport} %s\u2192%s {pkt[1].dst}:{pkt[2].dport}" \
+	    	% (fg(150), attr(0), fg(9), attr(0))
 	    )
 	def capture(self):
 		""" Begin capturing live packets with scapy.all.sniff """

@@ -15,7 +15,7 @@ import sys
 
 def main():
 	args = _parse_args()
-	capture = NetSniff(interf="eth0")
+	capture = NetSniff(args.interf)
 	capture.capture()
 
 if __name__ == "__main__":
