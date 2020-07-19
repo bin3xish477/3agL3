@@ -1,5 +1,5 @@
-# Pysniff
-Sniffing network traffic with Python for real-time analysis or network traffic aggregation.
+# 3agL3
+Sniffing network traffic with Python for real-time or PCAP analysis.
 
 ## > Requirements
 ```
