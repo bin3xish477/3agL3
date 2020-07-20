@@ -1,5 +1,5 @@
 """
-Live network traffic capturing using scapy.all.sniff
+Real-time network traffic capturing using scapy.all.sniff
 """
 
 from datetime import datetime
@@ -7,14 +7,16 @@ from colored import fg, attr
 from scapy.all import sniff
 
 class NetSniff:
-	def __init__(self, interf="eth0", apply_filter=None, count=0, print_msg=None):
+	def __init__(self, interf="eth0", apply_filter=None, count=0):
+		"""
+		Args:
+			interf (str): the infertace to capture packets on.
+			apply_filter (str): apply tcpdump filter to live capture.
+			count (int): number of packets to capture, 0=infinite.
+		"""
 		self._interf = interf
 		self._apply_filter = apply_filter
 		self._count = count
-		if print_msg == None:
-			self._print_msg = self.prn
-		else:
-			self._print_msg = print_msg
 
 	@property
 	def interf(self):
@@ -27,10 +29,6 @@ class NetSniff:
 	@property
 	def count(self):
 		return self._count
-
-	@property
-	def print_msg(self):
-		return self._print_msg
 	
 	def prn(self, pkt):
 	    """ The print message for every captured packet
@@ -50,5 +48,5 @@ class NetSniff:
 		""" Begin capturing live packets with scapy.all.sniff """
 		sniff(
 			iface=self.interf, filter=self.apply_filter,
-			count=self.count, prn=self.print_msg
+			count=self.count, prn=self.prn
 		)
