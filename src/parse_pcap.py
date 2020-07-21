@@ -6,18 +6,28 @@ class PCAPParser():
         """
         """
         pass
-
-    def filter_UDP(self):
+    
+    def filter_ip(self):
         """
         """
         pass
 
-    def filter_TCP(self):
+    def filter_port(self):
         """
         """
         pass
 
-    def filter_ICMP(self):
+    def filter_udp(self):
+        """
+        """
+        pass
+
+    def filter_tcp(self):
+        """
+        """
+        pass
+
+    def filter_icmp(self):
         """
         """
         pass
