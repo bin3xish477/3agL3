@@ -17,13 +17,28 @@ def main():
 	args = _parse_args()
 
 	args = {
+		"live": args.live_mode,
 		"interf": args.interf,
 		"filter": args.filter,
 		"count": args.count,
+		"read": args.read_mode,
+		"rfile": args.rfile,
+		"write": args.write_mode,
+		"wfile": args.wfile
 	}
-	
-	capture = NetSniff(args["interf"], args["filter"], args["count"])
-	capture.capture()
 
+	if args["live"]:
+		capture = NetSniff(args["interf"], args["filter"], args["count"])
+		capture.capture()
+
+	elif args["read"]:
+		pass
+
+	elif args["write"]:
+		pass
+
+	else:
+		print("[ERROR] Must provide a mode of operation: -live, -read, or -write")
+	
 if __name__ == "__main__":
 	main()
