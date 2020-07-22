@@ -7,7 +7,7 @@ from colored import fg, attr
 from scapy.all import sniff
 
 class NetSniff:
-	def __init__(self, interf="eth0", apply_filter=None, count=0):
+	def __init__(self, interf, apply_filter, count):
 		"""
 		Args:
 			interf (str): the infertace to capture packets on.
@@ -20,33 +20,49 @@ class NetSniff:
 
 	@property
 	def interf(self):
+		""" Returns the specified interface """
 		return self._interf
 
 	@property
 	def apply_filter(self):
+		""" Filter (tcpdump) to apply to capture """
 		return self._apply_filter
 	
 	@property
 	def count(self):
+		""" Returns the number of packets to capture """
 		return self._count
 	
-	def prn(self, pkt):
-	    """ The print message for every captured packet
+	def echo(self, pkt):
+		""" The print message for every captured packet
+		Args:
+		pkt (scapy.layers.l2.Ether): a scapy captured packet.
+		"""
+		try: 
+			date = str(datetime.now())
+			src_mac = str(pkt[0].src).replace(":", ".")
+			dst_mac = str(pkt[0].dst).replace(":", ".")
+			return (
+				f"[%s{date[11:13]}%s:%s{date[14:16]}%s:%s{date[17:]}%s]" \
+					f" {src_mac} | {dst_mac}" \
+						f" %s{str(pkt[1].payload.name).upper()}%s" \
+							f" {pkt[1].src}%s:{pkt[2].sport}%s %s\u2192%s {pkt[1].dst}%s:{pkt[2].dport}%s" \
+								f" TTL:{pkt[0].ttl} LEN:{pkt[0].len}"
+				% (
+					fg(75), attr(0),
+					fg(75), attr(0),
+					fg(75), attr(0),
+					fg(118), attr(0),
+					fg(209), attr(0),
+					fg(9), attr(0),
+					fg(171), attr(0)
+				)
+			)
+		except: return None
 
-	    Args:
-	        pkt (scapy.layers.l2.Ether): the packet captured
-	    """
-	    return (
-	    	f"[{str(datetime.now())[11:19]}]" \
-	    	f" {pkt[0].src}" \
-	    	f" {pkt[0].dst}" \
-	    	f" %s{str(pkt[1].payload.name).upper()}%s" \
-	    	f" {pkt[1].src}:{pkt[2].sport} %s\u2192%s {pkt[1].dst}:{pkt[2].dport}" \
-	    	% (fg(150), attr(0), fg(9), attr(0))
-	    )
 	def capture(self):
 		""" Begin capturing live packets with scapy.all.sniff """
 		sniff(
 			iface=self.interf, filter=self.apply_filter,
-			count=self.count, prn=self.prn
+			count=self.count, prn=self.echo
 		)

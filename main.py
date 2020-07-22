@@ -15,12 +15,15 @@ import sys
 
 def main():
 	args = _parse_args()
-	capture = NetSniff(args.interf)
+
+	args = {
+		"interf": args.interf,
+		"filter": args.filter,
+		"count": args.count,
+	}
+	
+	capture = NetSniff(args["interf"], args["filter"], args["count"])
 	capture.capture()
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print(f"[{str(datetime.now())[11:19]}] : Quitting program")
-        sys.exit(1)
+	main()
