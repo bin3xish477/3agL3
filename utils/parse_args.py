@@ -1,18 +1,26 @@
 from argparse import ArgumentParser
 from colored import fg, attr
 from platform import system
-from sys import exit
+from sys import exit, argv
 
-def _parse_args():
+def parse_args():
 	""" Program arguments """
 	parser = ArgumentParser(
 		description="There are three modes of operation: live capture, read PCAP, write PCAP",
-		usage="-l: live capture, -r: read PCAP, -w: write PCAP"
+		usage=f"\n\t{argv[0]} -live (live capture) [options] | -read (read PCAP) [options] | -write (write PCAP) [options]",
+		add_help=False
 		)
-
+	help_options = parser.add_argument_group("For Help")
 	live_capture = parser.add_argument_group("Live Capture")
-	read_pcap = parser.add_argument_group("Reading PCAP")
-	write_pcap = parser.add_argument_group("Writing PCAP")
+	read_pcap = parser.add_argument_group("Reading PCAP Required Options")
+	write_pcap = parser.add_argument_group("Writing PCAP Required Options")
+	write_read_pcap = parser.add_argument_group("Optional Arguments for Read/Write Mode")
+
+	help_options.add_argument(
+		"-h", "--help",
+		action="help",
+		help="show this help message and exit"
+	)
 
 	# -------------- Live Capture Options ---------------
 	live_capture.add_argument(
@@ -22,10 +30,9 @@ def _parse_args():
 
 	if system() == "Windows":
 		live_capture.add_argument(
-			"-i", "--interf", 
-			nargs="*", type=str, 
-			default="eth0",
-			help="the interface to listen on (more than one is allowed)"
+			"-i", "--interf",
+			type=str, default="eth0",
+			help="the interface to listen on"
 		)
 	else:
 		live_capture.add_argument(
@@ -36,7 +43,7 @@ def _parse_args():
 	live_capture.add_argument(
 		"-c", "--count",
 		type=int, default=0,
-		help="the number of packets to capture (default=0=infinity)"
+		help="the number of packets to capture (default = 0 = infinity)"
 	)
 
 	live_capture.add_argument(
@@ -54,20 +61,75 @@ def _parse_args():
 
 	read_pcap.add_argument(
 		"-r", "--rfile",
-		action="store_true", default=False,
+		type=str, default=False,
 		help="name of PCAP file to read for parsing"
 	)
+	
 	# -------------- Writing PCAP options ---------------
 	write_pcap.add_argument(
 		"-write", "--write-mode",
-		type=str, default=None,
+		action="store_true", default=None,
 		help="capture live traffic and write to PCAP file"
 	)
 
 	write_pcap.add_argument(
 		"-w", "--wfile",
-		default=None,
+		type=str, default=None,
 		help="name of PCAP file to create"
 	)
+
+	# -------------- Read/Write Options ----------------
+	write_read_pcap.add_argument(
+		"-src-ip", "--source-ip",
+		type=str,
+		help="Filter packets and write PCAP file based on a specified source IP address"
+	)
+
+	write_read_pcap.add_argument(
+		"-dst-ip", "--destination-ip",
+		type=str,
+		help="Filter packets and write PCAP file based on a specified destination IP address"
+	)
+
+	write_read_pcap.add_argument(
+		"-src-port", "--source-port",
+		type=str,
+		help="Filter packets and write PCAP file based on a specified source port number"
+	)
+
+	write_read_pcap.add_argument(
+		"-dst-port", "--destination-port",
+		type=str,
+		help="Filter packets and write PCAP file based on a specified destination port number"
+	)
+
+	write_read_pcap.add_argument(
+		"-src-mac", "--source-mac",
+		type=str,
+		help="Filter packets and write PCAP file based on a specified source mac address"
+	)
+
+	write_read_pcap.add_argument(
+		"-dst-mac", "--destination-mac",
+		type=str,
+		help="Filter packets and write PCAP file based on a specified destination mac address"
+	)
+
+	write_read_pcap.add_argument(
+		"-tcp", "--filter-tcp",
+		action="store_true",
+		default=False,
+		help="Filter packets and write PCAP file if packets were using the TCP protocol"
+	)
+
+	write_read_pcap.add_argument(
+		"-udp", "--filter-udp",
+		action="store_true", default=False,
+		help="Filter packets and write PCAP file if packets were using the UDP protocol"
+	)
+
+	if len(argv[1:]) == 0:
+		parser.print_help()
+		exit(1)
 
 	return parser.parse_args()

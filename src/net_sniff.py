@@ -7,7 +7,7 @@ from colored import fg, attr
 from scapy.all import sniff
 
 class NetSniff:
-	def __init__(self, interf, apply_filter, count):
+	def __init__(self, interf, berkeley_filter, count):
 		"""
 		Args:
 			interf (str): the infertace to capture packets on.
@@ -15,7 +15,7 @@ class NetSniff:
 			count (int): number of packets to capture, 0=infinite.
 		"""
 		self._interf = interf
-		self._apply_filter = apply_filter
+		self._berkeley_filter = berkeley_filter
 		self._count = count
 
 	@property
@@ -24,9 +24,9 @@ class NetSniff:
 		return self._interf
 
 	@property
-	def apply_filter(self):
+	def berkeley_filter(self):
 		""" Filter (tcpdump) to apply to capture """
-		return self._apply_filter
+		return self._berkeley_filter
 	
 	@property
 	def count(self):
@@ -60,9 +60,22 @@ class NetSniff:
 			)
 		except: return None
 
-	def capture(self):
-		""" Begin capturing live packets with scapy.all.sniff """
-		sniff(
-			iface=self.interf, filter=self.apply_filter,
-			count=self.count, prn=self.echo
-		)
+	def capture(self, print_stdout=True):
+		""" Begin capturing live packets with scapy.all.sniff 
+		Args:
+			print (bool): display packets to screen, default=True.
+		"""
+		if print_stdout:
+			sniff(
+				iface=self.interf, 
+				filter=self.berkeley_filter,
+				count=self.count, 
+				prn=self.echo
+			)
+		else:
+			capture = sniff(
+				iface=self.interf, 
+				filter=self.berkeley_filter,
+				count=self.count
+			)
+			return capture
