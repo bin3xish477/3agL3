@@ -119,13 +119,37 @@ def parse_args():
 		"-tcp", "--filter-tcp",
 		action="store_true",
 		default=False,
-		help="Filter packets and write PCAP file if packets were using the TCP protocol"
+		help="Filter TCP packets only"
 	)
 
 	write_read_pcap.add_argument(
 		"-udp", "--filter-udp",
 		action="store_true", default=False,
-		help="Filter packets and write PCAP file if packets were using the UDP protocol"
+		help="Filter UDP packets only"
+	)
+
+	write_read_pcap.add_argument(
+		"-sum", "--summary",
+		action="store_true",
+		help="provide a summary of the packet capture [for read & write mode]"
+	)
+
+	write_read_pcap.add_argument(
+		"-le", "--len-less-equal",
+		type=int,
+		help="Filters for packets with a length that is less than or equal to the specified number."
+	)
+
+	write_read_pcap.add_argument(
+		"-ge", "--len-greater-equal",
+		type=int,
+		help="Filters for packets with a length that is greater than or equal to the specified number."
+	)
+
+	write_read_pcap.add_argument(
+		"-e", "--equal",
+		type=int,
+		help="Filters for packets with a length that is equal to the specified number."
 	)
 
 	if len(argv[1:]) == 0:

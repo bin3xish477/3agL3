@@ -13,6 +13,8 @@ from datetime import datetime
 from src.net_sniff import NetSniff
 from src.read_pcap import ReadPCAP
 from src.write_pcap import WritePCAP
+from colored import fg, attr
+from time import sleep
 from sys import exit
 
 def main():
@@ -34,7 +36,11 @@ def main():
 		"src-mac": args.source_mac,
 		"dst-mac": args.destination_mac,
 		"tcp": args.filter_tcp,
-		"udp": args.filter_udp
+		"udp": args.filter_udp,
+		"sum": args.summary,
+		"le": args.len_less_equal,
+		"ge": args.len_greater_equal,
+		"equal": args.equal
 	}
 
 	if args["live"]:
@@ -56,10 +62,18 @@ def main():
 			args["src-mac"], args["dst-mac"], args["tcp"], args["udp"]
 		)
 
-		write_obj.start()
 		if args["src-ip"]:
 			write_obj.filter_src_ip()
+		elif args["dst-ip"]:
+			write_obj.filter_dst_ip()
+		else:
+			print("[%sNOTICE%s] No filter applied to PCAP for writing" % (fg(226), attr(0)))
+		print("[%sSUCCESS%s] PCAP file `%s` created" % (fg(50), attr(0), args["wfile"]))
 
+		if args["sum"]:
+			sleep(1)
+			print("[%sNOTICE%s] Generating capture summary" % (fg(226), attr(0)))
+			write_obj.summary()
 	else:
 		print("[ERROR] Must provide a mode of operation: -live, -read, or -write")
 	

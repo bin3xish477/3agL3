@@ -1,6 +1,7 @@
 from src.parse_pcap import PCAPParser
 from src.net_sniff import NetSniff
 from scapy.all import wrpcap
+from colored import fg, attr
 from sys import exit
 
 class WritePCAP(NetSniff):
@@ -39,14 +40,47 @@ class WritePCAP(NetSniff):
 
         self.capparser = PCAPParser()
 
-    def start(self):
-        """ Starts real-time capture and stores results in `to_parse` """
+    def start(self, func, arg):
+        """ Starts real-time capture and passes that capture to `func`
+        along with `arg`. 
+            Args:
+                func (function): function defined in PCAPParser to invoke
+                arg (str|int): value to filter from packet capture
+        """
         self.to_parse = super().capture(print_stdout=False)
+        filtered_capture = func(self.to_parse, arg)
+        self.write(filtered_capture)
 
     def filter_src_ip(self):
         """ """
-        filtered_capture = self.capparser.filt_src_ip(self.to_parse, self.src_ip)
-        self.write(filtered_capture)
+        self.start(self.capparser.filt_src_ip, self.src_ip)
+    
+    def filter_dst_ip(self):
+        """ """
+        self.start(self.capparser.filt_dst_ip, self.dst_ip)
+
+    def filter_src_port(self):
+        """ """
+
+
+    def filter_dst_port(self):
+        """ """
+
+    def filter_src_mac(self):
+        """ """
+
+    def filter_dst_mac(self):
+        """ """
+
+    def filter_tcp(self):
+        """ """
+
+    def filter_udp(self):
+        """ """
+        
+    def summary(self):
+        """ """
+        self.start(self.capparser.summary, None)
 
     def write(self, packets):
         """
@@ -54,5 +88,8 @@ class WritePCAP(NetSniff):
         try:
             wrpcap(self.wfile, packets)
         except:
-            print("[ERROR] There was an error writing PCAP file. Please try again...")
+            print(
+                "[%sERROR%s] There was an error writing PCAP file. Please try again..."
+            % (fg(9), attr(0))
+            )
             exit(1)

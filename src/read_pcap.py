@@ -5,7 +5,7 @@ from scapy.all import rdpcap
 class ReadPCAP(NetSniff):
     def __init__(
         self, rfile, interf, berkeley_filter, count,
-        src_ip, dst_ip, src_port, 
+        src_ip, dst_ip, src_port,
         dst_port, src_mac, dst_mac,
         tcp, udp
     ):
