@@ -50,8 +50,11 @@ class WritePCAP(NetSniff):
         """
         try:
             self.to_parse = super().capture(print_stdout=False)
-        except KeyboardInterrupt:
-            print("error")
+        except:
+            print(
+				"[%sERROR%s] couldn't begin packet capture. Try again please"
+				% (fg(9), attr(0))
+			)
         self.filtered_capture = func(self.to_parse, arg)
         self.write(self.filtered_capture)
 
