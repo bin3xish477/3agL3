@@ -31,8 +31,8 @@ def parse_args():
 	if system() == "Windows":
 		live_capture.add_argument(
 			"-i", "--interf",
-			type=str, default="eth0",
-			help="the interface to listen on"
+			nargs="*", default="eth0",
+			help="the interface to listen on (more than one can be specified)"
 		)
 	else:
 		live_capture.add_argument(
@@ -69,7 +69,7 @@ def parse_args():
 	write_pcap.add_argument(
 		"-write", "--write-mode",
 		action="store_true", default=None,
-		help="capture live traffic and write to PCAP file"
+		help="capture live traffic and write to PCAP file (must specify `-c` option)"
 	)
 
 	write_pcap.add_argument(
@@ -131,7 +131,7 @@ def parse_args():
 	write_read_pcap.add_argument(
 		"-sum", "--summary",
 		action="store_true",
-		help="provide a summary of the packet capture [for read & write mode]"
+		help="summary of the packet capture [for read & write mode]"
 	)
 
 	write_read_pcap.add_argument(

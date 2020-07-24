@@ -62,20 +62,29 @@ def main():
 			args["src-mac"], args["dst-mac"], args["tcp"], args["udp"]
 		)
 
-		if args["src-ip"]:
-			write_obj.filter_src_ip()
-		elif args["dst-ip"]:
-			write_obj.filter_dst_ip()
-		else:
-			print("[%sNOTICE%s] No filter applied to PCAP for writing" % (fg(226), attr(0)))
-		print("[%sSUCCESS%s] PCAP file `%s` created" % (fg(50), attr(0), args["wfile"]))
+		if args["count"]:
+			if args["src-ip"]:
+				write_obj.filter_src_ip()
+			elif args["dst-ip"]:
+				write_obj.filter_dst_ip()
+			else:
+				print("[%sNOTE%s] No filter has been applied" % (fg(226), attr(0)))
+				write_obj.no_filter()
 
-		if args["sum"]:
-			sleep(1)
-			print("[%sNOTICE%s] Generating capture summary" % (fg(226), attr(0)))
-			write_obj.summary()
+			if args["sum"]:
+				sleep(1)
+				print("[%sNOTE%s] Generating capture summary" % (fg(226), attr(0)))
+				write_obj.summary()
+		else:
+			print(
+				"[%sERROR%s] Must provide `-c` arguments for write mode"
+				% (fg(9), attr(0))
+			)
 	else:
-		print("[ERROR] Must provide a mode of operation: -live, -read, or -write")
+		print(
+			"[%sERROR%s] Must provide a mode of operation: -live, -read, or -write"
+			% (fg(9), attr(0))
+		)
 	
 if __name__ == "__main__":
 	main()
