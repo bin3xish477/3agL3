@@ -58,7 +58,8 @@ class NetSniff:
 					fg(171), attr(0)
 				)
 			)
-		except: return None
+		except:
+			return None
 
 	def capture(self, print_stdout=True):
 		""" Begin capturing live packets with scapy.all.sniff 
