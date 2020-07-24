@@ -16,6 +16,8 @@ from src.write_pcap import WritePCAP
 from colored import fg, attr
 from time import sleep
 from sys import exit
+from os import geteuid
+from platform import system
 
 def main():
 	args = parse_args()
@@ -87,4 +89,10 @@ def main():
 		)
 	
 if __name__ == "__main__":
+	if system() == "Linux" and geteuid != 0:
+		print(
+			"[%sERROR%s] %s must be ran as user `root`"
+			% (fg(9), attr(0), __file__)
+		)
+		exit(1)
 	main()

@@ -2,19 +2,20 @@ from argparse import ArgumentParser
 from colored import fg, attr
 from platform import system
 from sys import exit, argv
+from colored import fg, attr
 
 def parse_args():
 	""" Program arguments """
 	parser = ArgumentParser(
-		description="There are three modes of operation: live capture, read PCAP, write PCAP",
+		description="There are three modes of operation: live:read:write ",
 		usage=f"\n\t{argv[0]} -live (live capture) [options] | -read (read PCAP) [options] | -write (write PCAP) [options]",
 		add_help=False
 		)
-	help_options = parser.add_argument_group("For Help")
-	live_capture = parser.add_argument_group("Live Capture")
-	read_pcap = parser.add_argument_group("Reading PCAP Required Options")
-	write_pcap = parser.add_argument_group("Writing PCAP Required Options")
-	write_read_pcap = parser.add_argument_group("Optional Arguments for Read/Write Mode")
+	help_options = parser.add_argument_group("%sFor Help%s" % (fg(226), attr(0)))
+	live_capture = parser.add_argument_group("%sLive Capture%s" % (fg(196), attr(0)))
+	read_pcap = parser.add_argument_group("%sRead Mode Required Options%s" % (fg(76), attr(0)))
+	write_pcap = parser.add_argument_group("%sWrite Mode Required Options%s" % (fg(39), attr(0)))
+	write_read_pcap = parser.add_argument_group("%sOptional Arguments for Read/Write Modes%s" % (fg(199), attr(0)))
 
 	help_options.add_argument(
 		"-h", "--help",
