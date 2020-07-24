@@ -8,8 +8,8 @@ from src.write_pcap import WritePCAP
 from colored import fg, attr
 from time import sleep
 from sys import exit
-from os import geteuid
 from platform import system
+from subprocess import run, PIPE
 
 def main():
 	args = parse_args()
@@ -39,6 +39,7 @@ def main():
 
 	if args["live"]:
 		capture = NetSniff(args["interf"], args["filter"], args["count"])
+		print("[%sATTENTION%s] Please wait a second or two for a response" % (fg(198), attr(0)))
 		capture.capture()
 
 	elif args["read"]:
@@ -81,10 +82,10 @@ def main():
 		)
 	
 if __name__ == "__main__":
-	if system() == "Linux" and geteuid != 0:
-		print(
-			"[%sERROR%s] %s must be ran as user `root`"
-			% (fg(9), attr(0), __file__)
-		)
-		exit(1)
+	if system() == "Linux":
+		user = run(["whoami"], stdout=PIPE, stderr=PIPE)
+		user = user.stdout.decode("utf-8").replace("\n", "")
+		if user != "root":
+			print("[%sERROR%s] %s must be ran as user `root`" % (fg(9), attr(0), __file__))
+			exit(1)
 	main()

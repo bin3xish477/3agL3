@@ -42,12 +42,13 @@ class NetSniff:
 			date = str(datetime.now())
 			src_mac = str(pkt[0].src).replace(":", ".")
 			dst_mac = str(pkt[0].dst).replace(":", ".")
+			proto = str(pkt[1].payload.name).upper()
 			return (
 				f"[%s{date[11:13]}%s:%s{date[14:16]}%s:%s{date[17:]}%s]" \
 				f" {src_mac} | {dst_mac}" \
-				f" %s{str(pkt[1].payload.name).upper()}%s" \
+				f" %s{proto}%s" \
 				f" {pkt[1].src}%s:{pkt[2].sport}%s %s\u2192%s {pkt[1].dst}%s:{pkt[2].dport}%s" \
-				f" TTL:{pkt[0].ttl} LEN:{pkt[0].len}"
+				f" (TTL:{pkt[0].ttl} LEN:{pkt[0].len})"
 				% (
 					fg(75), attr(0),
 					fg(75), attr(0),
