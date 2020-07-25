@@ -8,7 +8,7 @@ def parse_args():
 	""" Program arguments """
 	parser = ArgumentParser(
 		description="There are three modes of operation: live:read:write ",
-		usage=f"\n\t{argv[0]} -live (live capture) [options] | -read (read PCAP) [options] | -write (write PCAP) [options]",
+		usage=f"\n\t{argv[0]} -live [options..] | -read [options..] | -write [options..]",
 		add_help=False
 		)
 	help_options = parser.add_argument_group("%sFor Help%s" % (fg(226), attr(0)))
@@ -32,13 +32,14 @@ def parse_args():
 	if system() == "Windows":
 		live_capture.add_argument(
 			"-i", "--interf",
-			nargs="*", default="eth0",
+			nargs="*",
+			required=True,
 			help="the interface to listen on (more than one can be specified)"
 		)
 	else:
 		live_capture.add_argument(
 			"-i", "--interf", 
-			nargs="*", type=str, default="eth0",
+			nargs="*", default="eth0",
 			help="the interface to listen on (more than one is allowed)"
 		)
 	live_capture.add_argument(
