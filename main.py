@@ -10,8 +10,15 @@ from time import sleep
 from sys import exit
 from platform import system
 from subprocess import run, PIPE
+	
+if __name__ == "__main__":
+	if system() == "Linux":
+		user = run(["whoami"], stdout=PIPE, stderr=PIPE)
+		user = user.stdout.decode("utf-8").replace("\n", "")
+		if user != "root":
+			print("[%sERROR%s] %s MUST BE RAN AS `root`" % (fg(9), attr(0), __file__))
+			exit(1)
 
-def main():
 	args = parse_args()
 
 	args = {
@@ -105,12 +112,3 @@ def main():
 			"[%sERROR%s] MUST PROVIDE A MODE OF OPERATION: -live, -read, or -write"
 			% (fg(9), attr(0))
 		)
-	
-if __name__ == "__main__":
-	if system() == "Linux":
-		user = run(["whoami"], stdout=PIPE, stderr=PIPE)
-		user = user.stdout.decode("utf-8").replace("\n", "")
-		if user != "root":
-			print("[%sERROR%s] %s MUST BE RAN AS `root`" % (fg(9), attr(0), __file__))
-			exit(1)
-	main()

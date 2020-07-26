@@ -7,7 +7,7 @@ from colored import fg, attr
 def parse_args():
 	""" Program arguments """
 	parser = ArgumentParser(
-		description="There are three modes of operation: live:read:write ",
+		description="There are three modes of operation \u2192 live : read : write ",
 		usage=f"\n\t{argv[0]} -live [options..] | -read [options..] | -write [options..]",
 		add_help=False
 		)
