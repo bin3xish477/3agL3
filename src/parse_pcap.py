@@ -53,8 +53,7 @@ class PCAPParser:
                 filtered.append(cap)
         return filtered
 
-
-    def summary(self, capture, *args):
+    def summary(self, capture):
         """ Prints a summary of the data contained in a capture.
         This summary includes:
             - unique IP and the number of times they appear
@@ -63,6 +62,53 @@ class PCAPParser:
 
         Args:
             capture (scapy.plist.PacketList)
-            args (any): will not be used but decorator calling this function expects an argument
         """
-        print(type(capture))
+        print("[%sATTENTION%s] THIS MAY TAKE A COUPLE OF SECONDS" % (fg(202), attr(0)))
+        # FILTERING IP ADDRESSES
+        src_ip_list = [cap[1].src for cap in capture]
+        dst_ip_list = [cap[1].dst for cap in capture]
+        all_ips = src_ip_list + dst_ip_list
+
+        ip_dict = Counter(all_ips)
+        print("-"*40)
+        for ip, count in ip_dict.most_common():
+            print("%sIP%s: \'%s\', COUNT: %s" % (fg(124), attr(0), ip, count))
+        print("-"*40)
+
+        # FILTERING PORT NUMBERS
+        src_port_list = [cap[2].sport for cap in capture]
+        dst_port_list = [cap[2].dport for cap in capture]
+        all_ports = src_port_list + dst_port_list
+        
+        port_dict = Counter(all_ports)
+        for port, count in port_dict.most_common():
+            print("%sPort%s: %s, COUNT: %s" % (fg(113), attr(0), port, count))
+        print("-"*40)
+
+        # FILTERING MAC ADDRESSES
+        src_mac_list = [cap[0].src for cap in capture]
+        dst_mac_list = [cap[0].dst for cap in capture]
+        all_macs = src_mac_list + dst_mac_list
+
+        mac_dict = Counter(all_macs)
+        for mac, count in mac_dict.most_common():
+            print("%sMAC%s: %s, COUNT: %s" % (fg(153), attr(0), mac, count))
+
+        # FILTERING PACKETS LENGTHS
+        i = 0
+        pkt_len_sum = 0
+        for cap in capture:
+            i += 1
+            pkt_len_sum += cap[0].len
+        average_pkt_len = pkt_len_sum / i
+        print("-"*40)
+        print("%sAVERAGE PACKET LENGTH%s: %s bytes" % (fg(109), attr(0), average_pkt_len))
+
+        # FILTERING TTL
+        i = 0
+        pkt_ttl_sum = 0
+        for cap in capture:
+            i += 1
+            pkt_ttl_sum += cap[0].ttl
+        average_pkt_ttl = pkt_ttl_sum / i
+        print("%sAVERAGE TTL%s: %s " % (fg(109), attr(0), average_pkt_ttl))

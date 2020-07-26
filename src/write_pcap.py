@@ -52,7 +52,7 @@ class WritePCAP(NetSniff):
             self.to_parse = super().capture(print_stdout=False)
         except:
             print(
-				"[%sERROR%s] couldn't begin packet capture. Try again please"
+				"[%sERROR%s] COULD BEGIN PACKET CAPTURE. PLEASE TRY AGAIN..."
 				% (fg(9), attr(0))
 			)
         self.filtered_capture = func(self.to_parse, arg)
@@ -68,53 +68,61 @@ class WritePCAP(NetSniff):
 
     def filter_src_port(self):
         """ """
-
+        self.start(self.capparser.filt_src_port, self.src_port)
 
     def filter_dst_port(self):
         """ """
+        self.start(self.capparser.filt_dst_port, self.dst_port)
 
     def filter_src_mac(self):
         """ """
+        self.start(self.capparser.filt_src_mac, self.src_mac)
 
     def filter_dst_mac(self):
         """ """
+        self.start(self.capparser.filt_dst_mac, self.dst_mac)
 
     def filter_tcp(self):
         """ """
+        self.start(self.capparser.filt_tcp, self.tcp)
 
     def filter_udp(self):
         """ """
+        self.start(self.capparser.filt_udp, self.udp)
 
     def no_filter(self):
         """ """
-        for i in range(3, -1, -1):
+        for i in range(2, -1, -1):
             if i != 0:
                 print(
-                    "[%sATTENTION%s] capture will begin in %s\r"
-                    % (fg(198), attr(0), i), end=""
+                    "[%sATTENTION%s] CAPTURE WILL BEGIN IN %s\r"
+                    % (fg(202), attr(0), i), end=""
                 )
             else:
                 print(
-                    "[%sATTENTION%s] capture will begin in %s"
-                    % (fg(198), attr(0), i)
+                    "[%sATTENTION%s] CAPTURE WILL BEGIN IN %s"
+                    % (fg(202), attr(0), i)
                 )
             sleep(1)
-        capture = super().capture(print_stdout=False)
-        self.write(capture)
+        self.cap = super().capture(print_stdout=False)
+        self.write(self.cap)
 
     def summary(self):
         """ """
-        self.start(self.capparser.summary, None)
+        if self.cap:
+            self.capparser.summary(self.cap)
+        elif self.filtered_capture:
+            self.capparser.summary(self.filtered_capture)
 
     def write(self, packets):
         """
         """
         try:
             wrpcap(self.wfile, packets)
-            print("[%sSUCCESS%s] PCAP file `%s` created" % (fg(50), attr(0), self.wfile))
+            print("[%sSUCCESS%s] PCAP FILE `%s` CREATED" % (fg(50), attr(0), self.wfile))
         except:
             print(
-                "[%sERROR%s] There was an error writing PCAP file. Please try again..."
+                "[%sERROR%s] THERE WAS AN ERROR CREATING PCAP FILE. PLEASE TRY AGAIN..."
                 % (fg(9), attr(0))
             )
             exit(1)

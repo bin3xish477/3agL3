@@ -39,45 +39,70 @@ def main():
 
 	if args["live"]:
 		capture = NetSniff(args["interf"], args["filter"], args["count"])
-		print("[%sATTENTION%s] Please wait a second or two for a response" % (fg(198), attr(0)))
+		print("[%sATTENTION%s] PLEASE WAIT A SECOND OR TWO FOR A RESPONSE" % (fg(202), attr(0)))
 		capture.capture()
 
 	elif args["read"]:
-		# read_obj = ReadPCAP(
-		# 	args["rfile"], args["interf"], args["filter"], args["count"],
-		# 	args["src-ip"], args["dst-ip"], args["src-port"], args["dst-port"],
-		# 	args["src-mac"], args["dst-mac"], args["tcp"], args["udp"]
-		# )
-		pass
+		if args["rfile"]:
+			read_obj = ReadPCAP(
+				args["rfile"], args["interf"], args["filter"], args["count"],
+				args["src-ip"], args["dst-ip"], args["src-port"], args["dst-port"],
+				args["src-mac"], args["dst-mac"], args["tcp"], args["udp"]
+			)
+		else:
+			print(
+				"[%sERROR%s] MUST PROVIDE `-r` ARGUMENTS FOR READ MODE"
+				% (fg(9), attr(0))
+			)
+			exit(1)
 
 	elif args["write"]:
-		write_obj = WritePCAP(
-			args["wfile"], args["interf"], args["filter"], args["count"],
-			args["src-ip"], args["dst-ip"], args["src-port"], args["dst-port"],
-			args["src-mac"], args["dst-mac"], args["tcp"], args["udp"]
-		)
+		if args["wfile"]:
+			write_obj = WritePCAP(
+				args["wfile"], args["interf"], args["filter"], args["count"],
+				args["src-ip"], args["dst-ip"], args["src-port"], args["dst-port"],
+				args["src-mac"], args["dst-mac"], args["tcp"], args["udp"]
+			)
+		else:
+			print(
+				"[%sERROR%s] MUST PROVIDE `-w` ARGUMENT FOR WRITE MODE"
+				% (fg(9), attr(0))
+			)
+			exit(1)		
 
 		if args["count"]:
 			if args["src-ip"]:
 				write_obj.filter_src_ip()
 			elif args["dst-ip"]:
 				write_obj.filter_dst_ip()
+			elif args["src-port"]:
+				write_obj.filter_src_port()
+			elif args["dst-port"]:
+				write_obj.filter_dst_port()
+			elif args["src-mac"]:
+				write_obj.filter_src_mac()
+			elif args["dst-mac"]:
+				write_obj.filter_dst_mac()
+			elif args["tcp"]:
+				write_obj.filter_tcp()
+			elif args["udp"]:
+				write_obj.filter_udp()
 			else:
-				print("[%sNOTE%s] No filter has been applied" % (fg(226), attr(0)))
+				print("[%sNOTE%s] NO WRITE FILTERS HAS BEEN APPLIED" % (fg(226), attr(0)))
 				write_obj.no_filter()
 
 			if args["sum"]:
 				sleep(1)
-				print("[%sNOTE%s] Generating capture summary" % (fg(226), attr(0)))
+				print("\n[%sNOTE%s] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
 				write_obj.summary()
 		else:
 			print(
-				"[%sERROR%s] Must provide `-c` arguments for write mode"
+				"[%sERROR%s] MUST PROVIDE `-c` ARGUMENT FOR WRITE MODE"
 				% (fg(9), attr(0))
 			)
 	else:
 		print(
-			"[%sERROR%s] Must provide a mode of operation: -live, -read, or -write"
+			"[%sERROR%s] MUST PROVIDE A MODE OF OPERATION: -live, -read, or -write"
 			% (fg(9), attr(0))
 		)
 	
@@ -86,6 +111,6 @@ if __name__ == "__main__":
 		user = run(["whoami"], stdout=PIPE, stderr=PIPE)
 		user = user.stdout.decode("utf-8").replace("\n", "")
 		if user != "root":
-			print("[%sERROR%s] %s must be ran as user `root`" % (fg(9), attr(0), __file__))
+			print("[%sERROR%s] %s MUST BE RAN AS `root`" % (fg(9), attr(0), __file__))
 			exit(1)
 	main()
