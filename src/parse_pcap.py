@@ -1,5 +1,6 @@
 from collections import Counter
 from colored import fg, attr
+from json import dump
 
 class PCAPParser:
     def filt_src_ip(self, capture, src_ip):
