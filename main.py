@@ -52,10 +52,36 @@ if __name__ == "__main__":
 	elif args["read"]:
 		if args["rfile"]:
 			read_obj = ReadPCAP(
-				args["rfile"], args["interf"], args["filter"], args["count"],
-				args["src-ip"], args["dst-ip"], args["src-port"], args["dst-port"],
-				args["src-mac"], args["dst-mac"], args["tcp"], args["udp"]
+				args["rfile"],args["src-ip"], args["dst-ip"], 
+				args["src-port"], args["dst-port"], args["src-mac"], 
+				args["dst-mac"], args["tcp"], args["udp"]
 			)
+			read_obj.read()
+
+			if args["src-ip"]:
+				read_obj.filter_src_ip()
+			elif args["dst-ip"]:
+				read_obj.filter_dst_ip()
+			elif args["src-port"]:
+				read_obj.filter_src_port()
+			elif args["dst-port"]:
+				read_obj.filter_dst_port()
+			elif args["src-mac"]:
+				read_obj.filter_src_mac()
+			elif args["dst-mac"]:
+				read_obj.filter_dst_mac()
+			elif args["tcp"]:
+				read_obj.filter_tcp()
+			elif args["udp"]:
+				read_obj.filter_udp()
+			else:
+				print("[%sNOTE%s] NO READ FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
+				read_obj.no_filter()
+
+			if args["sum"]:
+				sleep(1)
+				print("\n[%sNOTE%s] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
+				read_obj.summary()
 		else:
 			print(
 				"[%sERROR%s] MUST PROVIDE `-r` ARGUMENTS FOR READ MODE"
@@ -95,7 +121,7 @@ if __name__ == "__main__":
 			elif args["udp"]:
 				write_obj.filter_udp()
 			else:
-				print("[%sNOTE%s] NO WRITE FILTERS HAS BEEN APPLIED" % (fg(226), attr(0)))
+				print("[%sNOTE%s] NO WRITE FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
 				write_obj.no_filter()
 
 			if args["sum"]:

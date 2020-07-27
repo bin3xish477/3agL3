@@ -95,13 +95,11 @@ class WritePCAP(NetSniff):
         for i in range(2, -1, -1):
             if i != 0:
                 print(
-                    "[%sATTENTION%s] CAPTURE WILL BEGIN IN %s\r"
-                    % (fg(202), attr(0), i), end=""
+                    "[%sATTENTION%s] CAPTURE WILL BEGIN IN %s\r" % (fg(202), attr(0), i), end=""
                 )
             else:
                 print(
-                    "[%sATTENTION%s] CAPTURE WILL BEGIN IN %s"
-                    % (fg(202), attr(0), i)
+                    "[%sATTENTION%s] CAPTURE WILL BEGIN IN %s" % (fg(202), attr(0), i)
                 )
             sleep(1)
         self.cap = super().capture(print_stdout=False)

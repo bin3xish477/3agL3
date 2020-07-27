@@ -33,7 +33,6 @@ def parse_args():
 		live_capture.add_argument(
 			"-i", "--interf",
 			nargs="*",
-			required=True,
 			help="the interface to listen on (more than one can be specified)"
 		)
 	else:
