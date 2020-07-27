@@ -150,7 +150,7 @@ class PCAPParser:
         port_dict = Counter(port_list)
         capture_summary["port_dict"] = port_dict
 
-        mac_list = [cap[0].src for cap in capture] +[cap[0].dst for cap in capture]
+        mac_list = [cap[0].src for cap in capture] + [cap[0].dst for cap in capture]
         mac_dict = Counter(mac_list)
         capture_summary["mac_dict"] = mac_dict
         
