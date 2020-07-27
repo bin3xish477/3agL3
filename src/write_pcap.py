@@ -115,7 +115,7 @@ class WritePCAP(NetSniff):
     def to_json(self):
         """ """
         if self._cap:
-            self._capparser.json_summary(self._cap)
+            self.capparser.json_summary(self._cap)
         elif self._filtered_cap:
             self.capparser.json_summary(self._filtered_cap)
 
