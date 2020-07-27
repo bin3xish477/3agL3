@@ -2,12 +2,14 @@ from collections import Counter
 from colored import fg, attr
 from json import dump
 from sys import exit
+from re import search
 
 class PCAPParser:
     def filt_src_ip(self, capture, src_ip):
         """ Filter source IP addresses from capture """
         filtered = []
         for cap in capture:
+            # check if src-ip if valid ip with re.search!!!
             if cap[1].src == src_ip:
                 filtered.append(cap)
         return filtered
@@ -16,6 +18,7 @@ class PCAPParser:
         """ Filter destination IP addresses from capture """
         filtered = []
         for cap in capture:
+            # check if src-ip if valid ip with re.search!!!
             if cap[1].dst == dst_ip:
                 filtered.append(cap)
         return filtered
