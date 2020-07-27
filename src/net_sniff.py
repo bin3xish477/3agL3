@@ -50,9 +50,9 @@ class NetSniff:
 				f" {pkt[1].src}%s:{pkt[2].sport}%s %s\u2192%s {pkt[1].dst}%s:{pkt[2].dport}%s" \
 				f" (TTL:{pkt[0].ttl} LEN:{pkt[0].len})"
 				% (
-					fg(75), attr(0),
-					fg(75), attr(0),
-					fg(75), attr(0),
+					fg(39), attr(0),
+					fg(39), attr(0),
+					fg(39), attr(0),
 					fg(118), attr(0),
 					fg(209), attr(0),
 					fg(9), attr(0),
