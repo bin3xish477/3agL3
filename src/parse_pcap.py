@@ -142,9 +142,9 @@ class PCAPParser:
             print("%sAVERAGE TTL%s: %s " % (fg(109), attr(0), average_pkt_ttl))
         except:
             print(
-				"[%sERROR%s] COULDN'T GENERATE COMPLETE CAPTURE SUMMARY"
-				% (fg(9), attr(0))
-			)
+                "[%sERROR%s] COULDN'T GENERATE COMPLETE CAPTURE SUMMARY"
+                % (fg(9), attr(0))
+            )
             exit(1)
 
     def len_less_equal(self):
@@ -191,6 +191,6 @@ class PCAPParser:
                 dump(capture_summary, cap_sum_file, indent=4)
         except:
             print(
-				"[%sERROR%s] THERE WAS AN ERROR CREATING SUMMARY JSON FILE... PLEASE TRY AGAIN"
-				% (fg(9), attr(0))
-			)
+                "[%sERROR%s] THERE WAS AN ERROR CREATING SUMMARY JSON FILE... PLEASE TRY AGAIN"
+                % (fg(9), attr(0))
+            )
