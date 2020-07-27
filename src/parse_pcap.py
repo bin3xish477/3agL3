@@ -1,6 +1,5 @@
 from collections import Counter
 from colored import fg, attr
-from scapy.all import *
 
 class PCAPParser:
     def filt_src_ip(self, capture, src_ip):
@@ -122,3 +121,7 @@ class PCAPParser:
                 continue
         average_pkt_ttl = pkt_ttl_sum / i
         print("%sAVERAGE TTL%s: %s " % (fg(109), attr(0), average_pkt_ttl))
+
+    def to_json(self):
+        """ Generate JSON file containing summary of packet capture """
+        pass
