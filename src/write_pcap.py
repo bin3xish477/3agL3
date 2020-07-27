@@ -36,8 +36,8 @@ class WritePCAP(NetSniff):
         self._src_mac = src_mac
         self._dst_mac = dst_mac
         # these are booleans v
-        self.tcp = _tcp
-        self.udp = _udp
+        self._tcp = tcp
+        self._udp = udp
 
         self.capparser = PCAPParser()
 
