@@ -138,21 +138,33 @@ def parse_args():
 	write_read_pcap.add_argument(
 		"-le", "--len-less-equal",
 		type=int,
-		help="Filters for packets with a length that is less than or equal to the specified number."
+		help="Filters for packets with a length that is less than or equal to the specified number"
 	)
 
 	write_read_pcap.add_argument(
 		"-ge", "--len-greater-equal",
 		type=int,
-		help="Filters for packets with a length that is greater than or equal to the specified number."
+		help="Filters for packets with a length that is greater than or equal to the specified number"
 	)
 
 	write_read_pcap.add_argument(
-		"-e", "--equal",
+		"-len-eq", "--len-equal",
 		type=int,
-		help="Filters for packets with a length that is equal to the specified number."
+		help="Filters for packets with a length that is equal to the specified number"
 	)
 
+	write_read_pcap.add_argument(
+		"-ttl-eq", "--ttl-equal",
+		type=int,
+		help="Filteres for packets with a ttl that is equal to the specified number"
+	)
+	
+	write_read_pcap.add_argument(
+		"-j", "--json",
+		action="store_true",
+		help="Create JSON file containing capture summary (ip:count, port:count, mac:count)"
+	)
+	
 	if len(argv[1:]) == 0:
 		parser.print_help()
 		exit(1)

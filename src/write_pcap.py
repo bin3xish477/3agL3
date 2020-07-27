@@ -28,16 +28,16 @@ class WritePCAP(NetSniff):
         """
         super().__init__(interf, berkeley_filter, count)
 
-        self.wfile = wfile
-        self.src_ip = src_ip
-        self.dst_ip = dst_ip
-        self.src_port = src_port
-        self.dst_port = dst_port
-        self.src_mac = src_mac
-        self.dst_mac = dst_mac
+        self._wfile = wfile
+        self._src_ip = src_ip
+        self._dst_ip = dst_ip
+        self._src_port = src_port
+        self._dst_port = dst_port
+        self._src_mac = src_mac
+        self._dst_mac = dst_mac
         # these are booleans v
-        self.tcp = tcp
-        self.udp = udp
+        self.tcp = _tcp
+        self.udp = _udp
 
         self.capparser = PCAPParser()
 
@@ -55,40 +55,40 @@ class WritePCAP(NetSniff):
 				"[%sERROR%s] COULD BEGIN PACKET CAPTURE. PLEASE TRY AGAIN..."
 				% (fg(9), attr(0))
 			)
-        self.filtered_capture = func(self.to_parse, arg)
-        self.write(self.filtered_capture)
+        self._filtered_cap = func(self.to_parse, arg)
+        self.write(self._filtered_cap)
 
     def filter_src_ip(self):
         """ """
-        self.start(self.capparser.filt_src_ip, self.src_ip)
+        self.start(self.capparser.filt_src_ip, self._src_ip)
     
     def filter_dst_ip(self):
         """ """
-        self.start(self.capparser.filt_dst_ip, self.dst_ip)
+        self.start(self.capparser.filt_dst_ip, self._dst_ip)
 
     def filter_src_port(self):
         """ """
-        self.start(self.capparser.filt_src_port, self.src_port)
+        self.start(self.capparser.filt_src_port, self._src_port)
 
     def filter_dst_port(self):
         """ """
-        self.start(self.capparser.filt_dst_port, self.dst_port)
+        self.start(self.capparser.filt_dst_port, self._dst_port)
 
     def filter_src_mac(self):
         """ """
-        self.start(self.capparser.filt_src_mac, self.src_mac)
+        self.start(self.capparser.filt_src_mac, self._src_mac)
 
     def filter_dst_mac(self):
         """ """
-        self.start(self.capparser.filt_dst_mac, self.dst_mac)
+        self.start(self.capparser.filt_dst_mac, self._dst_mac)
 
     def filter_tcp(self):
         """ """
-        self.start(self.capparser.filt_tcp, self.tcp)
+        self.start(self.capparser.filt_tcp, self._tcp)
 
     def filter_udp(self):
         """ """
-        self.start(self.capparser.filt_udp, self.udp)
+        self.start(self.capparser.filt_udp, self._udp)
 
     def no_filter(self):
         """ """
@@ -102,22 +102,29 @@ class WritePCAP(NetSniff):
                     "[%sATTENTION%s] CAPTURE WILL BEGIN IN %s" % (fg(202), attr(0), i)
                 )
             sleep(1)
-        self.cap = super().capture(print_stdout=False)
-        self.write(self.cap)
+        self._cap = super().capture(print_stdout=False)
+        self.write(self._cap)
 
     def summary(self):
         """ """
-        if self.cap:
-            self.capparser.summary(self.cap)
-        elif self.filtered_capture:
-            self.capparser.summary(self.filtered_capture)
+        if self._cap:
+            self.capparser.summary(self._cap)
+        elif self._filtered_cap:
+            self.capparser.summary(self._filtered_cap)
+
+    def to_json(self):
+        """ """
+        if self._cap:
+            self._capparser.json_summary(self._cap)
+        elif self._filtered_cap:
+            self.capparser.json_summary(self._filtered_cap)
 
     def write(self, packets):
         """
         """
         try:
-            wrpcap(self.wfile, packets)
-            print("[%sSUCCESS%s] PCAP FILE `%s` CREATED" % (fg(50), attr(0), self.wfile))
+            wrpcap(self._wfile, packets)
+            print("[%sSUCCESS%s] PCAP FILE `%s` SUCCESSFULLY CREATED" % (fg(50), attr(0), self._wfile))
         except:
             print(
                 "[%sERROR%s] THERE WAS AN ERROR CREATING PCAP FILE. PLEASE TRY AGAIN..."

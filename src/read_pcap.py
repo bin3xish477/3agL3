@@ -22,21 +22,21 @@ class ReadPCAP:
             udp (bool):
         """
 
-        self.rfile = rfile
-        self.src_ip = src_ip
-        self.dst_ip = dst_ip
-        self.src_port = src_port
-        self.dst_port = dst_port
-        self.src_mac = src_mac
-        self.dst_mac = dst_mac
-        self.tcp = tcp
-        self.udp = udp
+        self._rfile = rfile
+        self._src_ip = src_ip
+        self._dst_ip = dst_ip
+        self._src_port = src_port
+        self._dst_port = dst_port
+        self._src_mac = src_mac
+        self._dst_mac = dst_mac
+        self._tcp = tcp
+        self._udp = udp
 
         self.capparser = PCAPParser()
 
     def read(self):
         """ Read PCAP file """
-        self.pcapfile = rdpcap(self.rfile)
+        self._pcapfile = rdpcap(self._rfile)
     
     def start(self, func, arg):
         """ Starts real-time capture and passes that capture to `func`
@@ -45,7 +45,7 @@ class ReadPCAP:
                 func (function): function defined in PCAPParser to invoke
                 arg (str|int): value to filter from packet capture
         """
-        filtered_capture = func(self.pcapfile, arg)
+        filtered_capture = func(self._pcapfile, arg)
         if len(filtered_capture) == 0:
             print("[%sATTENTION%s] NO PACKET CONTAINED TARGET VALUE `%s`" % (fg(202), attr(0), arg))
             exit(1)
@@ -54,43 +54,47 @@ class ReadPCAP:
 
     def filter_src_ip(self):
         """ """
-        self.start(self.capparser.filt_src_ip, self.src_ip)
+        self.start(self.capparser.filt_src_ip, self._src_ip)
     
     def filter_dst_ip(self):
         """ """
-        self.start(self.capparser.filt_dst_ip, self.dst_ip)
+        self.start(self.capparser.filt_dst_ip, self._dst_ip)
 
     def filter_src_port(self):
         """ """
-        self.start(self.capparser.filt_src_port, self.src_port)
+        self.start(self.capparser.filt_src_port, self._src_port)
 
     def filter_dst_port(self):
         """ """
-        self.start(self.capparser.filt_dst_port, self.dst_port)
+        self.start(self.capparser.filt_dst_port, self._dst_port)
 
     def filter_src_mac(self):
         """ """
-        self.start(self.capparser.filt_src_mac, self.src_mac)
+        self.start(self.capparser.filt_src_mac, self._src_mac)
 
     def filter_dst_mac(self):
         """ """
-        self.start(self.capparser.filt_dst_mac, self.dst_mac)
+        self.start(self.capparser.filt_dst_mac, self._dst_mac)
 
     def filter_tcp(self):
         """ """
-        self.start(self.capparser.filt_tcp, self.tcp)
+        self.start(self.capparser.filt_tcp, self._tcp)
 
     def filter_udp(self):
         """ """
-        self.start(self.capparser.filt_udp, self.udp)
+        self.start(self.capparser.filt_udp, self._udp)
 
     def no_filter(self):
         """ """
-        self.to_stdout(self.pcapfile)
+        self.to_stdout(self._pcapfile)
     
     def summary(self):
         """ """
-        self.capparser.summary(self.pcapfile)
+        self.capparser.summary(self._pcapfile)
+
+    def to_json(self):
+        """ """
+        self.capparser.json_summary(self._pcapfile)
 
     def to_stdout(self, capture):
         """ """

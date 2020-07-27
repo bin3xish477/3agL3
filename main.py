@@ -6,7 +6,6 @@ from src.net_sniff import NetSniff
 from src.read_pcap import ReadPCAP
 from src.write_pcap import WritePCAP
 from colored import fg, attr
-from time import sleep
 from sys import exit
 from platform import system
 from subprocess import run, PIPE
@@ -41,7 +40,9 @@ if __name__ == "__main__":
 		"sum": args.summary,
 		"le": args.len_less_equal,
 		"ge": args.len_greater_equal,
-		"equal": args.equal
+		"len-equal": args.len_equal,
+		"ttl-equal": args.len_equal,
+		"json": args.json
 	}
 
 	if args["live"]:
@@ -79,9 +80,12 @@ if __name__ == "__main__":
 				read_obj.no_filter()
 
 			if args["sum"]:
-				sleep(1)
 				print("\n[%sNOTE%s] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
 				read_obj.summary()
+
+			if args["json"]:
+				read_obj.to_json()
+				print("[%sSUCCESS%s] SUMMARY JSON FILE SUCCESSFULLY CREATED" % (fg(50), attr(0)))
 		else:
 			print(
 				"[%sERROR%s] MUST PROVIDE `-r` ARGUMENTS FOR READ MODE"
@@ -125,9 +129,12 @@ if __name__ == "__main__":
 				write_obj.no_filter()
 
 			if args["sum"]:
-				sleep(1)
 				print("\n[%sNOTE%s] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
 				write_obj.summary()
+				
+			if args["json"]:
+				write_obj.to_json()
+				print("[%sSUCCESS%s] SUMMARY JSON FILE SUCCESSFULLY CREATED" % (fg(50), attr(0)))
 		else:
 			print(
 				"[%sERROR%s] MUST PROVIDE `-c` ARGUMENT FOR WRITE MODE"

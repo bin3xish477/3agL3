@@ -1,6 +1,7 @@
 from collections import Counter
 from colored import fg, attr
 from json import dump
+from pprint import pprint
 
 class PCAPParser:
     def filt_src_ip(self, capture, src_ip):
@@ -67,37 +68,31 @@ class PCAPParser:
             - unique mac addresses and the number of times they appear
 
         Args:
-            capture (scapy.plist.PacketList)
+            capture (scapy.plist.PacketList): scapy packet capture list
         """
         print("[%sATTENTION%s] THIS MAY TAKE A COUPLE OF SECONDS" % (fg(202), attr(0)))
 
         # FILTERING IP ADDRESSES
-        src_ip_list = [cap[1].src for cap in capture]
-        dst_ip_list = [cap[1].dst for cap in capture]
-        all_ips = src_ip_list + dst_ip_list
+        ip_list = [cap[1].src for cap in capture] + [cap[1].dst for cap in capture]
 
-        ip_dict = Counter(all_ips)
+        ip_dict = Counter(ip_list)
         print("-"*50)
         for ip, count in ip_dict.most_common():
             print("%sIP%s: \'%s\', COUNT: %s" % (fg(124), attr(0), ip, count))
         print("-"*50)
 
         # FILTERING PORT NUMBERS
-        src_port_list = [cap[2].sport for cap in capture]
-        dst_port_list = [cap[2].dport for cap in capture]
-        all_ports = src_port_list + dst_port_list
+        port_list = [cap[2].sport for cap in capture] + [cap[2].dport for cap in capture]
         
-        port_dict = Counter(all_ports)
+        port_dict = Counter(port_list)
         for port, count in port_dict.most_common():
             print("%sPort%s: %s, COUNT: %s" % (fg(113), attr(0), port, count))
         print("-"*50)
 
         # FILTERING MAC ADDRESSES
-        src_mac_list = [cap[0].src for cap in capture]
-        dst_mac_list = [cap[0].dst for cap in capture]
-        all_macs = src_mac_list + dst_mac_list
+        mac_list = [cap[0].src for cap in capture] + [cap[0].dst for cap in capture]
 
-        mac_dict = Counter(all_macs)
+        mac_dict = Counter(mac_list)
         for mac, count in mac_dict.most_common():
             print("%sMAC%s: %s, COUNT: %s" % (fg(153), attr(0), mac, count))
 
@@ -123,6 +118,47 @@ class PCAPParser:
         average_pkt_ttl = pkt_ttl_sum / i
         print("%sAVERAGE TTL%s: %s " % (fg(109), attr(0), average_pkt_ttl))
 
-    def to_json(self):
-        """ Generate JSON file containing summary of packet capture """
-        pass
+    def len_less_equal(self):
+        """ """
+
+    def len_greater_equal(self):
+        """ """
+
+    def len_equal(self):
+        """ """
+
+    def ttl_equal(self):
+        """ """
+
+    def json_summary(self, capture):
+        """ Generate JSON file containing summary of packet capture.
+        The JSON file will contain:
+            - ip: count
+            - port: count
+            - mac: count
+        
+        Args:
+            capture (scapy.plist.PacketList): scapy packet capture list
+        """
+        capture_summary = {}
+
+        ip_list = [cap[1].src for cap in capture] + [cap[1].dst for cap in capture]
+        ip_dict = Counter(ip_list)
+        capture_summary["ip_dict"] = ip_dict
+
+        port_list = [cap[2].sport for cap in capture] + [cap[2].dport for cap in capture]
+        port_dict = Counter(port_list)
+        capture_summary["port_dict"] = port_dict
+
+        mac_list = [cap[0].src for cap in capture] +[cap[0].dst for cap in capture]
+        mac_dict = Counter(mac_list)
+        capture_summary["mac_dict"] = mac_dict
+        
+        try:
+            with open("capture_summary.json", "w") as cap_sum_file:
+                dump(capture_summary, cap_sum_file, indent=4)
+        except:
+            print(
+				"[%sERROR%s] THERE WAS AN ERROR CREATING SUMMARY JSON FILE... PLEASE TRY AGAIN"
+				% (fg(9), attr(0))
+			)
