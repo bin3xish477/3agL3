@@ -90,6 +90,9 @@ class WritePCAP(NetSniff):
         """ """
         self.start(self.capparser.filt_udp, self._udp)
 
+    def filter_icmp(self):
+        """ """
+
     def no_filter(self):
         """ """
         for i in range(2, -1, -1):

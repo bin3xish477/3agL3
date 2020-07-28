@@ -130,6 +130,12 @@ def parse_args():
 	)
 
 	write_read_pcap.add_argument(
+		"-icmp", "--filter-icmp",
+		action="store_true",
+		help="Filter ICMP packets only"
+	)
+
+	write_read_pcap.add_argument(
 		"-sum", "--summary",
 		action="store_true",
 		help="summary of the packet capture [for read & write mode]"

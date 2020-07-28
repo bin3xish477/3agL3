@@ -4,7 +4,7 @@ Real-time network traffic capturing using scapy.all.sniff
 
 from datetime import datetime
 from colored import fg, attr
-from scapy.all import sniff
+from scapy.all import sniff, ICMP, IP
 
 class NetSniff:
 	def __init__(self, interf, berkeley_filter, count):
@@ -38,29 +38,61 @@ class NetSniff:
 		Args:
 		pkt (scapy.layers.l2.Ether): a scapy captured packet.
 		"""
-		try: 
-			date = str(datetime.now())
-			src_mac = str(pkt[0].src).replace(":", ".")
-			dst_mac = str(pkt[0].dst).replace(":", ".")
-			proto = str(pkt[1].payload.name).upper()
-			return (
-				f"[%s{date[11:13]}%s:%s{date[14:16]}%s:%s{date[17:]}%s]" \
-				f" {src_mac} | {dst_mac}" \
-				f" %s{proto}%s" \
-				f" {pkt[1].src}%s:{pkt[2].sport}%s %s\u2192%s {pkt[1].dst}%s:{pkt[2].dport}%s" \
-				f" (TTL:{pkt[0].ttl} LEN:{pkt[0].len})"
-				% (
-					fg(39), attr(0),
-					fg(39), attr(0),
-					fg(39), attr(0),
-					fg(118), attr(0),
-					fg(209), attr(0),
-					fg(9), attr(0),
-					fg(171), attr(0)
+		if pkt.haslayer(ICMP):
+			try:
+				date = str(datetime.now())
+				src_mac = str(pkt[0].src).replace(":", ".")
+				dst_mac = str(pkt[0].dst).replace(":", ".")
+				proto = str(pkt[1].payload.name).upper()
+				
+				icmp_type = ""
+				# add more icmp field types
+				if pkt[ICMP].type == 0:
+					icmp_type = "echo-reply"
+				elif pkt[ICMP].type == 8:
+					icmp_type = "echo"
+
+				return (
+					f"[%s{date[11:13]}%s:%s{date[14:16]}%s:%s{date[17:]}%s]" \
+					f" {src_mac} | {dst_mac} %sICMP%s" \
+					f" %s{pkt[1].src}%s %s\u2192%s %s{pkt[1].dst}%s" \
+					f" (TTL:{pkt[0].ttl} LEN:{pkt[0].len} TYPE:{icmp_type})"
+					% (
+						fg(39), attr(0),
+						fg(39), attr(0),
+						fg(39), attr(0),
+						fg(118), attr(0),
+						fg(209), attr(0),
+						fg(9), attr(0),
+						fg(171), attr(0)
+					)
 				)
-			)
-		except:
-			return None
+			except:
+				return None
+		else:
+			try:
+				date = str(datetime.now())
+				src_mac = str(pkt[0].src).replace(":", ".")
+				dst_mac = str(pkt[0].dst).replace(":", ".")
+				proto = str(pkt[1].payload.name).upper()
+				return (
+					f"[%s{date[11:13]}%s:%s{date[14:16]}%s:%s{date[17:]}%s]" \
+					f" {src_mac} | {dst_mac}" \
+					f" %s{proto}%s" \
+					f" {pkt[1].src}%s:{pkt[2].sport}%s %s\u2192%s {pkt[1].dst}%s:{pkt[2].dport}%s" \
+					f" (TTL:{pkt[0].ttl} LEN:{pkt[0].len})"
+					% (
+						fg(39), attr(0),
+						fg(39), attr(0),
+						fg(39), attr(0),
+						fg(118), attr(0),
+						fg(209), attr(0),
+						fg(9), attr(0),
+						fg(171), attr(0)
+					)
+				)
+			except:
+				return None
 
 	def capture(self, print_stdout=True):
 		""" Begin capturing live packets with scapy.all.sniff 

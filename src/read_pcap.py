@@ -84,6 +84,9 @@ class ReadPCAP:
         """ """
         self.start(self.capparser.filt_udp, self._udp)
 
+    def filter_icmp(self):
+        """ """
+
     def no_filter(self):
         """ """
         self.to_stdout(self._pcapfile)
@@ -101,4 +104,6 @@ class ReadPCAP:
         obj = NetSniff(None, None, None)
         for cap in capture:
             print_str = obj.echo(cap)
+            if not print_str:
+                continue
             print(print_str)

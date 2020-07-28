@@ -37,6 +37,7 @@ if __name__ == "__main__":
 		"dst-mac": args.destination_mac,
 		"tcp": args.filter_tcp,
 		"udp": args.filter_udp,
+		"icmp": args.filter_icmp,
 		"sum": args.summary,
 		"le": args.len_less_equal,
 		"ge": args.len_greater_equal,
@@ -75,6 +76,8 @@ if __name__ == "__main__":
 				read_obj.filter_tcp()
 			elif args["udp"]:
 				read_obj.filter_udp()
+			elif args["icmp"]:
+				read_obj.filter_icmp()
 			else:
 				print("[%sNOTE%s] NO READ FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
 				read_obj.no_filter()
@@ -124,6 +127,8 @@ if __name__ == "__main__":
 				write_obj.filter_tcp()
 			elif args["udp"]:
 				write_obj.filter_udp()
+			elif args["icmp"]:
+				write_obj.filter_icmp()
 			else:
 				print("[%sNOTE%s] NO WRITE FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
 				write_obj.no_filter()

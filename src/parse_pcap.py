@@ -77,6 +77,9 @@ class PCAPParser:
     def filt_udp(self):
         """ """
 
+    def filt_icmp(self):
+        """ """
+
     def summary(self, capture):
         """ Prints a summary of the data contained in a capture.
         This summary includes:
