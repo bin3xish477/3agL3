@@ -7,7 +7,8 @@ from time import sleep
 class ReadPCAP:
     def __init__(
         self, rfile,src_ip, dst_ip, src_port,
-        dst_port, src_mac, dst_mac, tcp, udp
+        dst_port, src_mac, dst_mac, tcp, udp,
+        icmp
     ):
         """
         Args:
@@ -31,6 +32,7 @@ class ReadPCAP:
         self._dst_mac = dst_mac
         self._tcp = tcp
         self._udp = udp
+        self._icmp = icmp
 
         self.capparser = PCAPParser()
 
@@ -46,8 +48,8 @@ class ReadPCAP:
                 arg (str|int): value to filter from packet capture
         """
         filtered_capture = func(self._pcapfile, arg)
-        if len(filtered_capture) == 0:
-            print("[%sATTENTION%s] NO PACKET CONTAINED TARGET VALUE `%s`" % (fg(202), attr(0), arg))
+        if len(filtered_capture) == 0 or filtered_capture == None:
+            print("[ %sATTENTION%s ] NO PACKETS CONTAINED SPECIFIED FILTER" % (fg(202), attr(0)))
             exit(1)
         else:
             self.to_stdout(filtered_capture)
@@ -78,14 +80,15 @@ class ReadPCAP:
 
     def filter_tcp(self):
         """ """
-        self.start(self.capparser.filt_tcp, self._tcp)
+        self.start(self.capparser.filt_tcp, None)
 
     def filter_udp(self):
         """ """
-        self.start(self.capparser.filt_udp, self._udp)
+        self.start(self.capparser.filt_udp, None)
 
     def filter_icmp(self):
         """ """
+        self.start(self.capparser.filt_icmp, None)
 
     def no_filter(self):
         """ """

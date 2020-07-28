@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
 	if args["live"]:
 		capture = NetSniff(args["interf"], args["filter"], args["count"])
-		print("[%sATTENTION%s] PLEASE WAIT A SECOND OR TWO FOR A RESPONSE" % (fg(202), attr(0)))
+		print("[ %sATTENTION%s ] PLEASE WAIT A SECOND OR TWO FOR A RESPONSE" % (fg(202), attr(0)))
 		capture.capture()
 
 	elif args["read"]:
@@ -56,7 +56,7 @@ if __name__ == "__main__":
 			read_obj = ReadPCAP(
 				args["rfile"],args["src-ip"], args["dst-ip"], 
 				args["src-port"], args["dst-port"], args["src-mac"], 
-				args["dst-mac"], args["tcp"], args["udp"]
+				args["dst-mac"], args["tcp"], args["udp"], args["icmp"]
 			)
 			read_obj.read()
 
@@ -79,19 +79,19 @@ if __name__ == "__main__":
 			elif args["icmp"]:
 				read_obj.filter_icmp()
 			else:
-				print("[%sNOTE%s] NO READ FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
+				print("[ %sNOTE%s ] NO READ FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
 				read_obj.no_filter()
 
 			if args["sum"]:
-				print("\n[%sNOTE%s] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
+				print("\n[ %sNOTE%s ] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
 				read_obj.summary()
 
 			if args["json"]:
 				read_obj.to_json()
-				print("[%sSUCCESS%s] SUMMARY JSON FILE SUCCESSFULLY CREATED" % (fg(50), attr(0)))
+				print("[ %sSUCCESS%s ] SUMMARY JSON FILE SUCCESSFULLY CREATED" % (fg(50), attr(0)))
 		else:
 			print(
-				"[%sERROR%s] MUST PROVIDE `-r` ARGUMENTS FOR READ MODE"
+				"[ %sERROR%s ] MUST PROVIDE `-r` ARGUMENTS FOR READ MODE"
 				% (fg(9), attr(0))
 			)
 			exit(1)
@@ -101,11 +101,11 @@ if __name__ == "__main__":
 			write_obj = WritePCAP(
 				args["wfile"], args["interf"], args["filter"], args["count"],
 				args["src-ip"], args["dst-ip"], args["src-port"], args["dst-port"],
-				args["src-mac"], args["dst-mac"], args["tcp"], args["udp"]
+				args["src-mac"], args["dst-mac"], args["tcp"], args["udp"], args["icmp"]
 			)
 		else:
 			print(
-				"[%sERROR%s] MUST PROVIDE `-w` ARGUMENT FOR WRITE MODE"
+				"[ %sERROR%s ] MUST PROVIDE `-w` ARGUMENT FOR WRITE MODE"
 				% (fg(9), attr(0))
 			)
 			exit(1)		
@@ -130,23 +130,23 @@ if __name__ == "__main__":
 			elif args["icmp"]:
 				write_obj.filter_icmp()
 			else:
-				print("[%sNOTE%s] NO WRITE FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
+				print("[ %sNOTE%s ] NO WRITE FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
 				write_obj.no_filter()
 
 			if args["sum"]:
-				print("\n[%sNOTE%s] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
+				print("\n[ %sNOTE%s ] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
 				write_obj.summary()
 				
 			if args["json"]:
 				write_obj.to_json()
-				print("[%sSUCCESS%s] SUMMARY JSON FILE SUCCESSFULLY CREATED" % (fg(50), attr(0)))
+				print("[ %sSUCCESS%s ] SUMMARY JSON FILE SUCCESSFULLY CREATED" % (fg(50), attr(0)))
 		else:
 			print(
-				"[%sERROR%s] MUST PROVIDE `-c` ARGUMENT FOR WRITE MODE"
+				"[ %sERROR%s ] MUST PROVIDE `-c` ARGUMENT FOR WRITE MODE"
 				% (fg(9), attr(0))
 			)
 	else:
 		print(
-			"[%sERROR%s] MUST PROVIDE A MODE OF OPERATION: -live, -read, or -write"
+			"[ %sERROR%s ] MUST PROVIDE A MODE OF OPERATION: -live, -read, or -write"
 			% (fg(9), attr(0))
 		)

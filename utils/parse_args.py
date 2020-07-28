@@ -83,37 +83,37 @@ def parse_args():
 	write_read_pcap.add_argument(
 		"-src-ip", "--source-ip",
 		type=str,
-		help="Filter packets and write PCAP file based on a specified source IP address"
+		help="Filter packets based on a specified source IP address"
 	)
 
 	write_read_pcap.add_argument(
 		"-dst-ip", "--destination-ip",
 		type=str,
-		help="Filter packets and write PCAP file based on a specified destination IP address"
+		help="Filter packets based on a specified destination IP address"
 	)
 
 	write_read_pcap.add_argument(
 		"-src-port", "--source-port",
 		type=str,
-		help="Filter packets and write PCAP file based on a specified source port number"
+		help="Filter packets based on a specified source port number"
 	)
 
 	write_read_pcap.add_argument(
 		"-dst-port", "--destination-port",
 		type=str,
-		help="Filter packets and write PCAP file based on a specified destination port number"
+		help="Filter packets based on a specified destination port number"
 	)
 
 	write_read_pcap.add_argument(
 		"-src-mac", "--source-mac",
 		type=str,
-		help="Filter packets and write PCAP file based on a specified source mac address"
+		help="Filter packets based on a specified source mac address (seperate values by `.`)"
 	)
 
 	write_read_pcap.add_argument(
 		"-dst-mac", "--destination-mac",
 		type=str,
-		help="Filter packets and write PCAP file based on a specified destination mac address"
+		help="Filter packets based on a specified destination mac address (seperate values by `.`)"
 	)
 
 	write_read_pcap.add_argument(
@@ -125,13 +125,15 @@ def parse_args():
 
 	write_read_pcap.add_argument(
 		"-udp", "--filter-udp",
-		action="store_true", default=False,
+		action="store_true", 
+		default=False,
 		help="Filter UDP packets only"
 	)
 
 	write_read_pcap.add_argument(
 		"-icmp", "--filter-icmp",
 		action="store_true",
+		default=False,
 		help="Filter ICMP packets only"
 	)
 

@@ -9,7 +9,7 @@ class WritePCAP(NetSniff):
     def __init__(
         self, wfile, interf, berkeley_filter, count,
         src_ip, dst_ip, src_port, dst_port, src_mac,
-        dst_mac, tcp , udp
+        dst_mac, tcp , udp, icmp
     ):
         """
         Args:
@@ -38,6 +38,7 @@ class WritePCAP(NetSniff):
         # these are booleans v
         self._tcp = tcp
         self._udp = udp
+        self._icmp = icmp
 
         self.capparser = PCAPParser()
 
@@ -98,11 +99,11 @@ class WritePCAP(NetSniff):
         for i in range(2, -1, -1):
             if i != 0:
                 print(
-                    "[%sATTENTION%s] CAPTURE WILL BEGIN IN %s\r" % (fg(202), attr(0), i), end=""
+                    "[ %sATTENTION%s ] CAPTURE WILL BEGIN IN %s\r" % (fg(202), attr(0), i), end=""
                 )
             else:
                 print(
-                    "[%sATTENTION%s] CAPTURE WILL BEGIN IN %s" % (fg(202), attr(0), i)
+                    "[ %sATTENTION%s ] CAPTURE WILL BEGIN IN %s" % (fg(202), attr(0), i)
                 )
             sleep(1)
         self._cap = super().capture(print_stdout=False)
@@ -127,10 +128,10 @@ class WritePCAP(NetSniff):
         """
         try:
             wrpcap(self._wfile, packets)
-            print("[%sSUCCESS%s] PCAP FILE `%s` SUCCESSFULLY CREATED" % (fg(50), attr(0), self._wfile))
+            print("[ %sSUCCESS%s ] PCAP FILE `%s` SUCCESSFULLY CREATED" % (fg(50), attr(0), self._wfile))
         except:
             print(
-                "[%sERROR%s] THERE WAS AN ERROR CREATING PCAP FILE. PLEASE TRY AGAIN..."
+                "[ %sERROR%s ] THERE WAS AN ERROR CREATING PCAP FILE. PLEASE TRY AGAIN..."
                 % (fg(9), attr(0))
             )
             exit(1)

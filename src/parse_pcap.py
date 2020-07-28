@@ -3,23 +3,47 @@ from colored import fg, attr
 from json import dump
 from sys import exit
 from re import search
+from scapy.all import Ether, IP, ICMP
 
 class PCAPParser:
     def filt_src_ip(self, capture, src_ip):
-        """ Filter source IP addresses from capture """
+        """ Filter source IP addresses from capture 
+        Args:
+            capture (scapy.plist.PacketList): scapy packet capture
+            src_ip (str): target source IP address to filter for        
+        """
+        try:
+            src_ip = search(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", src_ip).group(0)
+        except AttributeError:
+            print(
+                "[ %sERROR%s ] SPECIFIED `-src-ip` MUST BE A VALID IP ADDRESSES"
+                % (fg(9), attr(0))
+            )
+            exit(1)
         filtered = []
         for cap in capture:
-            # check if src-ip if valid ip with re.search!!!
-            if cap[1].src == src_ip:
+            if cap[IP].src == src_ip:
                 filtered.append(cap)
         return filtered
 
     def filt_dst_ip(self, capture, dst_ip):
-        """ Filter destination IP addresses from capture """
+        """ Filter destination IP addresses from capture 
+        
+        Args:
+            capture (scapy.plist.PacketList): scapy packet capture
+            dst_ip (str): target destination IP address to filter for
+        """
+        try:
+            dst_ip = search(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", dst_ip).group(0)
+        except AttributeError:
+            print(
+                "[ %sERROR%s ] SPECIFIED `-dst-ip` MUST BE A VALID IP ADDRESSES"
+                % (fg(9), attr(0))
+            )
+            exit(1)
         filtered = []
         for cap in capture:
-            # check if src-ip if valid ip with re.search!!!
-            if cap[1].dst == dst_ip:
+            if cap[IP].dst == dst_ip:
                 filtered.append(cap)
         return filtered
 
@@ -29,11 +53,11 @@ class PCAPParser:
         filtered = []
         for cap in capture:
             try:
-                if cap[2].sport == int(src_port):
+                if cap[IP].sport == int(src_port):
                     filtered.append(cap)
             except ValueError:
                 print(
-                    "[%sERROR%s] SPECIFIED `-src-port` MUST BE WITHIN RANGE: 1-65535"
+                    "[ %sERROR%s ] SPECIFIED `-src-port` MUST BE WITHIN RANGE: 1-65535"
                     % (fg(9), attr(0))
                 )
                 exit(1)
@@ -45,11 +69,11 @@ class PCAPParser:
         filtered = []
         for cap in capture:
             try:
-                if cap[2].dport == int(dst_port):
+                if cap[IP].dport == int(dst_port):
                     filtered.append(cap)
             except ValueError:
                 print(
-                    "[%sERROR%s] SPECIFIED `-dst-port` MUST BE WITHIN RANGE: 1-65535"
+                    "[ %sERROR%s ] SPECIFIED `-dst-port` MUST BE WITHIN RANGE: 1-65535"
                     % (fg(9), attr(0))
                 )
                 exit(1)
@@ -57,28 +81,63 @@ class PCAPParser:
 
     def filt_src_mac(self, capture, src_mac):
         """ """
+        try:
+            src_mac = search(r"\w{2}\.\w{2}\.\w{2}\.\w{2}\.\w{2}\.\w{2}", src_mac).group(0)
+            src_mac = src_mac.replace(".", ":")
+        except AttributeError:
+            print(
+                "[ %sERROR%s ] SPECIFIED `-src-mac` MUST BE A VALID MAC ADDRESS"
+                % (fg(9), attr(0))
+                )
+            exit(1)
+
         filtered = []
         for cap in capture:
-            if cap[0].dst == src_mac:
+            if cap[Ether].src == src_mac:
                 filtered.append(cap)
         return filtered
 
     def filt_dst_mac(self, capture, dst_mac):
         """ """
+        try:
+            dst_mac = search(r"\w{2}\.\w{2}\.\w{2}\.\w{2}\.\w{2}\.\w{2}", dst_mac).group(0)
+            dst_mac = dst_mac.replace(".", ":")
+        except AttributeError:
+            print(
+                "[ %sERROR%s ] SPECIFIED `-dst-mac` MUST BE A VALID MAC ADDRESS"
+                % (fg(9), attr(0))
+                )
+            exit(1)
+
         filtered = []
         for cap in capture:
-            if cap[0].src == dst_mac:
+            if cap[Ether].dst == dst_mac:
                 filtered.append(cap)
         return filtered
 
-    def filt_tcp(self):
+    def filt_tcp(self, capture, _):
         """ """
-        
-    def filt_udp(self):
-        """ """
+        filtered = []
+        for cap in capture:
+            if str(cap[IP].payload.name).upper() == "TCP":
+                filtered.append(cap)
+        return filtered
 
-    def filt_icmp(self):
+    def filt_udp(self, capture, _):
         """ """
+        filtered = []
+        for cap in capture:
+            if str(cap[IP].payload.name).upper() == "UDP":
+                filtered.append(cap)
+        return filtered
+
+    def filt_icmp(self, capture, _):
+        """ """
+        filtered = []
+        for cap in capture:
+            if cap.haslayer(IP) and str(cap[IP].payload.name).upper() == "ICMP":
+                filtered.append(cap)
+        return filtered
 
     def summary(self, capture):
         """ Prints a summary of the data contained in a capture.
@@ -91,20 +150,20 @@ class PCAPParser:
             capture (scapy.plist.PacketList): scapy packet capture list
         """
         try:
-            print("[%sATTENTION%s] THIS MAY TAKE A COUPLE OF SECONDS" % (fg(202), attr(0)))
+            print("[ %sATTENTION%s ] THIS MAY TAKE A SECOND OR TWO" % (fg(202), attr(0)))
 
             # FILTERING IP ADDRESSES
-            ip_list = ([cap[1].src for cap in capture if hasattr(cap[1], 'src')]
-            + [cap[1].dst for cap in capture if hasattr(cap[1], 'dst')])
+            ip_list = ([cap[IP].src for cap in capture if hasattr(cap[IP], 'src')]
+            + [cap[IP].dst for cap in capture if hasattr(cap[IP], 'dst')])
             ip_dict = Counter(ip_list)
             
-            print("\n", " "*5, "%sIP%s: COUNT" % (fg(164), attr(0)))
+            print("%sIP%s: COUNT" % (fg(164), attr(0)))
             for ip, count in ip_dict.most_common():
                 print("\'%s\': %s" % (ip, count))
 
             # FILTERING PORT NUMBERS
-            port_list = ([cap[2].sport for cap in capture if hasattr(cap[2], 'sport')]
-            + [cap[2].dport for cap in capture if hasattr(cap[2], 'dport')])
+            port_list = ([cap[IP].sport for cap in capture if hasattr(cap[IP], 'sport')]
+            + [cap[IP].dport for cap in capture if hasattr(cap[IP], 'dport')])
             port_dict = Counter(port_list)
 
             print("\n%sPORT%s: COUNT" % (fg(113), attr(0)))
@@ -113,11 +172,11 @@ class PCAPParser:
                 print("%s: %s" % (port, count))
 
             # FILTERING MAC ADDRESSES
-            mac_list = ([cap[0].src for cap in capture if hasattr(cap[0], 'src')]
-            + [cap[0].dst for cap in capture if hasattr(cap[0], 'dst')])
+            mac_list = ([cap[Ether].src for cap in capture if hasattr(cap[Ether], 'src')]
+            + [cap[Ether].dst for cap in capture if hasattr(cap[Ether], 'dst')])
             mac_dict = Counter(mac_list)
 
-            print("\n", " "*5, "%sMAC%s: COUNT" % (fg(153), attr(0)))
+            print("%sMAC%s: COUNT" % (fg(153), attr(0)))
             for mac, count in mac_dict.most_common():
                 print("%s: %s" % (mac, count))
             print("\n", end="")
@@ -127,7 +186,7 @@ class PCAPParser:
             pkt_len_sum = 0
             for cap in capture:
                 i += 1
-                pkt_len_sum += cap[0].len
+                pkt_len_sum += cap[Ether].len
             average_pkt_len = round(pkt_len_sum / i, 1)
             print("-"*35)
             print("%sAVERAGE PACKET LENGTH%s: %s bytes" % (fg(109), attr(0), average_pkt_len))
@@ -138,14 +197,14 @@ class PCAPParser:
             for cap in capture:
                 try:
                     i += 1
-                    pkt_ttl_sum += cap[0].ttl
+                    pkt_ttl_sum += cap[Ether].ttl
                 except AttributeError:
                     continue
             average_pkt_ttl = round(pkt_ttl_sum / i, 1)
             print("%sAVERAGE TTL%s: %s " % (fg(109), attr(0), average_pkt_ttl))
         except:
             print(
-                "[%sERROR%s] COULDN'T GENERATE COMPLETE CAPTURE SUMMARY"
+                "[ %sERROR%s ] COULDN'T GENERATE COMPLETE CAPTURE SUMMARY"
                 % (fg(9), attr(0))
             )
             exit(1)
@@ -174,18 +233,18 @@ class PCAPParser:
         """
         capture_summary = {}
 
-        ip_list = ([cap[1].src for cap in capture if hasattr(cap[1], 'src')]
-        + [cap[1].dst for cap in capture if hasattr(cap[1], 'dst')])
+        ip_list = ([cap[IP].src for cap in capture if hasattr(cap[IP], 'src')]
+        + [cap[IP].dst for cap in capture if hasattr(cap[IP], 'dst')])
         ip_dict = Counter(ip_list)
         capture_summary["ip_dict"] = ip_dict
 
-        port_list = ([cap[2].sport for cap in capture if hasattr(cap[2], 'sport')]
-        + [cap[2].dport for cap in capture if hasattr(cap[2], 'dport')])
+        port_list = ([cap[IP].sport for cap in capture if hasattr(cap[IP], 'sport')]
+        + [cap[IP].dport for cap in capture if hasattr(cap[2], 'dport')])
         port_dict = Counter(port_list)
         capture_summary["port_dict"] = port_dict
 
-        mac_list = ([cap[0].src for cap in capture if hasattr(cap[0], 'src')]
-        + [cap[0].dst for cap in capture if hasattr(cap[0], 'dst')])
+        mac_list = ([cap[Ether].src for cap in capture if hasattr(cap[Ether], 'src')]
+        + [cap[Ether].dst for cap in capture if hasattr(cap[Ether], 'dst')])
         mac_dict = Counter(mac_list)
         capture_summary["mac_dict"] = mac_dict
         
@@ -194,6 +253,6 @@ class PCAPParser:
                 dump(capture_summary, cap_sum_file, indent=4)
         except:
             print(
-                "[%sERROR%s] THERE WAS AN ERROR CREATING SUMMARY JSON FILE... PLEASE TRY AGAIN"
+                "[ %sERROR%s ] THERE WAS AN ERROR CREATING SUMMARY JSON FILE... PLEASE TRY AGAIN"
                 % (fg(9), attr(0))
             )
