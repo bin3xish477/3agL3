@@ -44,7 +44,7 @@ class NetSniff:
 				src_mac = str(pkt[0].src).replace(":", ".")
 				dst_mac = str(pkt[0].dst).replace(":", ".")
 				proto = str(pkt[1].payload.name).upper()
-				
+
 				icmp_type = ""
 				# add more icmp field types
 				if pkt[ICMP].type == 0:
