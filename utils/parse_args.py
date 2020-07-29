@@ -65,6 +65,19 @@ def parse_args():
 		type=str, default=False,
 		help="name of PCAP file to read for parsing"
 	)
+
+	read_pcap.add_argument(
+		"-pc", "--packet-count",
+		action="store_true",
+		default=False,
+		help="returns the number of the packets within a PCAP file"
+	)
+
+	read_pcap.add_argument(
+		"-no-prn", "--no-print",
+		action="store_true",
+		help="do not print out traffic flow output to console"
+	)
 	
 	# -------------- Writing PCAP options ---------------
 	write_pcap.add_argument(
@@ -135,6 +148,17 @@ def parse_args():
 		action="store_true",
 		default=False,
 		help="Filter ICMP packets only"
+	)
+
+	write_read_pcap.add_argument(
+		"-raw-out", "--show-raw-output",
+		action="store_true",
+		help="print raw load of each packet"
+	)
+	write_read_pcap.add_argument(
+		"-raw-sch", "--raw_search",
+		type=str,
+		help="search the raw payload for specified data"
 	)
 
 	write_read_pcap.add_argument(

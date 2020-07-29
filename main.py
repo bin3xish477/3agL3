@@ -27,6 +27,8 @@ if __name__ == "__main__":
 		"count": args.count,
 		"read": args.read_mode,
 		"rfile": args.rfile,
+		"pkt-cnt": args.packet_count,
+		"no-prn": args.no_print,
 		"write": args.write_mode,
 		"wfile": args.wfile,
 		"src-ip": args.source_ip,
@@ -38,6 +40,8 @@ if __name__ == "__main__":
 		"tcp": args.filter_tcp,
 		"udp": args.filter_udp,
 		"icmp": args.filter_icmp,
+		"raw-out": args.show_raw_output,
+		"raw-sch": args.raw_search,
 		"sum": args.summary,
 		"le": args.len_less_equal,
 		"ge": args.len_greater_equal,
@@ -56,7 +60,8 @@ if __name__ == "__main__":
 			read_obj = ReadPCAP(
 				args["rfile"],args["src-ip"], args["dst-ip"], 
 				args["src-port"], args["dst-port"], args["src-mac"], 
-				args["dst-mac"], args["tcp"], args["udp"], args["icmp"]
+				args["dst-mac"], args["tcp"], args["udp"], args["icmp"],
+				args["pkt-cnt"]
 			)
 			read_obj.read()
 
@@ -79,8 +84,7 @@ if __name__ == "__main__":
 			elif args["icmp"]:
 				read_obj.filter_icmp()
 			else:
-				print("[ %sNOTE%s ] NO READ FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
-				read_obj.no_filter()
+				read_obj.no_filter(args["no-prn"])
 
 			if args["sum"]:
 				print("\n[ %sNOTE%s ] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
@@ -89,6 +93,15 @@ if __name__ == "__main__":
 			if args["json"]:
 				read_obj.to_json()
 				print("[ %sSUCCESS%s ] SUMMARY JSON FILE SUCCESSFULLY CREATED" % (fg(50), attr(0)))
+			
+			if args["pkt-cnt"]:
+				pkt_count = read_obj.packet_count()
+				print("[ %s+%s ] Number of packets in PCAP: " % (fg(50), attr(0)), pkt_count)
+
+			if args["raw-out"]:
+				read_obj.raw_data_parser.raw_output(read_obj.pcapfile)
+			elif args["raw-sch"]:
+				read_obj.raw_data_parser.search(read_obj.pcapfile, args["raw-sch"])
 		else:
 			print(
 				"[ %sERROR%s ] MUST PROVIDE `-r` ARGUMENTS FOR READ MODE"

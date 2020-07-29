@@ -3,7 +3,7 @@ from colored import fg, attr
 from json import dump
 from sys import exit
 from re import search
-from scapy.all import Ether, IP, ICMP
+from scapy.all import Ether, IP, ICMP, Raw
 
 class PCAPParser:
     def filt_src_ip(self, capture, src_ip):
@@ -20,9 +20,10 @@ class PCAPParser:
                 % (fg(9), attr(0))
             )
             exit(1)
+
         filtered = []
         for cap in capture:
-            if cap[IP].src == src_ip:
+            if cap.haslayer(IP) and cap[IP].src == src_ip:
                 filtered.append(cap)
         return filtered
 
@@ -41,9 +42,10 @@ class PCAPParser:
                 % (fg(9), attr(0))
             )
             exit(1)
+
         filtered = []
         for cap in capture:
-            if cap[IP].dst == dst_ip:
+            if cap.haslayer(IP) and cap[IP].dst == dst_ip:
                 filtered.append(cap)
         return filtered
 
@@ -53,7 +55,7 @@ class PCAPParser:
         filtered = []
         for cap in capture:
             try:
-                if cap[IP].sport == int(src_port):
+                if cap.haslayer(IP) and cap[IP].sport == int(src_port):
                     filtered.append(cap)
             except ValueError:
                 print(
@@ -69,7 +71,7 @@ class PCAPParser:
         filtered = []
         for cap in capture:
             try:
-                if cap[IP].dport == int(dst_port):
+                if cap.haslayer(IP) and cap[IP].dport == int(dst_port):
                     filtered.append(cap)
             except ValueError:
                 print(
@@ -119,7 +121,7 @@ class PCAPParser:
         """ """
         filtered = []
         for cap in capture:
-            if str(cap[IP].payload.name).upper() == "TCP":
+            if cap.haslayer(IP) and str(cap[IP].payload.name).upper() == "TCP":
                 filtered.append(cap)
         return filtered
 
@@ -127,7 +129,7 @@ class PCAPParser:
         """ """
         filtered = []
         for cap in capture:
-            if str(cap[IP].payload.name).upper() == "UDP":
+            if cap.haslayer(IP) and str(cap[IP].payload.name).upper() == "UDP":
                 filtered.append(cap)
         return filtered
 
@@ -153,8 +155,8 @@ class PCAPParser:
             print("[ %sATTENTION%s ] THIS MAY TAKE A SECOND OR TWO" % (fg(202), attr(0)))
 
             # FILTERING IP ADDRESSES
-            ip_list = ([cap[IP].src for cap in capture if hasattr(cap[IP], 'src')]
-            + [cap[IP].dst for cap in capture if hasattr(cap[IP], 'dst')])
+            ip_list = ([cap[IP].src for cap in capture if cap.haslayer(IP)]
+            + [cap[IP].dst for cap in capture if cap.haslayer(IP)])
             ip_dict = Counter(ip_list)
             
             print("%sIP%s: COUNT" % (fg(164), attr(0)))
@@ -162,8 +164,8 @@ class PCAPParser:
                 print("\'%s\': %s" % (ip, count))
 
             # FILTERING PORT NUMBERS
-            port_list = ([cap[IP].sport for cap in capture if hasattr(cap[IP], 'sport')]
-            + [cap[IP].dport for cap in capture if hasattr(cap[IP], 'dport')])
+            port_list = ([cap[IP].sport for cap in capture if cap.haslayer(IP)]
+            + [cap[IP].dport for cap in capture if cap.haslayer(IP)])
             port_dict = Counter(port_list)
 
             print("\n%sPORT%s: COUNT" % (fg(113), attr(0)))
@@ -172,8 +174,8 @@ class PCAPParser:
                 print("%s: %s" % (port, count))
 
             # FILTERING MAC ADDRESSES
-            mac_list = ([cap[Ether].src for cap in capture if hasattr(cap[Ether], 'src')]
-            + [cap[Ether].dst for cap in capture if hasattr(cap[Ether], 'dst')])
+            mac_list = ([cap[Ether].src for cap in capture if cap.haslayer(IP)]
+            + [cap[Ether].dst for cap in capture if cap.haslayer(IP)])
             mac_dict = Counter(mac_list)
 
             print("%sMAC%s: COUNT" % (fg(153), attr(0)))
@@ -186,7 +188,7 @@ class PCAPParser:
             pkt_len_sum = 0
             for cap in capture:
                 i += 1
-                pkt_len_sum += cap[Ether].len
+                pkt_len_sum += len(cap)
             average_pkt_len = round(pkt_len_sum / i, 1)
             print("-"*35)
             print("%sAVERAGE PACKET LENGTH%s: %s bytes" % (fg(109), attr(0), average_pkt_len))
@@ -195,11 +197,12 @@ class PCAPParser:
             i = 0
             pkt_ttl_sum = 0
             for cap in capture:
-                try:
-                    i += 1
-                    pkt_ttl_sum += cap[Ether].ttl
-                except AttributeError:
-                    continue
+                if cap.haslayer(Ether):
+                    try:
+                        i += 1
+                        pkt_ttl_sum += cap[Ether].ttl
+                    except AttributeError:
+                        continue
             average_pkt_ttl = round(pkt_ttl_sum / i, 1)
             print("%sAVERAGE TTL%s: %s " % (fg(109), attr(0), average_pkt_ttl))
         except:
@@ -233,18 +236,18 @@ class PCAPParser:
         """
         capture_summary = {}
 
-        ip_list = ([cap[IP].src for cap in capture if hasattr(cap[IP], 'src')]
-        + [cap[IP].dst for cap in capture if hasattr(cap[IP], 'dst')])
+        ip_list = ([cap[IP].src for cap in capture if cap.haslayer(IP)]
+        + [cap[IP].dst for cap in capture if cap.haslayer(IP)])
         ip_dict = Counter(ip_list)
         capture_summary["ip_dict"] = ip_dict
 
-        port_list = ([cap[IP].sport for cap in capture if hasattr(cap[IP], 'sport')]
-        + [cap[IP].dport for cap in capture if hasattr(cap[2], 'dport')])
+        port_list = ([cap[IP].sport for cap in capture if cap.haslayer(IP)]
+        + [cap[IP].dport for cap in capture if cap.haslayer(IP)])
         port_dict = Counter(port_list)
         capture_summary["port_dict"] = port_dict
 
-        mac_list = ([cap[Ether].src for cap in capture if hasattr(cap[Ether], 'src')]
-        + [cap[Ether].dst for cap in capture if hasattr(cap[Ether], 'dst')])
+        mac_list = ([cap[Ether].src for cap in capture if cap.haslayer(Ether)]
+        + [cap[Ether].dst for cap in capture if cap.haslayer(Ether)])
         mac_dict = Counter(mac_list)
         capture_summary["mac_dict"] = mac_dict
         
@@ -255,4 +258,31 @@ class PCAPParser:
             print(
                 "[ %sERROR%s ] THERE WAS AN ERROR CREATING SUMMARY JSON FILE... PLEASE TRY AGAIN"
                 % (fg(9), attr(0))
+            )
+
+class RawPCAPAnalyzer:
+    def raw_output(self, capture):
+        """ """
+        try:
+            for cap in capture:
+                if cap.haslayer(IP) and cap.haslayer(Raw):
+                    print(cap[Raw].load)
+        except KeyboardInterrupt:
+            print(
+                "\n[ %sATTENTION%s ] SIGINT INVOKED: TERMINATING PROGRAM"
+                % (fg(202), attr(0))
+            )
+
+    def search(self, capture, pattern):
+        """ """
+        try:
+            for cap in capture:
+                if cap.haslayer(IP) and cap.haslayer(Raw):
+                    str_raw_load = str(cap[Raw].load)
+                    if pattern in str_raw_load:
+                        print(str_raw_load)
+        except KeyboardInterrupt:
+            print(
+                "\n[ %sATTENTION%s ] SIGINT INVOKED: TERMINATING PROGRAM"
+                % (fg(202), attr(0))
             )

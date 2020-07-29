@@ -53,18 +53,18 @@ class NetSniff:
 					icmp_type = "echo"
 
 				return (
-					f"[ %s{date[11:13]}%s:%s{date[14:16]}%s:%s{date[17:]}%s ]" \
-					f" {src_mac} | {dst_mac} %s{str(pkt[IP].payload.name).upper()}%s" \
-					f" %s{pkt[IP].src}%s %s\u2192%s %s{pkt[IP].dst}%s" \
-					f" (TTL:{pkt[Ether].ttl} LEN:{pkt[Ether].len} TYPE:{icmp_type})"
+					f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
+					f" {src_mac} | {dst_mac}  %s%s{str(pkt[IP].payload.name).upper()}%s " \
+					f" %s%s{pkt[IP].src}%s %s%s\u2192%s %s%s{pkt[IP].dst}%s" \
+					f" (TTL:{pkt[Ether].ttl} LEN:{pkt[Ether].len}  TYPE:{icmp_type})"
 					% (
-						fg(39), attr(0),
-						fg(39), attr(0),
-						fg(39), attr(0),
-						fg(118), attr(0),
-						fg(208), attr(0),
-						fg(9), attr(0),
-						fg(220), attr(0)
+						fg(39), attr("bold"), attr("reset"),
+						fg(39), attr("bold"), attr("reset"),
+						fg(39), attr("bold"), attr("reset"),
+						fg(118), attr("bold"), attr("reset"),
+						fg(208), attr("bold"), attr("reset"),
+						fg(9), attr("bold"), attr("reset"),
+						fg(220), attr("bold"), attr("reset"),
 					)
 				)
 			except:
@@ -76,19 +76,19 @@ class NetSniff:
 				dst_mac = str(pkt[Ether].dst).replace(":", ".")
 				proto = str(pkt[IP].payload.name).upper()
 				return (
-					f"[ %s{date[11:13]}%s:%s{date[14:16]}%s:%s{date[17:]}%s ]" \
+					f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
 					f" {src_mac} | {dst_mac}" \
-					f" %s{proto}%s" \
-					f" {pkt[IP].src}%s:{pkt[IP].sport}%s %s\u2192%s {pkt[IP].dst}%s:{pkt[IP].dport}%s" \
-					f" (TTL:{pkt[0].ttl} LEN:{pkt[0].len})"
+					f"  %s%s{proto}%s " \
+					f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
+					f"  (TTL:{pkt[0].ttl} LEN:{pkt[0].len})"
 					% (
-						fg(39), attr(0),
-						fg(39), attr(0),
-						fg(39), attr(0),
-						fg(118), attr(0),
-						fg(208), attr(0),
-						fg(9), attr(0),
-						fg(220), attr(0)
+						fg(99), attr("bold"), attr("reset"),
+						fg(99), attr("bold"), attr("reset"),
+						fg(99), attr("bold"), attr("reset"),
+						fg(118), attr("bold"), attr("reset"),
+						fg(208), attr("bold"), attr("reset"),
+						fg(9), attr("bold"), attr("reset"),
+						fg(220), attr("bold"), attr("reset"),
 					)
 				)
 			except:

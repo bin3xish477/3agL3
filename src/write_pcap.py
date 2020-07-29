@@ -35,7 +35,7 @@ class WritePCAP(NetSniff):
         self._dst_port = dst_port
         self._src_mac = src_mac
         self._dst_mac = dst_mac
-        # these are booleans v
+        # these are booleans
         self._tcp = tcp
         self._udp = udp
         self._icmp = icmp
