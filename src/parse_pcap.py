@@ -26,6 +26,27 @@ class PCAPParser:
             if cap.haslayer(IP) and cap[IP].src == src_ip:
                 filtered.append(cap)
         return filtered
+    
+    def filt_not_src_ip(self, capture, src_ip):
+        """ Filter source IP addresses from capture that do not match `src_ip`
+        Args:
+            capture (scapy.plist.PacketList): scapy packet capture
+            src_ip (str): target source IP address to not filter for        
+        """
+        try:
+            src_ip = search(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", src_ip).group(0)
+        except AttributeError:
+            print(
+                "[ %sERROR%s ] SPECIFIED `-src-ip` MUST BE A VALID IP ADDRESSES"
+                % (fg(9), attr(0))
+            )
+            exit(1)
+
+        filtered = []
+        for cap in capture:
+            if cap.haslayer(IP) and cap[IP].src != src_ip:
+                filtered.append(cap)
+        return filtered
 
     def filt_dst_ip(self, capture, dst_ip):
         """ Filter destination IP addresses from capture 

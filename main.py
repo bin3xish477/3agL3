@@ -32,14 +32,23 @@ if __name__ == "__main__":
 		"write": args.write_mode,
 		"wfile": args.wfile,
 		"src-ip": args.source_ip,
+		"not-src-ip":args.not_source_ip,
 		"dst-ip": args.destination_ip,
+		"not-dst-ip": args.not_destination_ip,
 		"src-port": args.source_port,
+		"not-src-port": args.not_source_port,
 		"dst-port": args.destination_port,
+		"not-dst-port": args.not_destination_port,
 		"src-mac": args.source_mac,
+		"not-src-mac": args.not_source_mac,
 		"dst-mac": args.destination_mac,
+		"not-dst-mac": args.not_destination_mac,
 		"tcp": args.filter_tcp,
+		"not-tcp": args.not_filter_tcmp,
 		"udp": args.filter_udp,
+		"not-udp": args.not_filter_udp,
 		"icmp": args.filter_icmp,
+		"not-icmp": args.not_filter_icmp,
 		"raw-out": args.show_raw_output,
 		"raw-sch": args.raw_search,
 		"sum": args.summary,
@@ -67,6 +76,8 @@ if __name__ == "__main__":
 
 			if args["src-ip"]:
 				read_obj.filter_src_ip()
+			elif args["not-src-ip"]:
+				read_obj.filter_not_src_ip()
 			elif args["dst-ip"]:
 				read_obj.filter_dst_ip()
 			elif args["src-port"]:
@@ -89,6 +100,7 @@ if __name__ == "__main__":
 			if args["sum"]:
 				print("\n[ %sNOTE%s ] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
 				read_obj.summary()
+				read_obj.packet_count()
 
 			if args["json"]:
 				read_obj.to_json()

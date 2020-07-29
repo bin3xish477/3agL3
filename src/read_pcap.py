@@ -65,6 +65,9 @@ class ReadPCAP:
         """ """
         self.execute(self.capparser.filt_src_ip, self._src_ip)
     
+    def filter_not_src_ip(self):
+        """ """
+        self.execute(self.capparser.filt_not_src_ip, self._src_ip)
     def filter_dst_ip(self):
         """ """
         self.execute(self.capparser.filt_dst_ip, self._dst_ip)
