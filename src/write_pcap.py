@@ -42,8 +42,8 @@ class WritePCAP(NetSniff):
 
         self.capparser = PCAPParser()
 
-    def start(self, func, arg):
-        """ Starts real-time capture and passes that capture to `func`
+    def execute(self, func, arg):
+        """ Executes real-time capture and passes that capture to `func`
         along with `arg`. 
             Args:
                 func (function): function defined in PCAPParser to invoke
@@ -61,35 +61,35 @@ class WritePCAP(NetSniff):
 
     def filter_src_ip(self):
         """ """
-        self.start(self.capparser.filt_src_ip, self._src_ip)
+        self.execute(self.capparser.filt_src_ip, self._src_ip)
     
     def filter_dst_ip(self):
         """ """
-        self.start(self.capparser.filt_dst_ip, self._dst_ip)
+        self.execute(self.capparser.filt_dst_ip, self._dst_ip)
 
     def filter_src_port(self):
         """ """
-        self.start(self.capparser.filt_src_port, self._src_port)
+        self.execute(self.capparser.filt_src_port, self._src_port)
 
     def filter_dst_port(self):
         """ """
-        self.start(self.capparser.filt_dst_port, self._dst_port)
+        self.execute(self.capparser.filt_dst_port, self._dst_port)
 
     def filter_src_mac(self):
         """ """
-        self.start(self.capparser.filt_src_mac, self._src_mac)
+        self.execute(self.capparser.filt_src_mac, self._src_mac)
 
     def filter_dst_mac(self):
         """ """
-        self.start(self.capparser.filt_dst_mac, self._dst_mac)
+        self.execute(self.capparser.filt_dst_mac, self._dst_mac)
 
     def filter_tcp(self):
         """ """
-        self.start(self.capparser.filt_tcp, self._tcp)
+        self.execute(self.capparser.filt_tcp, self._tcp)
 
     def filter_udp(self):
         """ """
-        self.start(self.capparser.filt_udp, self._udp)
+        self.execute(self.capparser.filt_udp, self._udp)
 
     def filter_icmp(self):
         """ """
