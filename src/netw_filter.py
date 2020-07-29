@@ -24,9 +24,6 @@ def get_connection_name_from_guid(iface_guids):
         except FileNotFoundError:
             pass
     return iface_names
-
-x = ni.interfaces()
-pprint(get_connection_name_from_guid(x))
 """
 
 class NetworkFilter:
