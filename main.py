@@ -57,7 +57,8 @@ if __name__ == "__main__":
 		"ge": args.len_greater_equal,
 		"len-equal": args.len_equal,
 		"ttl-equal": args.len_equal,
-		"json": args.json
+		"json": args.json,
+		"enum": args.enumeration
 	}
 
 	if args["live"]:
@@ -171,6 +172,9 @@ if __name__ == "__main__":
 				"[ %sERROR%s ] MUST PROVIDE `-c` ARGUMENT FOR WRITE MODE"
 				% (fg(9), attr(0))
 			)
+	elif args["enum"]:
+		pass
+
 	else:
 		print(
 			"[ %sERROR%s ] MUST PROVIDE A MODE OF OPERATION: -live, -read, or -write"

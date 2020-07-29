@@ -73,6 +73,7 @@ def parse_args():
 	write_read_pcap.add_argument("-j", "--json",action="store_true",help="Create JSON file containing capture summary (ip:count, port:count, mac:count)")
 
 	# ------------ NETWORK ENUMERATION -----------------
+	network_enum.add_argument("-enum", "--enumeration",action="store_true",help="Use enum mode. Must specify 1 or more options from below")
 	network_enum.add_argument("-ls-inter", "--list-interfaces",action="store_true",help="List all available network interfaces")
 	network_enum.add_argument("-enum-ip", "--enumerate-ip",metavar="<IP>",type=str,help="Enumerate specified IP address")
 	
