@@ -36,7 +36,6 @@ class ReadPCAP:
         self._icmp = icmp
 
         self.capparser = PCAPParser()
-        self.raw_data_parser = RawPCAPAnalyzer()
 
     def read(self):
         """ Read PCAP file """

@@ -281,7 +281,6 @@ class PCAPParser:
                 % (fg(9), attr(0))
             )
 
-class RawPCAPAnalyzer:
     def raw_output(self, capture):
         """ """
         try:
@@ -294,7 +293,7 @@ class RawPCAPAnalyzer:
                 % (fg(202), attr(0))
             )
 
-    def search(self, capture, pattern):
+    def raw_search(self, capture, pattern):
         """ """
         try:
             for cap in capture:

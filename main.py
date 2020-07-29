@@ -111,9 +111,9 @@ if __name__ == "__main__":
 				print("[ %s+%s ] Number of packets in PCAP: " % (fg(50), attr(0)), pkt_count)
 
 			if args["raw-out"]:
-				read_obj.raw_data_parser.raw_output(read_obj.pcapfile)
+				read_obj.capparser.raw_output(read_obj.pcapfile)
 			elif args["raw-sch"]:
-				read_obj.raw_data_parser.search(read_obj.pcapfile, args["raw-sch"])
+				read_obj.capparser.raw_search(read_obj.pcapfile, args["raw-sch"])
 		else:
 			print(
 				"[ %sERROR%s ] MUST PROVIDE `-r` ARGUMENTS FOR READ MODE"

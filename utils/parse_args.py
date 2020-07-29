@@ -68,6 +68,7 @@ def parse_args():
 	write_read_pcap.add_argument("-ge", "--len-greater-equal",metavar="<NUM>",type=int,help="Filters for packets with a length that is greater than or equal to the specified number")
 	write_read_pcap.add_argument("-len-eq", "--len-equal",metavar="<NUM>",type=int,help="Filters for packets with a length that is equal to the specified number")
 	write_read_pcap.add_argument("-ttl-eq", "--ttl-equal",metavar="<NUM>",type=int,help="Filters for packets with a ttl that is equal to the specified number")
+	write_read_pcap.add_argument("-ip-ver", "--ip-version", action="store_true",help="Prints the percentage of a capture containing IPv4 vs IPv6")
 	write_read_pcap.add_argument("-j", "--json",action="store_true",help="Create JSON file containing capture summary (ip:count, port:count, mac:count)")
 	
 	if len(argv[1:]) == 0:
