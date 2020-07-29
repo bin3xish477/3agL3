@@ -7,7 +7,7 @@ from colored import fg, attr
 def parse_args():
 	""" Program arguments """
 	parser = ArgumentParser(
-		description="There are three modes of operation \u2192 live : read : write ",
+		description="There are four modes of operation \u2192 live : read : write : network-enum ",
 		usage=f"\n\t{argv[0]} -live <options> | -read <options> | -write <options>",
 		add_help=False
 		)
@@ -18,6 +18,7 @@ def parse_args():
 	read_pcap = parser.add_argument_group("%sRead Mode Required Options%s" % (fg(76), attr(0)))
 	write_pcap = parser.add_argument_group("%sWrite Mode Required Options%s" % (fg(39), attr(0)))
 	write_read_pcap = parser.add_argument_group("%sOptional Arguments for Read/Write Modes%s" % (fg(199), attr(0)))
+	network_enum = parser.add_argument_group("%sNetwork-Enum Mode Options%s" % (fg(130), attr(0)))
 
 	help_options.add_argument("-h", "--help",action="help",help="Show this help message and exit")
 
@@ -70,6 +71,10 @@ def parse_args():
 	write_read_pcap.add_argument("-ttl-eq", "--ttl-equal",metavar="<NUM>",type=int,help="Filters for packets with a ttl that is equal to the specified number")
 	write_read_pcap.add_argument("-ip-ver", "--ip-version", action="store_true",help="Prints the percentage of a capture containing IPv4 vs IPv6")
 	write_read_pcap.add_argument("-j", "--json",action="store_true",help="Create JSON file containing capture summary (ip:count, port:count, mac:count)")
+
+	# ------------ NETWORK ENUMERATION -----------------
+	network_enum.add_argument("-ls-inter", "--list-interfaces",action="store_true",help="List all available network interfaces")
+	network_enum.add_argument("-enum-ip", "--enumerate-ip",metavar="<IP>",type=str,help="Enumerate specified IP address")
 	
 	if len(argv[1:]) == 0:
 		parser.print_help()

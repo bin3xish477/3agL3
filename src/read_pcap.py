@@ -1,4 +1,4 @@
-from src.parse_pcap import PCAPParser, RawPCAPAnalyzer
+from src.parse_pcap import PCAPParser
 from src.net_sniff import NetSniff
 from scapy.all import rdpcap
 from colored import fg, attr
