@@ -43,7 +43,7 @@ def parse_args():
 	write_pcap.add_argument("-write", "--write-mode",action="store_true", default=None,help="capture live traffic and write to PCAP file (must specify `-c` option)")
 	write_pcap.add_argument("-w", "--wfile",metavar="<FILENAME>",type=str, default=None,help="name of PCAP file to create")
 
-	# -------------- Read/Write Options ----------------
+	# -------------- Read && Write Options ----------------
 	write_read_pcap.add_argument("-src-ip", "--source-ip",metavar="<IP>",type=str,help="Filter packets based on a specified source IP address")
 	write_read_pcap.add_argument("-not-src-ip", "--not-source-ip",metavar="<IP>",type=str,help="Filter packets that do not contain the specified source IP address")
 	write_read_pcap.add_argument("-dst-ip", "--destination-ip",metavar="<IP>",type=str,help="Filter packets based on a specified destination IP address")
@@ -71,6 +71,7 @@ def parse_args():
 	write_read_pcap.add_argument("-ttl-eq", "--ttl-equal",metavar="<NUM>",type=int,help="Filters for packets with a ttl that is equal to the specified number")
 	write_read_pcap.add_argument("-ip-ver", "--ip-version", action="store_true",help="Prints the percentage of a capture containing IPv4 vs IPv6")
 	write_read_pcap.add_argument("-j", "--json",action="store_true",help="Create JSON file containing capture summary (ip:count, port:count, mac:count)")
+	write_read_pcap.add_argument("-l", "--log",action="store_true",help="Log pcap traffic flow to a txt file for external parsing")
 
 	# ------------ NETWORK ENUMERATION -----------------
 	network_enum.add_argument("-enum", "--enumeration",action="store_true",help="Use enum mode. Must specify 1 or more options from below")

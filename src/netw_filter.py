@@ -1,7 +1,6 @@
-# from netaddr import (
-# )
-# from netifaces import (
-# )
+# from netaddr import 
+# from netifaces import 
+from colored import fg, attr
 from winreg import (
     ConnectRegistry, HKEY_LOCAL_MACHINE, OpenKey, QueryValueEx
 )
