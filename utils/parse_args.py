@@ -28,7 +28,7 @@ def parse_args():
 	if system() == "Windows":
 		live_capture.add_argument("-i", "--interf",nargs="*",help="The interface to listen on (more than one can be specified)")
 	else:
-		live_capture.add_argument("-i", "--interf", nargs="*", default="eth0",help="The interface to listen on (more than one is allowed)")
+		live_capture.add_argument("-i", "--interf", nargs="*",help="The interface to listen on (more than one is allowed)")
 
 	live_capture.add_argument("-c", "--count",metavar="<NUM>",type=int, default=0,help="The number of packets to capture (default = 0 = infinity)")
 	live_capture.add_argument("-f", "--filter",metavar="<BPF FITLER>",type=str, default=None,help="Berkeley packet filter to apply to capture")

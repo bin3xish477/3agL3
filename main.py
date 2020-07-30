@@ -45,7 +45,7 @@ if __name__ == "__main__":
 		"dst-mac": args.destination_mac,
 		"not-dst-mac": args.not_destination_mac,
 		"tcp": args.filter_tcp,
-		"not-tcp": args.not_filter_tcmp,
+		"not-tcp": args.not_filter_tcp,
 		"udp": args.filter_udp,
 		"not-udp": args.not_filter_udp,
 		"icmp": args.filter_icmp,
@@ -62,6 +62,9 @@ if __name__ == "__main__":
 	}
 
 	if args["live"]:
+		if not args["interf"]:
+			print("[ %sATTENTION%s ] an interface, `-i`, must be specified" % (fg(202), attr(0)))
+			exit(1)
 		capture = NetSniff(args["interf"], args["filter"], args["count"])
 		print("[ %sATTENTION%s ] PLEASE WAIT A SECOND OR TWO FOR A RESPONSE" % (fg(202), attr(0)))
 		capture.capture()
@@ -124,6 +127,9 @@ if __name__ == "__main__":
 			exit(1)
 
 	elif args["write"]:
+		if not args["interf"]:
+			print("[ %sATTENTION%s ] an interface, `-i`, must be specified" % (fg(202), attr(0)))
+			exit(1)
 		if args["wfile"]:
 			write_obj = WritePCAP(
 				args["wfile"], args["interf"], args["filter"], args["count"],

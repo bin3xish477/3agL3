@@ -1,9 +1,11 @@
 # from netaddr import 
 # from netifaces import 
 from colored import fg, attr
-from winreg import (
-    ConnectRegistry, HKEY_LOCAL_MACHINE, OpenKey, QueryValueEx
-)
+from platform import system
+if system() == "Windows":
+	from winreg import (
+	    ConnectRegistry, HKEY_LOCAL_MACHINE, OpenKey, QueryValueEx
+	)
 
 """
 https://0xbharath.github.io/art-of-packet-crafting-with-scapy/libraries/netifaces/index.html
