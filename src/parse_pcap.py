@@ -105,8 +105,7 @@ class PCAPParser:
     def filt_src_mac(self, capture, src_mac):
         """ """
         try:
-            src_mac = search(r"\w{2}\.\w{2}\.\w{2}\.\w{2}\.\w{2}\.\w{2}", src_mac).group(0)
-            src_mac = src_mac.replace(".", ":")
+            src_mac = search(r"\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}", src_mac).group(0)
         except AttributeError:
             print(
                 "[ %sERROR%s ] SPECIFIED `-src-mac` MUST BE A VALID MAC ADDRESS"
@@ -123,8 +122,7 @@ class PCAPParser:
     def filt_dst_mac(self, capture, dst_mac):
         """ """
         try:
-            dst_mac = search(r"\w{2}\.\w{2}\.\w{2}\.\w{2}\.\w{2}\.\w{2}", dst_mac).group(0)
-            dst_mac = dst_mac.replace(".", ":")
+            dst_mac = search(r"\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}", dst_mac).group(0)
         except AttributeError:
             print(
                 "[ %sERROR%s ] SPECIFIED `-dst-mac` MUST BE A VALID MAC ADDRESS"

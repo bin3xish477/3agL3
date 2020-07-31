@@ -58,7 +58,10 @@ if __name__ == "__main__":
 		"len-equal": args.len_equal,
 		"ttl-equal": args.len_equal,
 		"json": args.json,
-		"enum": args.enumeration
+		"enum": args.enumeration,
+		"ls-interf": args.list_interfaces,
+		"enum-interf": args.enumerate_interface,
+		"enum-ip": args.enumerate_ip
 	}
 
 	if args["live"]:
@@ -178,8 +181,16 @@ if __name__ == "__main__":
 				"[ %sERROR%s ] MUST PROVIDE `-c` ARGUMENT FOR WRITE MODE"
 				% (fg(9), attr(0))
 			)
+
 	elif args["enum"]:
-		pass
+		enum_obj = NetworkFilter()
+
+		if args["ls-interf"]:
+			enum_obj.list_interfaces()
+		elif args["enum-interf"]:
+			enum_obj.enumerate_interface(args["enum-interf"])
+		elif args["enum-ip"]:
+			pass
 
 	else:
 		print(

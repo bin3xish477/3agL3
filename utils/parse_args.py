@@ -52,10 +52,10 @@ def parse_args():
 	write_read_pcap.add_argument("-not-src-port", "--not-source-port",metavar="<PORT>",type=str,help="Filter packets that do not contain the specified source port number")
 	write_read_pcap.add_argument("-dst-port", "--destination-port",metavar="<PORT>",type=str,help="Filter packets based on a specified destination port number")
 	write_read_pcap.add_argument("-not-dst-port", "--not-destination-port",metavar="<PORT>",type=str,help="Filter packets based on a specified destination port number")
-	write_read_pcap.add_argument("-src-mac", "--source-mac",metavar="<MAC>",type=str,help="Filter packets based on a specified source mac address Example MAC: aa.bb.cc.dd.ee.ff")
-	write_read_pcap.add_argument("-not-src-mac", "--not-source-mac",metavar="<MAC>",type=str,help="Filter packets that do not contain the specified source mac address. Example MAC: aa.bb.cc.dd.ee.ff")
-	write_read_pcap.add_argument("-dst-mac", "--destination-mac",metavar="<MAC>",type=str,help="Filter packets based on a specified destination mac address (seperate values by .)")
-	write_read_pcap.add_argument("-not-dst-mac", "--not-destination-mac",metavar="<MAC>",type=str,help="Filter packets that do not contain the specified destination mac address (seperate values by .)")
+	write_read_pcap.add_argument("-src-mac", "--source-mac",metavar="<MAC>",type=str,help="Filter packets based on a specified source mac address")
+	write_read_pcap.add_argument("-not-src-mac", "--not-source-mac",metavar="<MAC>",type=str,help="Filter packets that do not contain the specified source mac address.")
+	write_read_pcap.add_argument("-dst-mac", "--destination-mac",metavar="<MAC>",type=str,help="Filter packets based on a specified destination mac address")
+	write_read_pcap.add_argument("-not-dst-mac", "--not-destination-mac",metavar="<MAC>",type=str,help="Filter packets that do not contain the specified destination mac address")
 	write_read_pcap.add_argument("-tcp", "--filter-tcp",action="store_true",default=False,help="Filter TCP packets only")
 	write_read_pcap.add_argument("-not-tcp", "--not-filter-tcp",action="store_true",default=False,help="Filter for non-TCP packets only")
 	write_read_pcap.add_argument("-udp", "--filter-udp",action="store_true", default=False,help="Filter UDP packets only")
@@ -75,7 +75,8 @@ def parse_args():
 
 	# ------------ NETWORK ENUMERATION -----------------
 	network_enum.add_argument("-enum", "--enumeration",action="store_true",help="Use enum mode. Must specify 1 or more options from below")
-	network_enum.add_argument("-ls-inter", "--list-interfaces",action="store_true",help="List all available network interfaces")
+	network_enum.add_argument("-ls-interf", "--list-interfaces",action="store_true",help="List all available network interfaces")
+	network_enum.add_argument("-enum-interf", "--enumerate-interface",metavar="<INTERFACE>",type=str,help="Enumerate information regarding an IP addresses. NOTE: FOR LINUX ONLY")
 	network_enum.add_argument("-enum-ip", "--enumerate-ip",metavar="<IP>",type=str,help="Enumerate specified IP address")
 	
 	if len(argv[1:]) == 0:

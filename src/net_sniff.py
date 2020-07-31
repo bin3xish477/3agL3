@@ -41,8 +41,8 @@ class NetSniff:
 		if pkt.haslayer(ICMP):
 			try:
 				date = str(datetime.now())
-				src_mac = str(pkt[Ether].src).replace(":", ".")
-				dst_mac = str(pkt[Ether].dst).replace(":", ".")
+				src_mac = str(pkt[Ether].src)
+				dst_mac = str(pkt[Ether].dst)
 				proto = str(pkt[IP].payload.name).upper()
 
 				icmp_type = ""
@@ -56,7 +56,7 @@ class NetSniff:
 					f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
 					f" {src_mac} | {dst_mac}  %s%s{str(pkt[IP].payload.name).upper()}%s " \
 					f" %s%s{pkt[IP].src}%s %s%s\u2192%s %s%s{pkt[IP].dst}%s" \
-					f" (TTL:{pkt[Ether].ttl} LEN:{pkt[Ether].len}  TYPE:{icmp_type})"
+					f" (TTL:{pkt[Ether].ttl} LEN:{pkt[Ether].len} TYPE:{icmp_type})"
 					% (
 						fg(141), attr("bold"), attr("reset"),
 						fg(141), attr("bold"), attr("reset"),
@@ -72,8 +72,8 @@ class NetSniff:
 		else:
 			try:
 				date = str(datetime.now())
-				src_mac = str(pkt[Ether].src).replace(":", ".")
-				dst_mac = str(pkt[Ether].dst).replace(":", ".")
+				src_mac = str(pkt[Ether].src)
+				dst_mac = str(pkt[Ether].dst)
 				proto = str(pkt[IP].payload.name).upper()
 				return (
 					f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
