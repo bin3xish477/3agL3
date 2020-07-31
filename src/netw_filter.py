@@ -1,7 +1,5 @@
 from netaddr import IPAddress, IPNetwork
-from netifaces import (
-	interfaces, ifaddresses, gateways, AF_INET
-)
+from netifaces import interfaces, ifaddresses
 from colored import fg, attr
 from platform import system
 from random import randint
