@@ -46,7 +46,6 @@ class NetSniff:
 				proto = str(pkt[IP].payload.name).upper()
 
 				icmp_type = ""
-				# add more icmp field types
 				if pkt[ICMP].type == 0:
 					icmp_type = "echo-reply"
 				elif pkt[ICMP].type == 8:
