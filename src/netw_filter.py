@@ -1,19 +1,11 @@
-from netaddr import IPAddress, IPNetwork
+from netaddr import IPAddress, EUI
 from netifaces import interfaces, ifaddresses
 from colored import fg, attr
 from platform import system
 from random import randint
-
-SYSTEM = system()
-if SYSTEM == "Windows":
-	from winreg import (
-	    ConnectRegistry, HKEY_LOCAL_MACHINE, OpenKey, QueryValueEx
-	)
+from pprint import pprint
 
 """
-https://0xbharath.github.io/art-of-packet-crafting-with-scapy/libraries/netifaces/index.html
-https://0xbharath.github.io/art-of-packet-crafting-with-scapy/libraries/netaddr/index.html
-
 For network intergace guid resolution
 https://stackoverflow.com/questions/29913516/how-to-get-meaningful-network-interface-names-instead-of-guids-with-netifaces-un
 """
@@ -27,8 +19,12 @@ class NetworkFilter:
     		list_of_interfaces = interfaces()
     		for interface in list_of_interfaces:
     			print(interface)
-    	elif SYSTEM == "Windows":
-    		pass
+    	else:
+    		print(
+    			"[ %sATTENTION%s ] the `-ls-interf` option is only for Linux"
+    			% (fg(202), attr(0))
+    		)
+
 
     def enumerate_interface(self, target_interface):
     	""" Get info of a specified network interface """
@@ -45,4 +41,17 @@ class NetworkFilter:
 
     def enumerate_ip(self, target_ip):
     	""" Perform enumeration on a specified IP address """
-    	pass
+    	ip = IPAddress(target_ip)
+    	print("IP Version:", ip.version)
+    	print("Binary Representation:", ip.bin[2:])
+    	print("Bit Representation:", ip.bits())
+    	pprint("Info:\n", ip.info)
+
+    def enumerate_mac(self, target_mac):
+    	""" Perform enumeration on a specified MAC address """
+    	mac = EUI(target_mac)
+    	print("MAC version:", mac.version)
+    	print("Binary Representation:", mac.bin)
+    	print("Bit Representation:", mac.bits())
+    	print("Host Identifier:", mac.ei)
+    	print("Info:\n", mac.info)

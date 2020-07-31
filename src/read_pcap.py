@@ -36,6 +36,7 @@ class ReadPCAP:
         self._icmp = icmp
 
         self.capparser = PCAPParser()
+        self.netsniff_obj = NetSniff(None, None, None)
 
     def read(self):
         """ Read PCAP file """
@@ -117,12 +118,18 @@ class ReadPCAP:
         """ """
         self.capparser.json_summary(self.pcapfile)
 
+    def log(self):
+        """ """
+        with open("capture.log", "w") as log_file:
+            for cap in self.pcapfile:
+                flow_statement = self.netsniff_obj.echo(cap)
+                log_file.write(flow_statement + "\n")
+
     def to_stdout(self, capture):
         """ """
-        obj = NetSniff(None, None, None)
         try:
             for cap in capture:
-                print_str = obj.echo(cap)
+                print_str = self.netsniff_obj.echo(cap)
                 if not print_str:
                     continue
                 print(print_str)

@@ -8,7 +8,7 @@ def parse_args():
 	""" Program arguments """
 	parser = ArgumentParser(
 		description="There are four modes of operation \u2192 live : read : write : network-enum ",
-		usage=f"\n\t{argv[0]} -live <options> | -read <options> | -write <options>",
+		usage=f"\n\t{argv[0]} -live <options> | -read <options> | -write <options> -enum <options>",
 		add_help=False
 		)
 	
@@ -75,9 +75,10 @@ def parse_args():
 
 	# ------------ NETWORK ENUMERATION -----------------
 	network_enum.add_argument("-enum", "--enumeration",action="store_true",help="Use enum mode. Must specify 1 or more options from below")
-	network_enum.add_argument("-ls-interf", "--list-interfaces",action="store_true",help="List all available network interfaces")
-	network_enum.add_argument("-enum-interf", "--enumerate-interface",metavar="<INTERFACE>",type=str,help="Enumerate information regarding an IP addresses. NOTE: FOR LINUX ONLY")
-	network_enum.add_argument("-enum-ip", "--enumerate-ip",metavar="<IP>",type=str,help="Enumerate specified IP address")
+	network_enum.add_argument("-ls-interf", "--list-interfaces",action="store_true",help="List all available network interfaces. NOTE: FOR LINUX ONLY")
+	network_enum.add_argument("-e-interf", "--enumerate-interface",metavar="<INTERFACE>",type=str,help="Enumerate information regarding an IP addresses. NOTE: FOR LINUX ONLY")
+	network_enum.add_argument("-e-ip", "--enumerate-ip",metavar="<IP>",type=str,help="Enumerate specified IP address")
+	network_enum.add_argument("-e-mac", "--enumerate-mac",metavar="<MAC>",type=str,help="Enumerate specified MAC address")
 	
 	if len(argv[1:]) == 0:
 		parser.print_help()

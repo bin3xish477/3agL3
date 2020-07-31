@@ -41,6 +41,7 @@ class WritePCAP(NetSniff):
         self._icmp = icmp
 
         self.capparser = PCAPParser()
+        self.netsniff_obj = NetSniff(None, None, None)
 
     def execute(self, func, arg):
         """ Executes real-time capture and passes that capture to `func`
@@ -93,6 +94,7 @@ class WritePCAP(NetSniff):
 
     def filter_icmp(self):
         """ """
+        self.execute(self.capparser.filt_icmp, self._icmp)
 
     def no_filter(self):
         """ """
@@ -123,12 +125,26 @@ class WritePCAP(NetSniff):
         elif self._filtered_cap:
             self.capparser.json_summary(self._filtered_cap)
 
+    def log(self):
+        """ """
+        if self._cap:
+            with open("capture.log", "w") as log_file:
+                for cap in self._cap:
+                    flow_statement = self.netsniff_obj.echo(cap)
+                    log_file.write(flow_statement + "\n")
+
+        elif self._filtered_cap:
+            with open("capture.log", "w") as log_file:
+                for cap in self._filtered_cap:
+                    flow_statement = self.netsniff_obj.echo(cap)
+                    log_file.write(flow_statement + "\n")
+
     def write(self, packets):
         """
         """
         try:
             wrpcap(self._wfile, packets)
-            print("[ %sSUCCESS%s ] PCAP FILE `%s` SUCCESSFULLY CREATED" % (fg(50), attr(0), self._wfile))
+            print("[ %sSUCCESS%s ] PCAP FILE `%s` CREATED" % (fg(50), attr(0), self._wfile))
         except:
             print(
                 "[ %sERROR%s ] THERE WAS AN ERROR CREATING PCAP FILE. PLEASE TRY AGAIN..."

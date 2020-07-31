@@ -58,10 +58,12 @@ if __name__ == "__main__":
 		"len-equal": args.len_equal,
 		"ttl-equal": args.len_equal,
 		"json": args.json,
+		"log": args.log,
 		"enum": args.enumeration,
 		"ls-interf": args.list_interfaces,
-		"enum-interf": args.enumerate_interface,
-		"enum-ip": args.enumerate_ip
+		"e-interf": args.enumerate_interface,
+		"e-ip": args.enumerate_ip,
+		"e-mac": args.enumerate_mac
 	}
 
 	if args["live"]:
@@ -112,7 +114,10 @@ if __name__ == "__main__":
 
 			if args["json"]:
 				read_obj.to_json()
-				print("[ %sSUCCESS%s ] SUMMARY JSON FILE SUCCESSFULLY CREATED" % (fg(50), attr(0)))
+				print("[ %sSUCCESS%s ] SUMMARY JSON FILE CREATED" % (fg(50), attr(0)))
+			elif args["log"]:
+				read_obj.log()
+				print("[ %sSUCCESS%s ] LOG FILE CREATED" % (fg(50), attr(0)))
 			
 			if args["pkt-cnt"]:
 				pkt_count = read_obj.packet_count()
@@ -175,7 +180,10 @@ if __name__ == "__main__":
 				
 			if args["json"]:
 				write_obj.to_json()
-				print("[ %sSUCCESS%s ] SUMMARY JSON FILE SUCCESSFULLY CREATED" % (fg(50), attr(0)))
+				print("[ %sSUCCESS%s ] SUMMARY JSON FILE CREATED" % (fg(50), attr(0)))
+			elif args["log"]:
+				write_obj.log()
+				print("[ %sSUCCESS%s ] LOG FILE CREATED" % (fg(50), attr(0)))
 		else:
 			print(
 				"[ %sERROR%s ] MUST PROVIDE `-c` ARGUMENT FOR WRITE MODE"
@@ -187,10 +195,12 @@ if __name__ == "__main__":
 
 		if args["ls-interf"]:
 			enum_obj.list_interfaces()
-		elif args["enum-interf"]:
-			enum_obj.enumerate_interface(args["enum-interf"])
-		elif args["enum-ip"]:
-			pass
+		elif args["e-interf"]:
+			enum_obj.enumerate_interface(args["e-interf"])
+		elif args["e-ip"]:
+			enum_obj.enumerate_ip(args["e-ip"])
+		elif args["e-mac"]:
+			enum_obj.enumerate_mac(args["e-mac"])
 
 	else:
 		print(
