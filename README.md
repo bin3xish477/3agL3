@@ -5,6 +5,8 @@ Sniffing network traffic with Python for real-time or PCAP analysis.
 ```
 scapy
 colored
+netaddr
+netifaces
 ```
 ## > Example: Live Mode
 ![live_mode](images/live_mode.png)
