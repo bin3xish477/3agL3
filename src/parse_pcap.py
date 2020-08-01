@@ -70,7 +70,45 @@ class PCAPParser:
                 filtered.append(cap)
         return filtered
 
+    def filt_not_dst_ip(self, capture, dst_ip):
+        """ Filter destination IP addresses from capture 
+        
+        Args:
+            capture (scapy.plist.PacketList): scapy packet capture
+            dst_ip (str): target destination IP address to filter for
+        """
+        try:
+            dst_ip = search(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", dst_ip).group(0)
+        except AttributeError:
+            print(
+                "[ %sERROR%s ] SPECIFIED `-dst-ip` MUST BE A VALID IP ADDRESSES"
+                % (fg(9), attr(0))
+            )
+            exit(1)
+
+        filtered = []
+        for cap in capture:
+            if cap.haslayer(IP) and cap[IP].dst == dst_ip:
+                filtered.append(cap)
+        return filtered
+
     def filt_src_port(self, capture, src_port):
+        """
+        """
+        filtered = []
+        for cap in capture:
+            try:
+                if cap.haslayer(IP) and cap[IP].sport == int(src_port):
+                    filtered.append(cap)
+            except ValueError:
+                print(
+                    "[ %sERROR%s ] SPECIFIED `-src-port` MUST BE WITHIN RANGE: 1-65535"
+                    % (fg(9), attr(0))
+                )
+                exit(1)
+        return filtered
+
+    def filt_not_src_port(self, capture, src_port):
         """
         """
         filtered = []
@@ -102,7 +140,40 @@ class PCAPParser:
                 exit(1)
         return filtered
 
+    def filt_not_dst_port(self, capture, dst_port):
+        """
+        """
+        filtered = []
+        for cap in capture:
+            try:
+                if cap.haslayer(IP) and cap[IP].dport == int(dst_port):
+                    filtered.append(cap)
+            except ValueError:
+                print(
+                    "[ %sERROR%s ] SPECIFIED `-dst-port` MUST BE WITHIN RANGE: 1-65535"
+                    % (fg(9), attr(0))
+                )
+                exit(1)
+        return filtered
+
     def filt_src_mac(self, capture, src_mac):
+        """ """
+        try:
+            src_mac = search(r"\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}", src_mac).group(0)
+        except AttributeError:
+            print(
+                "[ %sERROR%s ] SPECIFIED `-src-mac` MUST BE A VALID MAC ADDRESS"
+                % (fg(9), attr(0))
+                )
+            exit(1)
+
+        filtered = []
+        for cap in capture:
+            if cap[Ether].src == src_mac:
+                filtered.append(cap)
+        return filtered
+
+    def filt_not_src_mac(self, capture, src_mac):
         """ """
         try:
             src_mac = search(r"\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}", src_mac).group(0)
@@ -136,7 +207,32 @@ class PCAPParser:
                 filtered.append(cap)
         return filtered
 
+    def filt_not_dst_mac(self, capture, dst_mac):
+        """ """
+        try:
+            dst_mac = search(r"\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}", dst_mac).group(0)
+        except AttributeError:
+            print(
+                "[ %sERROR%s ] SPECIFIED `-dst-mac` MUST BE A VALID MAC ADDRESS"
+                % (fg(9), attr(0))
+                )
+            exit(1)
+
+        filtered = []
+        for cap in capture:
+            if cap[Ether].dst == dst_mac:
+                filtered.append(cap)
+        return filtered
+
     def filt_tcp(self, capture, _):
+        """ """
+        filtered = []
+        for cap in capture:
+            if cap.haslayer(IP) and str(cap[IP].payload.name).upper() == "TCP":
+                filtered.append(cap)
+        return filtered
+
+    def filt_not_tcp(self, capture, _):
         """ """
         filtered = []
         for cap in capture:
@@ -152,7 +248,23 @@ class PCAPParser:
                 filtered.append(cap)
         return filtered
 
+    def filt_not_udp(self, capture, _):
+        """ """
+        filtered = []
+        for cap in capture:
+            if cap.haslayer(IP) and str(cap[IP].payload.name).upper() == "UDP":
+                filtered.append(cap)
+        return filtered
+
     def filt_icmp(self, capture, _):
+        """ """
+        filtered = []
+        for cap in capture:
+            if cap.haslayer(IP) and str(cap[IP].payload.name).upper() == "ICMP":
+                filtered.append(cap)
+        return filtered
+
+    def filt_not_icmp(self, capture, _):
         """ """
         filtered = []
         for cap in capture:
