@@ -90,20 +90,36 @@ if __name__ == "__main__":
 				read_obj.filter_not_src_ip()
 			elif args["dst-ip"]:
 				read_obj.filter_dst_ip()
+			elif args["not-dst-ip"]:
+				read_obj.filter_not_dst_ip()
 			elif args["src-port"]:
 				read_obj.filter_src_port()
+			elif args["not-src-port"]:
+				read_obj.filter_not_src_port()
 			elif args["dst-port"]:
 				read_obj.filter_dst_port()
+			elif args["not-dst-port"]:
+				read_obj.filter_not_dst_port()
 			elif args["src-mac"]:
 				read_obj.filter_src_mac()
+			elif args["not-src-mac"]:
+				read_obj.filter_not_mac()
 			elif args["dst-mac"]:
 				read_obj.filter_dst_mac()
+			elif args["not-dst-mac"]:
+				read_obj.filter_not_dst_mac()
 			elif args["tcp"]:
 				read_obj.filter_tcp()
+			elif args["not-tcp"]:
+				read_obj.filter_not_tcp()
 			elif args["udp"]:
 				read_obj.filter_udp()
+			elif args["not-udp"]:
+				read_obj.filter_not_udp()
 			elif args["icmp"]:
 				read_obj.filter_icmp()
+			elif args["not-icmp"]:
+				read_obj.filter_not_icmp()
 			else:
 				read_obj.no_filter(args["no-prn"])
 
@@ -154,16 +170,28 @@ if __name__ == "__main__":
 		if args["count"]:
 			if args["src-ip"]:
 				write_obj.filter_src_ip()
+			elif args["not-src-ip"]:
+				write_obj.filter_not_src_ip()
 			elif args["dst-ip"]:
 				write_obj.filter_dst_ip()
+			elif args["not-dst-ip"]:
+				write_obj.filter_not_dst_ip()
 			elif args["src-port"]:
 				write_obj.filter_src_port()
+			elif args["not-src-port"]:
+				write_obj.filter_not_src_port()
 			elif args["dst-port"]:
 				write_obj.filter_dst_port()
+			elif args["not-dst-port"]:
+				write_obj.filter_not_dst_port()
 			elif args["src-mac"]:
 				write_obj.filter_src_mac()
+			elif args["not-src-mac"]:
+				write_obj.filter_not_src_mac()
 			elif args["dst-mac"]:
 				write_obj.filter_dst_mac()
+			elif args["not-dst-mac"]:
+				write_obj.filter_not_dst_mac()
 			elif args["tcp"]:
 				write_obj.filter_tcp()
 			elif args["udp"]:
