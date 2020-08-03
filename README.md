@@ -7,6 +7,9 @@ scapy
 colored
 netaddr
 netifaces
+
+# must have npcap installed
+https://nmap.org/npcap/#download
 ```
 ## > Example: Live Mode
 ![live_mode](images/live_mode.png)

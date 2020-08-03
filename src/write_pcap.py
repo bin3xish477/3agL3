@@ -8,37 +8,32 @@ from time import sleep
 class WritePCAP(NetSniff):
     def __init__(
         self, wfile, interf, berkeley_filter, count,
-        src_ip, dst_ip, src_port, dst_port, src_mac,
-        dst_mac, tcp , udp, icmp
+        src_ip, not_src_ip, dst_ip, not_dst_ip, src_port,
+        not_src_port, dst_port, not_dst_port, src_mac,
+        not_src_mac, dst_mac, not_dst_mac, tcp, not_tcp,
+        udp, not_udp, icmp, not_icmp
     ):
-        """
-        Args:
-            wfile (str): name of file to create.
-            interf (str): interface to use to capture packets.
-            berkeley_filter (str): berkeley packet filter to apply to packet capture.
-            count (int): number of packets to capture.
-            src_ip ():
-            dst_ip ():
-            src_port ():
-            dst_port ():
-            src_mac ():
-            dst_mac ():
-            tcp (bool):
-            udp (bool):
-        """
         super().__init__(interf, berkeley_filter, count)
 
         self._wfile = wfile
         self._src_ip = src_ip
+        self._not_src_ip = not_src_ip
         self._dst_ip = dst_ip
+        self._not_dst_ip = not_dst_ip
         self._src_port = src_port
+        self._not_src_port = not_src_port
         self._dst_port = dst_port
+        self._not_dst_port = not_dst_port
         self._src_mac = src_mac
+        self._not_src_mac = not_src_mac
         self._dst_mac = dst_mac
-        # these are booleans
+        self._not_dst_mac = not_dst_mac
         self._tcp = tcp
+        self._not_tcp = not_tcp
         self._udp = udp
+        self._not_udp = not_udp
         self._icmp = icmp
+        self._not_icmp = not_icmp
 
         self.capparser = PCAPParser()
         self.netsniff_obj = NetSniff(None, None, None)

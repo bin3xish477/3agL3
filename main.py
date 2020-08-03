@@ -77,10 +77,12 @@ if __name__ == "__main__":
 	elif args["read"]:
 		if args["rfile"]:
 			read_obj = ReadPCAP(
-				args["rfile"],args["src-ip"], args["dst-ip"], 
-				args["src-port"], args["dst-port"], args["src-mac"], 
-				args["dst-mac"], args["tcp"], args["udp"], args["icmp"],
-				args["pkt-cnt"]
+				args["rfile"], args["src-ip"], args["not-src-ip"], args["dst-ip"], 
+				args["not-dst-ip"], args["src-port"], args["not-src-port"], 
+				args["dst-port"], args["not-dst-port"], args["src-mac"], 
+				args["not-src-mac"], args["dst-mac"], args["not-dst-mac"],
+				args["tcp"], args["not-tcp"], args["udp"], args["not-udp"],
+				args["icmp"], args["not-icmp"], args["pkt-cnt"]
 			)
 			read_obj.read()
 
@@ -103,7 +105,7 @@ if __name__ == "__main__":
 			elif args["src-mac"]:
 				read_obj.filter_src_mac()
 			elif args["not-src-mac"]:
-				read_obj.filter_not_mac()
+				read_obj.filter_not_src_mac()
 			elif args["dst-mac"]:
 				read_obj.filter_dst_mac()
 			elif args["not-dst-mac"]:
@@ -157,8 +159,11 @@ if __name__ == "__main__":
 		if args["wfile"]:
 			write_obj = WritePCAP(
 				args["wfile"], args["interf"], args["filter"], args["count"],
-				args["src-ip"], args["dst-ip"], args["src-port"], args["dst-port"],
-				args["src-mac"], args["dst-mac"], args["tcp"], args["udp"], args["icmp"]
+				args["src-ip"], args["not-src-ip"], args["dst-ip"], args["not-dst-ip"],
+				args["src-port"], args["not-src-port"], args["dst-port"], args["not-dst-port"],
+				args["src-mac"], args["not-src-mac"], args["dst-mac"], args["not-dst-mac"],
+				args["tcp"], args["not-tcp"], args["udp"], args["not-udp"], args["icmp"],
+				args["not-icmp"]
 			)
 		else:
 			print(
@@ -214,8 +219,8 @@ if __name__ == "__main__":
 				print("[ %sSUCCESS%s ] LOG FILE CREATED" % (fg(50), attr(0)))
 		else:
 			print(
-				"[ %sERROR%s ] MUST PROVIDE `-c` ARGUMENT FOR WRITE MODE"
-				% (fg(9), attr(0))
+				"[ %sATTENTION%s ] MUST PROVIDE `-c` ARGUMENT FOR WRITE MODE"
+				% (fg(202), attr(0))
 			)
 
 	elif args["enum"]:

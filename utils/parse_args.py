@@ -15,8 +15,8 @@ def parse_args():
 	# ---------------- Arguments Groups ------------------
 	help_options = parser.add_argument_group("%sFor Help%s" % (fg(226), attr(0)))
 	live_capture = parser.add_argument_group("%sLive Capture%s" % (fg(196), attr(0)))
-	read_pcap = parser.add_argument_group("%sRead Mode Required Options%s" % (fg(76), attr(0)))
-	write_pcap = parser.add_argument_group("%sWrite Mode Required Options%s" % (fg(39), attr(0)))
+	read_pcap = parser.add_argument_group("%sRead Mode Options%s" % (fg(76), attr(0)))
+	write_pcap = parser.add_argument_group("%sWrite Mode Options%s" % (fg(39), attr(0)))
 	write_read_pcap = parser.add_argument_group("%sOptional Arguments for Read/Write Modes%s" % (fg(199), attr(0)))
 	network_enum = parser.add_argument_group("%sNetwork-Enum Mode Options%s" % (fg(130), attr(0)))
 
