@@ -4,6 +4,7 @@ from json import dump
 from sys import exit
 from re import search
 from scapy.all import Ether, IP, ICMP, Raw
+from random import randint
 
 class PCAPParser:
     def filt_src_ip(self, capture, src_ip):
@@ -290,7 +291,7 @@ class PCAPParser:
             + [cap[IP].dst for cap in capture if cap.haslayer(IP)])
             ip_dict = Counter(ip_list)
             
-            print("%sIP%s: COUNT" % (fg(164), attr(0)))
+            print("%sIP%s: COUNT" % (fg(randint(1, 254)), attr(0)))
             for ip, count in ip_dict.most_common():
                 print("\'%s\': %s" % (ip, count))
 
@@ -299,17 +300,18 @@ class PCAPParser:
             + [cap[IP].dport for cap in capture if cap.haslayer(IP)])
             port_dict = Counter(port_list)
 
-            print("\n%sPORT%s: COUNT" % (fg(113), attr(0)))
+            print("\n%sPORT%s: COUNT" % (fg(randint(1, 254)), attr(0)))
 
             for port, count in port_dict.most_common():
                 print("%s: %s" % (port, count))
+            print("\n", end="")
 
             # FILTERING MAC ADDRESSES
             mac_list = ([cap[Ether].src for cap in capture if cap.haslayer(IP)]
             + [cap[Ether].dst for cap in capture if cap.haslayer(IP)])
             mac_dict = Counter(mac_list)
 
-            print("%sMAC%s: COUNT" % (fg(153), attr(0)))
+            print("%sMAC%s: COUNT" % (fg(randint(1, 254)), attr(0)))
             for mac, count in mac_dict.most_common():
                 print("%s: %s" % (mac, count))
             print("\n", end="")
