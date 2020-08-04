@@ -58,38 +58,86 @@ class WritePCAP(NetSniff):
     def filter_src_ip(self):
         """ """
         self.execute(self.capparser.filt_src_ip, self._src_ip)
+
+    def filter_not_src_ip(self):
+        """ """
+        self.execute(self.capparser.filt_not_src_ip, self._not_src_ip)
     
     def filter_dst_ip(self):
         """ """
         self.execute(self.capparser.filt_dst_ip, self._dst_ip)
 
+    def filter_not_dst_ip(self):
+        """ """
+        self.execute(self.capparser.filt_not_dst_ip, self._not_dst_ip)
+
     def filter_src_port(self):
         """ """
         self.execute(self.capparser.filt_src_port, self._src_port)
+
+    def filter_not_src_port(self):
+        """ """
+        self.execute(self.capparser.filt_not_src_port, self._not_src_port)
 
     def filter_dst_port(self):
         """ """
         self.execute(self.capparser.filt_dst_port, self._dst_port)
 
+    def filter_not_dst_port(self):
+        """ """
+        self.execute(self.capparser.filt_not_dst_port, self._not_dst_port)
+
     def filter_src_mac(self):
         """ """
         self.execute(self.capparser.filt_src_mac, self._src_mac)
+
+    def filter_not_src_mac(self):
+        """ """
+        self.execute(self.capparser.filt_not_src_mac, self._not_src_mac)
 
     def filter_dst_mac(self):
         """ """
         self.execute(self.capparser.filt_dst_mac, self._dst_mac)
 
+    def filter_not_dst_mac(self):
+        """ """
+        self.execute(self.capparser.filt_not_dst_mac, self._not_dst_mac)
+
     def filter_tcp(self):
         """ """
-        self.execute(self.capparser.filt_tcp, self._tcp)
+        self.execute(self.capparser.filt_tcp, None)
+
+    def filter_not_tcp(self):
+        """ """
+        self.execute(self.capparser.filt_not_tcp, None)
 
     def filter_udp(self):
         """ """
-        self.execute(self.capparser.filt_udp, self._udp)
+        self.execute(self.capparser.filt_udp, None)
+
+    def filter_not_udp(self):
+        """ """
+        self.execute(self.capparser.filt_not_udp, None)
 
     def filter_icmp(self):
         """ """
-        self.execute(self.capparser.filt_icmp, self._icmp)
+        self.execute(self.capparser.filt_icmp, None)
+
+    def filter_not_icmp(self):
+        """ """
+        self.execute(self.capparser.filt_not_icmp, None)
+
+    def len_le_eq(self, value):
+        """ """
+
+    def len_gr_eq(self, value):
+        """ """
+
+    def len_eq(self, value):
+        """ """
+
+    def ttl_eq(self, value):
+        """ """
 
     def no_filter(self):
         """ """

@@ -343,17 +343,37 @@ class PCAPParser:
             )
             exit(1)
 
-    def len_less_equal(self):
+    def len_less_equal(self, capture, value):
         """ """
+        filtered = []
+        for cap in capture:
+            if cap.haslayer(Ether) and cap[Ether].len <= value:
+                filtered.append(cap)
+        return filtered
 
-    def len_greater_equal(self):
+    def len_greater_equal(self, capture, value):
         """ """
+        filtered = []
+        for cap in capture:
+            if cap.haslayer(Ether) and cap[Ether].len >= value:
+                filtered.append(cap)
+        return filtered
 
-    def len_equal(self):
+    def len_equal(self, capture, value):
         """ """
+        filtered = []
+        for cap in capture:
+            if cap.haslayer(Ether) and cap[Ether].len == value:
+                filtered.append(cap)
+        return filtered
 
-    def ttl_equal(self):
+    def ttl_equal(self, capture):
         """ """
+        filtered = []
+        for cap in capture:
+            if cap.haslayer(Ether) and cap[Ether].ttl == value:
+                filtered.append(cap)
+        return filtered
 
     def json_summary(self, capture):
         """ Generate JSON file containing summary of packet capture.

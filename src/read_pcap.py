@@ -130,6 +130,22 @@ class ReadPCAP:
         """ """
         self.execute(self.capparser.filt_not_icmp, None)
 
+    def len_le_eq(self, value):
+        """ """
+        self.capparser.len_less_equal(self.pcapfile, value)
+
+    def len_gr_eq(self, value):
+        """ """
+        self.capparser.len_greater_equal(self.pcapfile, value)
+
+    def len_eq(self, value):
+        """ """
+        self.capparser.len_equal(self.pcapfile, value)
+
+    def ttl_eq(self, value):
+        """ """
+        self.capparser.ttl_equal(self.pcapfile, value)
+
     def no_filter(self, no_print=False):
         """ """
         if not no_print:

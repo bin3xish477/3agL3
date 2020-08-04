@@ -199,10 +199,16 @@ if __name__ == "__main__":
 				write_obj.filter_not_dst_mac()
 			elif args["tcp"]:
 				write_obj.filter_tcp()
+			elif args["not-tcp"]:
+				write_obj.filter_not_tcp()
 			elif args["udp"]:
 				write_obj.filter_udp()
+			elif args["not-udp"]:
+				write_obj.filter_not_udp()
 			elif args["icmp"]:
 				write_obj.filter_icmp()
+			elif args["not-icmp"]:
+				write_obj.filter_not_icmp()
 			else:
 				print("[ %sNOTE%s ] NO WRITE FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
 				write_obj.no_filter()
