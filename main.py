@@ -30,6 +30,7 @@ if __name__ == "__main__":
 		"rfile": args.rfile,
 		"pkt-cnt": args.packet_count,
 		"no-prn": args.no_print,
+		"rc": args.read_count,
 		"write": args.write_mode,
 		"wfile": args.wfile,
 		"src-ip": args.source_ip,
@@ -55,8 +56,8 @@ if __name__ == "__main__":
 		"sum": args.summary,
 		"le": args.len_less_equal,
 		"ge": args.len_greater_equal,
-		"len-equal": args.len_equal,
-		"ttl-equal": args.len_equal,
+		"len-eq": args.len_equal,
+		"ttl-eq": args.len_equal,
 		"json": args.json,
 		"log": args.log,
 		"enum": args.enumeration,
@@ -85,6 +86,8 @@ if __name__ == "__main__":
 				args["icmp"], args["not-icmp"], args["pkt-cnt"]
 			)
 			read_obj.read()
+
+			# DONT FORGET TO HANDLE READ-COUNT OPTION!!!
 
 			if args["src-ip"]:
 				read_obj.filter_src_ip()
@@ -122,6 +125,14 @@ if __name__ == "__main__":
 				read_obj.filter_icmp()
 			elif args["not-icmp"]:
 				read_obj.filter_not_icmp()
+			elif args["le"]:
+				read_obj.len_le_eq(args["le"])
+			elif args["ge"]:
+				read_obj.len_gr_eq(args["ge"])
+			elif args["len-eq"]:
+				read_obj.len_eq(args["len-eq"])
+			elif args["ttl-eq"]:
+				read_obj.ttl_eq(args["ttl-eq"])
 			else:
 				read_obj.no_filter(args["no-prn"])
 
@@ -209,6 +220,14 @@ if __name__ == "__main__":
 				write_obj.filter_icmp()
 			elif args["not-icmp"]:
 				write_obj.filter_not_icmp()
+			elif args["le"]:
+				write_obj.len_le_eq(args["le"])
+			elif args["ge"]:
+				write_obj.len_gr_eq(args["ge"])
+			elif args["len-eq"]:
+				write_obj.len_eq(args["len-eq"])
+			elif args["ttl-eq"]:
+				write_obj.ttl_eq(args["ttl-eq"])
 			else:
 				print("[ %sNOTE%s ] NO WRITE FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
 				write_obj.no_filter()

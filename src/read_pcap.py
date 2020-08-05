@@ -52,7 +52,7 @@ class ReadPCAP:
                 arg (str|int): value to filter from packet capture
         """
         filtered_capture = func(self.pcapfile, arg)
-        if len(filtered_capture) == 0 or filtered_capture == None:
+        if len(filtered_capture) == 0 or iltered_capture == None:
             print("[ %sATTENTION%s ] NO PACKETS CONTAINED SPECIFIED FILTER" % (fg(202), attr(0)))
             exit(1)
         else:
@@ -130,21 +130,25 @@ class ReadPCAP:
         """ """
         self.execute(self.capparser.filt_not_icmp, None)
 
-    def len_le_eq(self, value):
+    def len_le_eq(self, value:int):
         """ """
-        self.capparser.len_less_equal(self.pcapfile, value)
+        filtered_capture = self.capparser.len_less_equal(self.pcapfile, value)
+        self.to_stdout(filtered_capture)
 
-    def len_gr_eq(self, value):
+    def len_gr_eq(self, value:int):
         """ """
-        self.capparser.len_greater_equal(self.pcapfile, value)
+        filtered_capture = self.capparser.len_greater_equal(self.pcapfile, value)
+        self.to_stdout(filtered_capture)
 
-    def len_eq(self, value):
+    def len_eq(self, value:int):
         """ """
-        self.capparser.len_equal(self.pcapfile, value)
+        filtered_capture = self.capparser.len_equal(self.pcapfile, value)
+        self.to_stdout(filtered_capture)
 
-    def ttl_eq(self, value):
+    def ttl_eq(self, value:int):
         """ """
-        self.capparser.ttl_equal(self.pcapfile, value)
+        filtered_capture = self.capparser.ttl_equal(self.pcapfile, value)
+        self.to_stdout(filtered_capture)
 
     def no_filter(self, no_print=False):
         """ """

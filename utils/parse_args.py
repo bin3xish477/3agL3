@@ -36,6 +36,7 @@ def parse_args():
 	# -------------- Reading PCAP options ---------------
 	read_pcap.add_argument("-read", "--read-mode",action="store_true", default=False,help="Read a PCAP file for analysis")
 	read_pcap.add_argument("-r", "--rfile",metavar="<FILENAME>",type=str, default=False,help="name of PCAP file to read for parsing")
+	read_pcap.add_argument("-rc", "--read-count", metavar="<NUM>",type=int,default=None,help="number of packets to read from pcap file")
 	read_pcap.add_argument("-pc", "--packet-count",action="store_true",default=False,help="Prints the number of the packets within a PCAP file")
 	read_pcap.add_argument("-no-prn", "--no-print",action="store_true",help="Do not print out traffic flow output to console")
 
