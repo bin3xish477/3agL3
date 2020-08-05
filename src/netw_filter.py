@@ -5,10 +5,6 @@ from platform import system
 from random import randint
 from pprint import pprint
 
-"""
-For network intergace guid resolution
-https://stackoverflow.com/questions/29913516/how-to-get-meaningful-network-interface-names-instead-of-guids-with-netifaces-un
-"""
 SYSTEM = system()
 
 class NetworkFilter:
