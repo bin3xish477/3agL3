@@ -3,6 +3,7 @@ from src.net_sniff import NetSniff
 from scapy.all import rdpcap
 from colored import fg, attr
 from time import sleep
+from os.path import exists
 
 class ReadPCAP:
     def __init__(
@@ -37,7 +38,18 @@ class ReadPCAP:
 
     def read(self):
         """ Read PCAP file """
-        self._pcapfile = rdpcap(self._rfile)
+        if exists(self._rfile):
+            try:
+                self._pcapfile = rdpcap(self._rfile)
+            except:
+                print(
+                    "[ %sERROR%s ] THERE WAS A PROBLEM READING PCAP FILE"
+                    % (fg(9), attr(0))
+                )
+                exit(1)
+        else:
+            print("[ %sERROR%s ] FILE %s DOES NOT EXIST" % (fg(9), attr(0), self._rfile))
+            exit(1)
 
     @property
     def pcapfile(self):
