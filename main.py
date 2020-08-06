@@ -28,6 +28,7 @@ if __name__ == "__main__":
 		"count": args.count,
 		"read": args.read_mode,
 		"rfile": args.rfile,
+		"hex": args.hex_dump,
 		"pkt-cnt": args.packet_count,
 		"no-prn": args.no_print,
 		"rc": args.read_count,
@@ -78,7 +79,7 @@ if __name__ == "__main__":
 	elif args["read"]:
 		if args["rfile"]:
 			read_obj = ReadPCAP(
-				args["rfile"], args["src-ip"], args["not-src-ip"], args["dst-ip"], 
+				args["rfile"], args["hex"], args["src-ip"], args["not-src-ip"], args["dst-ip"], 
 				args["not-dst-ip"], args["src-port"], args["not-src-port"], 
 				args["dst-port"], args["not-dst-port"], args["src-mac"], 
 				args["not-src-mac"], args["dst-mac"], args["not-dst-mac"],

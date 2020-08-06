@@ -1,18 +1,19 @@
 from src.parse_pcap import PCAPParser
 from src.net_sniff import NetSniff
-from scapy.all import rdpcap
+from scapy.all import rdpcap, hexdump
 from colored import fg, attr
 from time import sleep
 from os.path import exists
 
 class ReadPCAP:
     def __init__(
-        self, rfile, src_ip, not_src_ip, dst_ip, not_dst_ip, 
+        self, rfile, hexdump, src_ip, not_src_ip, dst_ip, not_dst_ip, 
         src_port, not_src_port, dst_port, not_dst_port, src_mac,
         not_src_mac, dst_mac, not_dst_mac, tcp, not_tcp,udp, 
         not_udp, icmp, not_icmp, pkt_cnt
     ):
         self._rfile = rfile
+        self._hex = hexdump
         self._pkt_cnt = pkt_cnt
         self._src_ip = src_ip
         self._not_src_ip = not_src_ip
@@ -192,6 +193,9 @@ class ReadPCAP:
         try:
             for cap in capture:
                 print_str = self.netsniff_obj.echo(cap)
+                if self._hex:
+                    hexdump(cap)
+                    print("_"*71)
                 if not print_str:
                     continue
                 print(print_str)
