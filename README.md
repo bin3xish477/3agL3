@@ -126,6 +126,7 @@ Most arguments can be used for both Read & Write modes:
 ```
 ## > Enum
 Enumerate system processes, disk info, IP addresses, MAC addresses, etc
+
 **Arguments**:
 ```
   -enum, --enumeration  Use enum mode. Must specify 1 or more options from
