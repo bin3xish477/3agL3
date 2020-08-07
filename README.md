@@ -27,6 +27,7 @@ netifaces
 ## > Berkeley Packet Filter Examples
 ```
 # Matching IP
+-------------
 dst host 192.168.1.0
 src host 192.168.1
 dst host 172.16
@@ -36,6 +37,7 @@ host 192.168.1.0/24
 src host 192.168.1/24
 
 # Matching Port/Portranges
+--------------------------
 src port <PORT>
 dst port <PORT>
 port <PORT>
@@ -43,11 +45,13 @@ src portrange 80-88
 tcp portrange 1501-1549
 
 # Matching MAC
+--------------
 ether host <MAC>
 ether src host <MAC>
 ether dst host <MAC>
 
-# All supported protocols to filter by:
+# All supported protocols to filter by
+---------------------------------------
 arp
 ether
 fddi
