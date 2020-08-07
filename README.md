@@ -1,15 +1,20 @@
 # 3agL3
 Sniffing network traffic with Python for real-time or PCAP analysis.
 
-## > Requirements
+## > Pip Requirements
 ```
 scapy
 colored
 netaddr
 netifaces
-
-# must have npcap installed
+```
+## Npcap/Tcpdump Installation
+### Download npcap for Windows
 https://nmap.org/npcap/#download
+### Install Tcpdump: Ubuntu/Debian
+sudo apt install tcpdump -y
+### Install Tcpdump: CentOS/RHEL
+yum install tcpdump -y
 ```
 ## > Example: Live Mode
 ![live_mode](images/live_mode.png)
