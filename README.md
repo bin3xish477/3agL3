@@ -11,11 +11,11 @@ netifaces
 
 ## Npcap/Tcpdump Installation
 - Download npcap for Windows
-https://nmap.org/download.html
+    - https://nmap.org/download.html
 - Install Tcpdump: Ubuntu/Debian
-sudo apt install tcpdump -y
+    - `sudo apt install tcpdump -y`
 - Install Tcpdump: CentOS/RHEL
-yum install tcpdump -y
+    - `yum install tcpdump -y`
 
 ## > Example: Live Mode
 ![live_mode](images/live_mode.png)
