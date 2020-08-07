@@ -1,13 +1,10 @@
 # 3agL3
-Sniffing network traffic with Python for real-time capture or PCAP analysis and enumeration toolkit. 
+Sniffing network traffic with Python for live capture observation or PCAP creation and analysis.
 
 ## > Pip Requirements
 ```
 scapy
-psutil
 colored
-netaddr
-netifaces
 ```
 
 ## > Npcap/Tcpdump Installation
@@ -119,24 +116,6 @@ Most arguments can be used for both Read & Write modes:
                         port:count, mac:count)
   -l, --log             Log pcap traffic flow to a txt file for external
                         parsing
-```
-### > Enum
-Enumerate system processes, disk info, IP addresses, MAC addresses, etc
-
-**Arguments**:
-```
-  -enum, --enumeration  Use enum mode. Must specify 1 or more options from
-                        below
-  -ls-interf, --list-interfaces
-                        List all available network interfaces. NOTE: FOR LINUX
-                        ONLY
-  -e-interf <INTERFACE>, --enumerate-interface <INTERFACE>
-                        Enumerate information regarding an IP addresses. NOTE:
-                        FOR LINUX ONLY
-  -e-ip <IP>, --enumerate-ip <IP>
-                        Enumerate specified IP address
-  -e-mac <MAC>, --enumerate-mac <MAC>
-                        Enumerate specified MAC address
 ```
 ## > Berkeley Packet Filter Examples
 ```
