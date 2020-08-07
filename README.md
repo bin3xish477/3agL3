@@ -17,13 +17,26 @@ netifaces
 - Install Tcpdump: **CentOS/RHEL**:
     - `yum install tcpdump -y`
 
-## > Example: Live Mode
-![live_mode](images/live_mode.png)
+## 3agL3 Modes of Operation: Live, Read, Write
+## > Live Mode
+    - Args:
+    ```python
+    live_capture.add_argument("-live", "--live-mode",action="store_true",default=False,help="Perfrom live capture analysis")
 
-## > Example: Read Mode
+	if system() == "Windows":
+		live_capture.add_argument("-i", "--interf",nargs="*",help="The interface to listen on (more than one can be specified)")
+	else:
+		live_capture.add_argument("-i", "--interf", nargs="*",help="The interface to listen on (more than one is allowed)")
 
-## > Example: Write Mode
+	live_capture.add_argument("-c", "--count",metavar="<NUM>",type=int, default=0,help="The number of packets to capture (default = 0 = infinity)")
+	live_capture.add_argument("-f", "--filter",metavar="<BPF FITLER>",type=str, default=None,help="Berkeley packet filter to apply to capture")
+    ```
 
+## > Read Mode
+    - 
+    
+## > Write Mode
+    - 
 ## > Berkeley Packet Filter Examples
 ```
 # Matching IP
