@@ -99,10 +99,6 @@ Most arguments can be used for both Read & Write modes:
   -icmp, --filter-icmp  Filter ICMP packets only
   -not-icmp, --not-filter-icmp
                         Filter for non-ICMP packets only
-  -raw-out, --show-raw-output
-                        Print raw load of each packet
-  -raw-sch <PATTERN>, --raw_search <PATTERN>
-                        search the raw payload for specified string
   -sum, --summary       Summary of the packet capture <for read & write mode>
   -le <NUM>, --len-less-equal <NUM>
                         Filters for packets with a length that is less than or

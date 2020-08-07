@@ -64,8 +64,6 @@ def parse_args():
 	write_read_pcap.add_argument("-not-udp", "--not-filter-udp",action="store_true", default=False,help="Filter for non-UDP packets only")
 	write_read_pcap.add_argument("-icmp", "--filter-icmp",action="store_true",default=False,help="Filter ICMP packets only")
 	write_read_pcap.add_argument("-not-icmp", "--not-filter-icmp",action="store_true",default=False,help="Filter for non-ICMP packets only")
-	write_read_pcap.add_argument("-raw-out", "--show-raw-output",action="store_true",help="Print raw load of each packet")
-	write_read_pcap.add_argument("-raw-sch", "--raw_search",metavar="<PATTERN>",type=str,help="search the raw payload for specified string")
 	write_read_pcap.add_argument("-sum", "--summary",action="store_true",help="Summary of the packet capture <for read & write mode>")
 	write_read_pcap.add_argument("-le", "--len-less-equal",metavar="<NUM>",type=int,help="Filters for packets with a length that is less than or equal to the specified number")
 	write_read_pcap.add_argument("-ge", "--len-greater-equal",metavar="<NUM>",type=int,help="Filters for packets with a length that is greater than or equal to the specified number")

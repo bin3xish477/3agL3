@@ -412,29 +412,3 @@ class PCAPParser:
                 "[ %sERROR%s ] THERE WAS AN ERROR CREATING SUMMARY JSON FILE... PLEASE TRY AGAIN"
                 % (fg(9), attr(0))
             )
-
-    def raw_output(self, capture):
-        """ """
-        try:
-            for cap in capture:
-                if cap.haslayer(IP) and cap.haslayer(Raw):
-                    print(cap[Raw].load)
-        except KeyboardInterrupt:
-            print(
-                "\n[ %sATTENTION%s ] SIGINT INVOKED: TERMINATING PROGRAM"
-                % (fg(202), attr(0))
-            )
-
-    def raw_search(self, capture, pattern):
-        """ """
-        try:
-            for cap in capture:
-                if cap.haslayer(IP) and cap.haslayer(Raw):
-                    str_raw_load = str(cap[Raw].load)
-                    if pattern in str_raw_load:
-                        print(str_raw_load)
-        except KeyboardInterrupt:
-            print(
-                "\n[ %sATTENTION%s ] SIGINT INVOKED: TERMINATING PROGRAM"
-                % (fg(202), attr(0))
-            )
