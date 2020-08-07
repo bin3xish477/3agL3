@@ -10,7 +10,7 @@ def parse_args():
 		description="There are four modes of operation \u2192 live : read : write : enum ",
 		usage=f"\n\t{argv[0]} -live <options> | -read <options> | -write <options> -enum <options>",
 		add_help=False
-		)
+	)
 	
 	# ---------------- Arguments Groups ------------------
 	help_options = parser.add_argument_group("%sFor Help%s" % (fg(226), attr(0)))
@@ -18,8 +18,7 @@ def parse_args():
 	read_pcap = parser.add_argument_group("%sRead Mode Options%s" % (fg(76), attr(0)))
 	write_pcap = parser.add_argument_group("%sWrite Mode Options%s" % (fg(39), attr(0)))
 	write_read_pcap = parser.add_argument_group("%sOptional Arguments for Read/Write Modes%s" % (fg(199), attr(0)))
-	network_enum = parser.add_argument_group("%sNetwork-Enum Mode Options%s" % (fg(130), attr(0)))
-
+	
 	help_options.add_argument("-h", "--help",action="help",help="Show this help message and exit")
 
 	# -------------- Live Capture Options ---------------
@@ -28,7 +27,7 @@ def parse_args():
 	if system() == "Windows":
 		live_capture.add_argument("-i", "--interf",nargs="*",help="The interface to listen on (more than one can be specified)")
 	else:
-		live_capture.add_argument("-i", "--interf", nargs="*",help="The interface to listen on (more than one is allowed)")
+		live_capture.add_argument("-i", "--interf",nargs="*",help="The interface to listen on (more than one is allowed)")
 
 	live_capture.add_argument("-c", "--count",metavar="<NUM>",type=int, default=0,help="The number of packets to capture (default = 0 = infinity)")
 	live_capture.add_argument("-f", "--filter",metavar="<BPF FITLER>",type=str, default=None,help="Berkeley packet filter to apply to capture")
@@ -72,13 +71,6 @@ def parse_args():
 	write_read_pcap.add_argument("-ip-ver", "--ip-version", action="store_true",help="Prints the percentage of a capture containing IPv4 vs IPv6")
 	write_read_pcap.add_argument("-j", "--json",action="store_true",help="Create JSON file containing capture summary (ip:count, port:count, mac:count)")
 	write_read_pcap.add_argument("-l", "--log",action="store_true",help="Log pcap traffic flow to a txt file for external parsing")
-
-	# ------------ NETWORK ENUMERATION -----------------
-	network_enum.add_argument("-enum", "--enumeration",action="store_true",help="Use enum mode. Must specify 1 or more options from below")
-	network_enum.add_argument("-ls-interf", "--list-interfaces",action="store_true",help="List all available network interfaces. NOTE: FOR LINUX ONLY")
-	network_enum.add_argument("-e-interf", "--enumerate-interface",metavar="<INTERFACE>",type=str,help="Enumerate information regarding an IP addresses. NOTE: FOR LINUX ONLY")
-	network_enum.add_argument("-e-ip", "--enumerate-ip",metavar="<IP>",type=str,help="Enumerate specified IP address")
-	network_enum.add_argument("-e-mac", "--enumerate-mac",metavar="<MAC>",type=str,help="Enumerate specified MAC address")
 	
 	if len(argv[1:]) == 0:
 		parser.print_help()
