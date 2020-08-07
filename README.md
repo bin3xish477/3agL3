@@ -24,5 +24,15 @@ netifaces
 
 ## > Example: Write Mode
 
-## > Berkeley Packet Filters
-[Berkeley Packet Filters](https://www.ibm.com/support/knowledgecenter/en/SS42VS_7.3.3/com.ibm.qradar.doc/c_forensics_bpf.html)
+## > Berkeley Packet Filter Examples
+```
+dst host 192.168.1.0
+src host 192.168.1
+dst host 172.16
+src host 10
+host 192.168.1.0
+host 192.168.1.0/24
+src host 192.168.1/24
+
+```
+For more Berkeley Packet Filters: [Berkeley Packet Filters](https://www.ibm.com/support/knowledgecenter/en/SS42VS_7.3.3/com.ibm.qradar.doc/c_forensics_bpf.html)
