@@ -5,7 +5,7 @@ from datetime import datetime
 from src.net_sniff import NetSniff
 from src.read_pcap import ReadPCAP
 from src.write_pcap import WritePCAP
-from src.netw_filter import NetworkFilter
+from src.netw_filter import Enumerate
 from colored import fg, attr
 from sys import exit
 from platform import system

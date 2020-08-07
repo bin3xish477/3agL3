@@ -7,7 +7,7 @@ from colored import fg, attr
 def parse_args():
 	""" Program arguments """
 	parser = ArgumentParser(
-		description="There are four modes of operation \u2192 live : read : write : network-enum ",
+		description="There are four modes of operation \u2192 live : read : write : enum ",
 		usage=f"\n\t{argv[0]} -live <options> | -read <options> | -write <options> -enum <options>",
 		add_help=False
 		)

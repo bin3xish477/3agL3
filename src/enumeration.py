@@ -3,11 +3,11 @@ from netifaces import interfaces, ifaddresses
 from colored import fg, attr
 from platform import system
 from random import randint
-from pprint import pprint
+import psutil
 
 SYSTEM = system()
 
-class NetworkFilter:
+class Enumerate:
     def list_interfaces(self):
     	""" List network interfaces on system """
     	print("[ %s%sNetwork Interfaces%s ]" % (fg(126), attr("bold"), attr("reset")))
@@ -52,3 +52,7 @@ class NetworkFilter:
     	print("Bit Representation:", mac.bits())
     	print("Host Identifier:", mac.ei)
     	print("Info:\n", mac.info)
+
+    def enumerate_processes(self):
+        """ List running processes and related info """
+        pass
