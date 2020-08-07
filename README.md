@@ -26,6 +26,7 @@ netifaces
 
 ## > Berkeley Packet Filter Examples
 ```
+# Matching IP
 dst host 192.168.1.0
 src host 192.168.1
 dst host 172.16
@@ -34,5 +35,33 @@ host 192.168.1.0
 host 192.168.1.0/24
 src host 192.168.1/24
 
+# Matching Port/Portranges
+src port <PORT>
+dst port <PORT>
+port <PORT>
+src portrange 80-88
+tcp portrange 1501-1549
+
+# Matching MAC
+ether host <MAC>
+ether src host <MAC>
+ether dst host <MAC>
+
+# All supported protocols to filter by:
+arp
+ether
+fddi
+icmp
+ip
+ip6
+link
+ppp
+radio
+rarp
+slip
+tcp
+tr
+udp
+wlan
 ```
-For more Berkeley Packet Filters: [Berkeley Packet Filters](https://www.ibm.com/support/knowledgecenter/en/SS42VS_7.3.3/com.ibm.qradar.doc/c_forensics_bpf.html)
+Check out this [link](https://www.ibm.com/support/knowledgecenter/en/SS42VS_7.3.3/com.ibm.qradar.doc/c_forensics_bpf.html) for more Berkeley Packet Filters.
