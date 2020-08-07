@@ -19,7 +19,7 @@ netifaces
     - `yum install tcpdump -y`
 
 ## 3agL3 Modes of Operation: Live, Read, Write, Enum
-## > Live Mode
+### > Live Mode
 **Arguments**:
 ```
   -live, --live-mode    Perfrom live capture analysis
@@ -32,7 +32,7 @@ netifaces
                         Berkeley packet filter to apply to capture
 ```
 
-## > Read Mode
+### > Read Mode
 **Arguments**:
 ```
   -read, --read-mode    Read a PCAP file for analysis
@@ -46,7 +46,7 @@ netifaces
   -no-prn, --no-print   Do not print out traffic flow output to console
 ```
     
-## > Write Mode
+### > Write Mode
 **Arguments**:
 ```
   -write, --write-mode  capture live traffic and write to PCAP file (must
@@ -54,7 +54,7 @@ netifaces
   -w <FILENAME>, --wfile <FILENAME>
                         name of PCAP file to create
 ```
-## > Read/Write Mode
+### > Read/Write Mode
 Most arguments can be used for both Read & Write modes:
 ```
   -src-ip <IP>, --source-ip <IP>
@@ -124,7 +124,7 @@ Most arguments can be used for both Read & Write modes:
   -l, --log             Log pcap traffic flow to a txt file for external
                         parsing
 ```
-## > Enum
+### > Enum
 Enumerate system processes, disk info, IP addresses, MAC addresses, etc
 
 **Arguments**:
