@@ -230,7 +230,6 @@ if __name__ == "__main__":
 			elif args["ttl-eq"]:
 				write_obj.ttl_eq(args["ttl-eq"])
 			else:
-				print("[ %sNOTE%s ] NO WRITE FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
 				write_obj.no_filter()
 
 			if args["sum"]:

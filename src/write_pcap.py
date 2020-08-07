@@ -4,6 +4,7 @@ from scapy.all import wrpcap
 from colored import fg, attr
 from sys import exit
 from time import sleep
+from random import randint
 
 class WritePCAP(NetSniff):
     def __init__(
@@ -45,102 +46,77 @@ class WritePCAP(NetSniff):
                 func (function): function defined in PCAPParser to invoke
                 arg (str|int): value to filter from packet capture
         """
+        print("\n\t\t\t  <[ %sCAPTURE INFO%s ]>" % (fg(60), attr(0)))
+        print("-"*71)
+        print("INTERFACE \u2192 %s%s%s" % (fg(randint(50, 200)), attr(0), self.interf))
+        print("BERKELEY CAPTURE FILTER APPLIED \u2192 %s%s%s" % (fg(randint(50, 200)), attr(0), self.berkeley_filter))
+        print("NUMBER OF PACKETS TO CAPTURE \u2192 %s%s%s" % (fg(randint(50, 200)), attr(0), self.count))
         try:
             self.to_parse = super().capture(print_stdout=False)
         except:
             print(
-				"[%sERROR%s] COULD BEGIN PACKET CAPTURE. PLEASE TRY AGAIN..."
-				% (fg(9), attr(0))
-			)
-        self._filtered_cap = func(self.to_parse, arg)
-        self.write(self._filtered_cap)
+                "[%sERROR%s] COULD BEGIN PACKET CAPTURE. PLEASE TRY AGAIN..."
+                % (fg(9), attr(0))
+            )
+            exit(1)
+        self._filtered_capture = func(self.to_parse, arg)
+        self.write(self._filtered_capture)
 
     def filter_src_ip(self):
-        """ """
         self.execute(self.capparser.filt_src_ip, self._src_ip)
 
     def filter_not_src_ip(self):
-        """ """
         self.execute(self.capparser.filt_not_src_ip, self._not_src_ip)
     
     def filter_dst_ip(self):
-        """ """
         self.execute(self.capparser.filt_dst_ip, self._dst_ip)
 
     def filter_not_dst_ip(self):
-        """ """
         self.execute(self.capparser.filt_not_dst_ip, self._not_dst_ip)
 
     def filter_src_port(self):
-        """ """
         self.execute(self.capparser.filt_src_port, self._src_port)
 
     def filter_not_src_port(self):
-        """ """
         self.execute(self.capparser.filt_not_src_port, self._not_src_port)
 
     def filter_dst_port(self):
-        """ """
         self.execute(self.capparser.filt_dst_port, self._dst_port)
 
     def filter_not_dst_port(self):
-        """ """
         self.execute(self.capparser.filt_not_dst_port, self._not_dst_port)
 
     def filter_src_mac(self):
-        """ """
         self.execute(self.capparser.filt_src_mac, self._src_mac)
 
     def filter_not_src_mac(self):
-        """ """
         self.execute(self.capparser.filt_not_src_mac, self._not_src_mac)
 
     def filter_dst_mac(self):
-        """ """
         self.execute(self.capparser.filt_dst_mac, self._dst_mac)
 
     def filter_not_dst_mac(self):
-        """ """
         self.execute(self.capparser.filt_not_dst_mac, self._not_dst_mac)
 
     def filter_tcp(self):
-        """ """
         self.execute(self.capparser.filt_tcp, None)
 
     def filter_not_tcp(self):
-        """ """
         self.execute(self.capparser.filt_not_tcp, None)
 
     def filter_udp(self):
-        """ """
         self.execute(self.capparser.filt_udp, None)
 
     def filter_not_udp(self):
-        """ """
         self.execute(self.capparser.filt_not_udp, None)
 
     def filter_icmp(self):
-        """ """
         self.execute(self.capparser.filt_icmp, None)
 
     def filter_not_icmp(self):
-        """ """
         self.execute(self.capparser.filt_not_icmp, None)
 
-    def len_le_eq(self, value):
-        """ """
-
-    def len_gr_eq(self, value):
-        """ """
-
-    def len_eq(self, value):
-        """ """
-
-    def ttl_eq(self, value):
-        """ """
-
     def no_filter(self):
-        """ """
         for i in range(2, -1, -1):
             if i != 0:
                 print(
@@ -151,43 +127,58 @@ class WritePCAP(NetSniff):
                     "[ %sATTENTION%s ] CAPTURE WILL BEGIN IN %s" % (fg(202), attr(0), i)
                 )
             sleep(1)
-        self._cap = super().capture(print_stdout=False)
-        self.write(self._cap)
+        print("\n\t\t\t  <[ %sCAPTURE INFO%s ]>" % (fg(60), attr(0)))
+        print("-"*71)
+        print("IINTERFACE \u2192 %s%s%s" % (fg(randint(50, 200)), self.interf, attr(0)))
+        print("BERKELEY CAPTURE FILTER APPLIED \u2192 %s%s%s" % (fg(randint(50, 200)), self.berkeley_filter, attr(0)))
+        print("NUMBER OF PACKETS TO CAPTURE \u2192  %s%s%s" % (fg(randint(50, 200)), self.count, attr(0)))
+        self._capture = super().capture(print_stdout=False)
+        self.write(self._capture)
+
+    def len_le_eq(self, value):
+        filtered_capture = self.capparser.len_less_equal(self.to_parse, value)
+        self.write(filtered_capture)
+
+    def len_gr_eq(self, value):
+        filtered_capture = self.capparser.len_greater_equal(self.to_parse, value)
+
+    def len_eq(self, value):
+        filtered_capture = self.capparser.len_equal(self.to_parse, value)
+        self.write(filtered_capture)
+
+    def ttl_eq(self, value):
+        filtered_capture = self.capparser.ttl_equal(self.to_parse, value)
+        self.write(filtered_capture)
 
     def summary(self):
-        """ """
-        if self._cap:
-            self.capparser.summary(self._cap)
-        elif self._filtered_cap:
-            self.capparser.summary(self._filtered_cap)
+        if self._capture:
+            self.capparser.summary(self._capture)
+        elif self._filtered_capture:
+            self.capparser.summary(self._filtered_capture)
 
     def to_json(self):
-        """ """
-        if self._cap:
-            self.capparser.json_summary(self._cap)
-        elif self._filtered_cap:
-            self.capparser.json_summary(self._filtered_cap)
+        if self._capture:
+            self.capparser.json_summary(self._capture)
+        elif self._filtered_capture:
+            self.capparser.json_summary(self._filtered_capture)
 
     def log(self):
-        """ """
-        if self._cap:
+        if self._capture:
             with open("capture.log", "w") as log_file:
-                for cap in self._cap:
+                for cap in self._capture:
                     flow_statement = self.netsniff_obj.echo(cap)
                     log_file.write(flow_statement + "\n")
 
-        elif self._filtered_cap:
+        elif self._filtered_capture:
             with open("capture.log", "w") as log_file:
-                for cap in self._filtered_cap:
+                for cap in self._filtered_capture:
                     flow_statement = self.netsniff_obj.echo(cap)
                     log_file.write(flow_statement + "\n")
 
     def write(self, packets):
-        """
-        """
         try:
             wrpcap(self._wfile, packets)
-            print("[ %sSUCCESS%s ] PCAP FILE `%s` CREATED" % (fg(50), attr(0), self._wfile))
+            print("\n[ %sSUCCESS%s ] PCAP FILE `%s` CREATED" % (fg(50), attr(0), self._wfile))
         except:
             print(
                 "[ %sERROR%s ] THERE WAS AN ERROR CREATING PCAP FILE. PLEASE TRY AGAIN..."

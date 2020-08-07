@@ -85,5 +85,4 @@ def parse_args():
 	if len(argv[1:]) == 0:
 		parser.print_help()
 		exit(1)
-
 	return parser.parse_args()

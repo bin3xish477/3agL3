@@ -72,124 +72,96 @@ class ReadPCAP:
             self.to_stdout(filtered_capture)
 
     def filter_src_ip(self):
-        """ """
         self.execute(self.capparser.filt_src_ip, self._src_ip)
     
     def filter_not_src_ip(self):
-        """ """
         self.execute(self.capparser.filt_not_src_ip, self._not_src_ip)
 
     def filter_dst_ip(self):
-        """ """
         self.execute(self.capparser.filt_dst_ip, self._dst_ip)
 
     def filter_not_dst_ip(self):
-        """ """
         self.execute(self.capparser.filt_not_dst_ip, self._not_dst_ip)
 
     def filter_src_port(self):
-        """ """
         self.execute(self.capparser.filt_src_port, self._src_port)
 
     def filter_not_src_port(self):
-        """ """
         self.execute(self.capparser.filt_not_src_port, self._not_src_port)
 
     def filter_dst_port(self):
-        """ """
         self.execute(self.capparser.filt_dst_port, self._dst_port)
     
     def filter_not_dst_port(self):
-        """ """
         self.execute(self.capparser.filt_not_dst_port, self._not_dst_port)
 
     def filter_src_mac(self):
-        """ """
         self.execute(self.capparser.filt_src_mac, self._src_mac)
 
     def filter_not_src_mac(self):
-        """ """
         self.execute(self.capparser.filt_not_src_mac, self._not_src_mac)
 
     def filter_dst_mac(self):
-        """ """
         self.execute(self.capparser.filt_dst_mac, self._dst_mac)
 
     def filter_not_dst_mac(self):
-        """ """
         self.execute(self.capparser.filt_not_dst_mac, self._not_dst_mac)
 
     def filter_tcp(self):
-        """ """
         self.execute(self.capparser.filt_tcp, None)
 
     def filter_not_tcp(self):
-        """ """
         self.execute(self.capparser.filt_not_tcp, None)
 
     def filter_udp(self):
-        """ """
         self.execute(self.capparser.filt_udp, None)
 
     def filter_not_udp(self):
-        """ """
         self.execute(self.capparser.filt_not_udp, None)
 
     def filter_icmp(self):
-        """ """
         self.execute(self.capparser.filt_icmp, None)
 
     def filter_not_icmp(self):
-        """ """
         self.execute(self.capparser.filt_not_icmp, None)
 
     def len_le_eq(self, value:int):
-        """ """
         filtered_capture = self.capparser.len_less_equal(self.pcapfile, value)
         self.to_stdout(filtered_capture)
 
     def len_gr_eq(self, value:int):
-        """ """
         filtered_capture = self.capparser.len_greater_equal(self.pcapfile, value)
         self.to_stdout(filtered_capture)
 
     def len_eq(self, value:int):
-        """ """
         filtered_capture = self.capparser.len_equal(self.pcapfile, value)
         self.to_stdout(filtered_capture)
 
     def ttl_eq(self, value:int):
-        """ """
         filtered_capture = self.capparser.ttl_equal(self.pcapfile, value)
         self.to_stdout(filtered_capture)
 
     def no_filter(self, no_print=False):
-        """ """
         if not no_print:
             print("[ %sNOTE%s ] NO READ FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))
             self.to_stdout(self.pcapfile)
     
     def packet_count(self):
-        """ """
         return len([cap for cap in self.pcapfile])
 
     def summary(self):
-        """ """
         self.capparser.summary(self.pcapfile)
 
     def to_json(self):
-        """ """
         self.capparser.json_summary(self.pcapfile)
 
     def log(self):
-        """ """
         with open("capture.log", "w") as log_file:
             for cap in self.pcapfile:
                 flow_statement = self.netsniff_obj.echo(cap)
                 log_file.write(flow_statement + "\n")
 
     def to_stdout(self, capture):
-        """ """
         try:
             for cap in capture:
                 print_str = self.netsniff_obj.echo(cap)
