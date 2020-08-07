@@ -10,11 +10,11 @@ netifaces
 ```
 
 ## Npcap/Tcpdump Installation
-- Download npcap for Windows
+- Download Npcap for **Windows**:
     - https://nmap.org/download.html
-- Install Tcpdump: Ubuntu/Debian
+- Install Tcpdump: **Ubuntu/Debian**:
     - `sudo apt install tcpdump -y`
-- Install Tcpdump: CentOS/RHEL
+- Install Tcpdump: **CentOS/RHEL**:
     - `yum install tcpdump -y`
 
 ## > Example: Live Mode
