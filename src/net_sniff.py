@@ -10,9 +10,9 @@ class NetSniff:
 	def __init__(self, interf, berkeley_filter, count):
 		"""
 		Args:
-			interf (str): the infertace to capture packets on.
-			apply_filter (str): apply tcpdump filter to live capture.
-			count (int): number of packets to capture, 0=infinite.
+			interf (str): the infertace to capture packets on
+			apply_filter (str): apply BP filter to live capture
+			count (int): number of packets to capture, 0=infinite
 		"""
 		self._interf = interf
 		self._berkeley_filter = berkeley_filter
