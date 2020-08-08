@@ -17,6 +17,16 @@ class NetSniff:
 		self._interf = interf
 		self._berkeley_filter = berkeley_filter
 		self._count = count
+		self.FLAGS = {
+			'F': 'FIN',
+			'S': 'SYN',
+			'R': 'RST',
+			'P': 'PSH',
+			'A': 'ACK',
+			'U': 'URG',
+			'E': 'ECE',
+			'C': 'CWR',
+		}
 
 	@property
 	def interf(self):
@@ -127,17 +137,7 @@ class NetSniff:
 				return None
 		elif pkt.haslayer(TCP):
 			try:
-				flags = {
-				    'F': 'FIN',
-				    'S': 'SYN',
-				    'R': 'RST',
-				    'P': 'PSH',
-				    'A': 'ACK',
-				    'U': 'URG',
-				    'E': 'ECE',
-				    'C': 'CWR',
-				}
-				tcp_flag_str = ",".join([flags[x] for x in pkt[TCP].flags if x in flags.keys()])
+				tcp_flag_str = ",".join([self.FLAGS[x] for x in pkt[TCP].flags if x in flags.keys()])
 				date = str(datetime.now())
 				src_mac = str(pkt[Ether].src)
 				dst_mac = str(pkt[Ether].dst)
