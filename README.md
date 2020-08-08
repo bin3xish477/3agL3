@@ -8,13 +8,13 @@ colored
 ```
 
 # Installation
-## > 3agLe Installation
+### > 3agLe Installation
 ```
 git clone https://github.com/binexisHATT/3agL3.git
 cd 3agL3
 pip3 install -r requirements.txt
 ```
-## > Npcap/Tcpdump Installation
+### > Npcap/Tcpdump Installation
 - Download Npcap for **Windows**:
     - https://nmap.org/download.html
 - Install Tcpdump: **Ubuntu/Debian**:
