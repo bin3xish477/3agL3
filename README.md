@@ -127,6 +127,7 @@ Optional Arguments for Read/Write Modes:
   -l, --log             Log pcap traffic flow to a txt file for external parsing
 ```
 ## > Berkeley Packet Filter Examples
+Berkeley Packet Filter are for 3agle's Live Mode of Operation. Berkeley Packet Filters are recommended to filter for content relevant to the content that the user is seeking. Python is no where near as fast at C at parsing network packets so it wouldn't be effective to capture on Live Mode without an appropiate BP filter. 
 ```
 # Matching IP
 -------------
