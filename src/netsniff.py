@@ -51,8 +51,8 @@ class NetSniff:
 		if pkt.haslayer(ICMP):
 			try:
 				date = str(datetime.now())
-				src_mac = str(pkt[Ether].src)
-				dst_mac = str(pkt[Ether].dst)
+				src_mac = pkt[Ether].src
+				dst_mac = pkt[Ether].dst
 				proto = str(pkt[IP].payload.name).upper()
 
 				icmp_type = ""
@@ -85,23 +85,28 @@ class NetSniff:
 			arp_str = ""
 			# matching ARP request
 			if pkt[ARP].op == WHO_HAS:
-				arp_str = ": REQUEST : %s %s%sWho Has%s %s? %s%sTell%s %s" % (
-					pkt[Ether].src,
+				arp_str = ": REQUEST: %s%sWho Has%s %s%s%s?%s %s%sTell%s %s %s%sAt%s %s" % (
 					fg(9), attr("bold"), attr("reset"),
 					pkt[Ether].pdst,
 					fg(9), attr("bold"), attr("reset"),
-					pkt[Ether].psrc
+					fg(9), attr("bold"), attr("reset"),
+					pkt[Ether].psrc,
+					fg(9), attr("bold"), attr("reset"),
+					pkt[Ether].src
 				)
 			# matching ARP reply
 			if pkt[ARP].op == IS_AT:
-				arp_str = ": REPLY : %s %s%sIs At%s %s" % (
+				arp_str = ": REPLY  : %s%sTell%s %s %s%sThat%s %s %s%sIs At%s %s" % (
+					fg(201), attr("bold"), attr("reset"),
+					pkt[Ether].dst,
+					fg(201), attr("bold"), attr("reset"),
 					pkt[ARP].psrc,
-					fg(183), attr("bold"), attr("reset"),
+					fg(201), attr("bold"), attr("reset"),
 					pkt[Ether].src
 				)
 			return (
 				f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:25]}%s>" \
-				f" %s%s{proto}%s {arp_str}"
+				f" %s%s{proto}%s{arp_str}"
 				% (
 					fg(141), attr("bold"), attr("reset"),
 					fg(141), attr("bold"), attr("reset"),
@@ -137,10 +142,10 @@ class NetSniff:
 				return None
 		elif pkt.haslayer(TCP):
 			try:
-				tcp_flag_str = ",".join([self.FLAGS[x] for x in pkt[TCP].flags if x in flags.keys()])
+				tcp_flag_str = ",".join([self.FLAGS[x] for x in pkt[TCP].flags if x in self.FLAGS.keys()])
 				date = str(datetime.now())
-				src_mac = str(pkt[Ether].src)
-				dst_mac = str(pkt[Ether].dst)
+				src_mac = pkt[Ether].src
+				dst_mac = pkt[Ether].dst
 				proto = str(pkt[IP].payload.name).upper()
 				return (
 					f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:25]}%s>" \
@@ -164,8 +169,8 @@ class NetSniff:
 		else:
 			try:
 				date = str(datetime.now())
-				src_mac = str(pkt[Ether].src)
-				dst_mac = str(pkt[Ether].dst)
+				src_mac = pkt[Ether].src
+				dst_mac = pkt[Ether].dst
 				proto = str(pkt[IP].payload.name).upper()
 				return (
 					f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:25]}%s>" \
