@@ -79,7 +79,7 @@ if __name__ == "__main__":
 				args["tcp"], args["not-tcp"], args["udp"], args["not-udp"],
 				args["icmp"], args["not-icmp"], args["pkt-cnt"]
 			)
-			read_obj.read()
+			read_obj.read(count=args["rc"])
 
 			# DONT FORGET TO HANDLE READ-COUNT OPTION!!!
 

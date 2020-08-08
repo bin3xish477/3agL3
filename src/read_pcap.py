@@ -37,11 +37,20 @@ class ReadPCAP:
         self.capparser = PCAPParser()
         self.netsniff_obj = NetSniff(None, None, None)
 
-    def read(self):
+    def read(self, count=None):
         """ Read PCAP file """
         if exists(self._rfile):
+            temp_pkt_list = []
+            i = 0
             try:
                 self._pcapfile = rdpcap(self._rfile)
+                if count is not None:
+                    for cap in self.pcapfile:
+                        if i == count:
+                            break
+                        i += 1
+                        temp_pkt_list.append(cap)
+                    self._pcapfile = temp_pkt_list
             except:
                 print(
                     "[ %sERROR%s ] THERE WAS A PROBLEM READING PCAP FILE"
