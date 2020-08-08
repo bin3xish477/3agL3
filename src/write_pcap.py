@@ -129,7 +129,7 @@ class WritePCAP(NetSniff):
             sleep(1)
         print("\n\t\t\t  <[ %sCAPTURE INFO%s ]>" % (fg(60), attr(0)))
         print("-"*71)
-        print("IINTERFACE \u2192 %s%s%s" % (fg(randint(50, 200)), self.interf, attr(0)))
+        print("INTERFACE \u2192 %s%s%s" % (fg(randint(50, 200)), self.interf, attr(0)))
         print("BERKELEY CAPTURE FILTER APPLIED \u2192 %s%s%s" % (fg(randint(50, 200)), self.berkeley_filter, attr(0)))
         print("NUMBER OF PACKETS TO CAPTURE \u2192  %s%s%s" % (fg(randint(50, 200)), self.count, attr(0)))
         self._capture = super().capture(print_stdout=False)
