@@ -25,7 +25,7 @@ python3 main.py
 - Install Tcpdump: **CentOS/RHEL**:
     - `yum install tcpdump -y`
 
-# 3agL3 Modes of Operation: Live, Read, Write, Enum
+# 3agL3 Modes of Operation: Live, Read, Write
 ### > Live Mode
 **Arguments**:
 ```
