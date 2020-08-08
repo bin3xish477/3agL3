@@ -7,8 +7,8 @@ from colored import fg, attr
 def parse_args():
 	""" Program arguments """
 	parser = ArgumentParser(
-		description="There are four modes of operation \u2192 live : read : write : enum ",
-		usage=f"\n\t{argv[0]} -live <options> | -read <options> | -write <options> -enum <options>",
+		description="There are three modes of operation \u2192 live : read : write",
+		usage=f"\n\t{argv[0]} -live <options> | -read <options> | -write <options>",
 		add_help=False
 	)
 	
@@ -63,12 +63,12 @@ def parse_args():
 	write_read_pcap.add_argument("-not-udp", "--not-filter-udp",action="store_true", default=False,help="Filter for non-UDP packets only")
 	write_read_pcap.add_argument("-icmp", "--filter-icmp",action="store_true",default=False,help="Filter ICMP packets only")
 	write_read_pcap.add_argument("-not-icmp", "--not-filter-icmp",action="store_true",default=False,help="Filter for non-ICMP packets only")
-	write_read_pcap.add_argument("-sum", "--summary",action="store_true",help="Summary of the packet capture <for read & write mode>")
+	write_read_pcap.add_argument("-tcp-f", "--tcp-flags",metavar="<TCP FLAGS>",nargs="+",help="Filter packets by TCP flag. Seperate each flag by spaces.")
 	write_read_pcap.add_argument("-le", "--len-less-equal",metavar="<NUM>",type=int,help="Filters for packets with a length that is less than or equal to the specified number")
 	write_read_pcap.add_argument("-ge", "--len-greater-equal",metavar="<NUM>",type=int,help="Filters for packets with a length that is greater than or equal to the specified number")
 	write_read_pcap.add_argument("-len-eq", "--len-equal",metavar="<NUM>",type=int,help="Filters for packets with a length that is equal to the specified number")
 	write_read_pcap.add_argument("-ttl-eq", "--ttl-equal",metavar="<NUM>",type=int,help="Filters for packets with a ttl that is equal to the specified number")
-	write_read_pcap.add_argument("-ip-ver", "--ip-version", action="store_true",help="Prints the percentage of a capture containing IPv4 vs IPv6")
+	write_read_pcap.add_argument("-sum", "--summary",action="store_true",help="Summary of the packet capture <for read & write mode>")
 	write_read_pcap.add_argument("-j", "--json",action="store_true",help="Create JSON file containing capture summary (ip:count, port:count, mac:count)")
 	write_read_pcap.add_argument("-l", "--log",action="store_true",help="Log pcap traffic flow to a txt file for external parsing")
 	

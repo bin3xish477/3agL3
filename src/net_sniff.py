@@ -68,29 +68,37 @@ class NetSniff:
 			except:
 				return None
 		elif pkt.haslayer(ARP):
-			try:
-				date = str(datetime.now())
-				qr = pkt[ARP]
-				op = qr.get_field("op").i2repr(qr, qr.op)
-				src_mac = str(pkt[Ether].src)
-				dst_mac = str(pkt[Ether].dst)
-				proto = "ARP"
-				return (
-					f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:25]}%s>" \
-					f" {src_mac} | {dst_mac}" \
-					f" %s%s{proto}%s %s%s{op}%s" \
-					f" {pkt[ARP].psrc}? %s%stell%s {pkt[ARP].pdst}"
-					% (
-						fg(141), attr("bold"), attr("reset"),
-						fg(141), attr("bold"), attr("reset"),
-						fg(141), attr("bold"), attr("reset"),
-						fg(118), attr("bold"), attr("reset"),
-						fg(208), attr("bold"), attr("reset"),
-						fg(9), attr("bold"), attr("reset")
-					)
+			date = str(datetime.now())
+			proto = "ARP"
+			WHO_HAS = 1
+			IS_AT = 2
+			arp_str = ""
+			# matching ARP request
+			if pkt[ARP].op == WHO_HAS:
+				arp_str = ": REQUEST : %s %s%sWho Has%s %s? %s%sTell%s %s" % (
+					pkt[Ether].src,
+					fg(9), attr("bold"), attr("reset"),
+					pkt[Ether].pdst,
+					fg(9), attr("bold"), attr("reset"),
+					pkt[Ether].psrc
 				)
-			except Exception as err:
-				print(err)
+			# matching ARP reply
+			if pkt[ARP].op == IS_AT:
+				arp_str = ": REPLY : %s %s%sIs At%s %s" % (
+					pkt[ARP].psrc,
+					fg(183), attr("bold"), attr("reset"),
+					pkt[Ether].src
+				)
+			return (
+				f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:25]}%s>" \
+				f" %s%s{proto}%s {arp_str}"
+				% (
+					fg(141), attr("bold"), attr("reset"),
+					fg(141), attr("bold"), attr("reset"),
+					fg(141), attr("bold"), attr("reset"),
+					fg(118), attr("bold"), attr("reset"),
+				)
+			)
 		elif pkt.haslayer(DNS):
 			try:
 				date = str(datetime.now())
@@ -110,6 +118,42 @@ class NetSniff:
 						fg(141), attr("bold"), attr("reset"),
 						fg(141), attr("bold"), attr("reset"),
 						fg(118), attr("bold"), attr("reset"),
+						fg(208), attr("bold"), attr("reset"),
+						fg(9), attr("bold"), attr("reset"),
+						fg(220), attr("bold"), attr("reset"),
+					)
+				)
+			except:
+				return None
+		elif pkt.haslayer(TCP):
+			try:
+				flags = {
+				    'F': 'FIN',
+				    'S': 'SYN',
+				    'R': 'RST',
+				    'P': 'PSH',
+				    'A': 'ACK',
+				    'U': 'URG',
+				    'E': 'ECE',
+				    'C': 'CWR',
+				}
+				tcp_flag_str = ",".join([flags[x] for x in pkt[TCP].flags if x in flags.keys()])
+				date = str(datetime.now())
+				src_mac = str(pkt[Ether].src)
+				dst_mac = str(pkt[Ether].dst)
+				proto = str(pkt[IP].payload.name).upper()
+				return (
+					f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:25]}%s>" \
+					f" {src_mac} | {dst_mac}" \
+					f" %s%s{proto}%s [%s%s{tcp_flag_str}%s]" \
+					f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
+					f"  (TTL:{pkt[0].ttl} LEN:{pkt[0].len})"
+					% (
+						fg(141), attr("bold"), attr("reset"),
+						fg(141), attr("bold"), attr("reset"),
+						fg(141), attr("bold"), attr("reset"),
+						fg(118), attr("bold"), attr("reset"),
+						fg(226), attr("bold"), attr("reset"),
 						fg(208), attr("bold"), attr("reset"),
 						fg(9), attr("bold"), attr("reset"),
 						fg(220), attr("bold"), attr("reset"),

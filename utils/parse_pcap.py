@@ -345,6 +345,9 @@ class PCAPParser:
             )
             exit(1)
 
+    def filter_by_tcp_flag(self):
+        """ """
+
     def len_less_equal(self, capture, value):
         """ """
         filtered = []

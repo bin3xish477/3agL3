@@ -5,7 +5,6 @@ from datetime import datetime
 from src.net_sniff import NetSniff
 from src.read_pcap import ReadPCAP
 from src.write_pcap import WritePCAP
-from src.netw_filter import Enumerate
 from colored import fg, attr
 from sys import exit
 from platform import system
@@ -52,20 +51,14 @@ if __name__ == "__main__":
 		"not-udp": args.not_filter_udp,
 		"icmp": args.filter_icmp,
 		"not-icmp": args.not_filter_icmp,
-		"raw-out": args.show_raw_output,
-		"raw-sch": args.raw_search,
-		"sum": args.summary,
+		"tcp-f": args.tcp_flags,
 		"le": args.len_less_equal,
 		"ge": args.len_greater_equal,
 		"len-eq": args.len_equal,
 		"ttl-eq": args.len_equal,
+		"sum": args.summary,
 		"json": args.json,
-		"log": args.log,
-		"enum": args.enumeration,
-		"ls-interf": args.list_interfaces,
-		"e-interf": args.enumerate_interface,
-		"e-ip": args.enumerate_ip,
-		"e-mac": args.enumerate_mac
+		"log": args.log
 	}
 
 	if args["live"]:
@@ -152,11 +145,6 @@ if __name__ == "__main__":
 			if args["pkt-cnt"]:
 				pkt_count = read_obj.packet_count()
 				print("[ %s+%s ] Number of packets in PCAP: " % (fg(50), attr(0)), pkt_count)
-
-			if args["raw-out"]:
-				read_obj.capparser.raw_output(read_obj.pcapfile)
-			elif args["raw-sch"]:
-				read_obj.capparser.raw_search(read_obj.pcapfile, args["raw-sch"])
 		else:
 			print(
 				"[ %sERROR%s ] MUST PROVIDE `-r` ARGUMENTS FOR READ MODE"
@@ -247,19 +235,6 @@ if __name__ == "__main__":
 				"[ %sATTENTION%s ] MUST PROVIDE `-c` ARGUMENT FOR WRITE MODE"
 				% (fg(202), attr(0))
 			)
-
-	elif args["enum"]:
-		enum_obj = NetworkFilter()
-
-		if args["ls-interf"]:
-			enum_obj.list_interfaces()
-		elif args["e-interf"]:
-			enum_obj.enumerate_interface(args["e-interf"])
-		elif args["e-ip"]:
-			enum_obj.enumerate_ip(args["e-ip"])
-		elif args["e-mac"]:
-			enum_obj.enumerate_mac(args["e-mac"])
-
 	else:
 		print(
 			"[ %sERROR%s ] MUST PROVIDE A MODE OF OPERATION: -live, -read, or -write"

@@ -1,4 +1,4 @@
-from src.parse_pcap import PCAPParser
+from utils.parse_pcap import PCAPParser
 from src.net_sniff import NetSniff
 from scapy.all import wrpcap
 from colored import fg, attr
