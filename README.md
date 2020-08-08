@@ -32,7 +32,8 @@ colored
                         Berkeley packet filter to apply to capture
 ```
 **Capturing 30 Packets In Real-time**
-[live_mode](images/live_capture_no_filter_30_packets.png)
+
+![live_mode](images/live_capture_no_filter_30_packets.png)
 
 ### > Read Mode
 **Arguments**:
@@ -48,7 +49,8 @@ colored
   -no-prn, --no-print   Do not print out traffic flow output to console
 ```
 **Reading PCAP File**
-[read_mode](images/reading_pcap.png)
+
+![read_mode](images/reading_pcap.png)
 
 ### > Write Mode
 **Arguments**:
@@ -59,7 +61,8 @@ colored
                         name of PCAP file to create
 ```
 **Capturing 100 Packets and Creating PCAP File Containing These Packets**
-[writing_pcap](images/writing_pcap.png)
+
+![writing_pcap](images/writing_pcap.png)
 
 ### > Read/Write Mode
 Most arguments can be used for both Read & Write modes:
