@@ -13,6 +13,9 @@ colored
 git clone https://github.com/binexisHATT/3agL3.git
 cd 3agL3
 pip3 install -r requirements.txt
+
+# run
+python3 main.py
 ```
 ### > Npcap/Tcpdump Installation
 - Download Npcap for **Windows**:
