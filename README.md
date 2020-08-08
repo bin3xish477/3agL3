@@ -1,13 +1,23 @@
 # 3agL3
 Sniffing network traffic with Python for live capture observation or PCAP creation and analysis.
 
-## > Pip Requirements
+### > Pip Requirements
 ```
 scapy
 colored
 ```
 
-## > Npcap/Tcpdump Installation
+# Installation
+### > 3agLe Installation
+```
+git clone https://github.com/binexisHATT/3agL3.git
+cd 3agL3
+pip3 install -r requirements.txt
+
+# run
+python3 main.py
+```
+### > Npcap/Tcpdump Installation
 - Download Npcap for **Windows**:
     - https://nmap.org/download.html
 - Install Tcpdump: **Ubuntu/Debian**:
@@ -15,10 +25,7 @@ colored
 - Install Tcpdump: **CentOS/RHEL**:
     - `yum install tcpdump -y`
 
-## 3agL3 Modes of Operation: Live, Read, Write, Enum
-
----
-
+# 3agL3 Modes of Operation: Live, Read, Write, Enum
 ### > Live Mode
 **Arguments**:
 ```
