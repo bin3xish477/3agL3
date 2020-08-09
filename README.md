@@ -74,11 +74,6 @@ python3 main.py
 ### > Read/Write Mode
 Most arguments can be used for both Read & Write modes:
 ```
-  -write, --write-mode  capture live traffic and write to PCAP file (must specify `-c` option)
-  -w <FILENAME>, --wfile <FILENAME>
-                        name of PCAP file to create
-
-Optional Arguments for Read/Write Modes:
   -src-ip <IP>, --source-ip <IP>
                         Filter packets based on a specified source IP address
   -not-src-ip <IP>, --not-source-ip <IP>
@@ -112,7 +107,13 @@ Optional Arguments for Read/Write Modes:
   -icmp, --filter-icmp  Filter ICMP packets only
   -not-icmp, --not-filter-icmp
                         Filter for non-ICMP packets only
-  -tcp-f <TCP FLAGS> [<TCP FLAGS> ...], --tcp-flags <TCP FLAGS> [<TCP FLAGS> ...]
+  -arp, --filter-arp    Filter for ARP packets only
+  -not-arp, --not-filter-arp
+                        Filter for non-ARP packets only
+  -dns, --filter-dns    Filter for DNS packets only
+  -not-dns, --not-filter-dns
+                        Filter for non-DNS packets only
+  -tf <TCP FLAG> [<TCP FLAG> ...], --tcp-flags <TCP FLAG> [<TCP FLAG> ...]
                         Filter packets by TCP flag. Seperate each flag by spaces.
   -le <NUM>, --len-less-equal <NUM>
                         Filters for packets with a length that is less than or equal to the specified number
@@ -123,8 +124,10 @@ Optional Arguments for Read/Write Modes:
   -ttl-eq <NUM>, --ttl-equal <NUM>
                         Filters for packets with a ttl that is equal to the specified number
   -sum, --summary       Summary of the packet capture <for read & write mode>
-  -j, --json            Create JSON file containing capture summary (ip:count, port:count, mac:count)
-  -l, --log             Log pcap traffic flow to a txt file for external parsing
+  -j <FILENAME>, --json <FILENAME>
+                        Create JSON file containing capture summary (ip:count, port:count, mac:count)
+  -l <FILENAME>, --log <FILENAME>
+                        Log pcap traffic flow to a txt file for external parsing
 ```
 ## > Berkeley Packet Filter Examples
 Berkeley Packet Filter are for 3agle's **Live** and **Write** Mode of Operation. Berkeley Packet Filters are recommended to filter for content relevant to the content that the user is seeking. Python is no where near as fast at C at parsing network packets so it wouldn't be effective to capture in Live or Write Mode without an appropiate BP filter. 
