@@ -114,7 +114,19 @@ class WritePCAP(NetSniff):
         self.execute(self.capparser.filt_icmp, None)
 
     def filter_not_icmp(self):
-        self.execute(self.capparser.filt_not_icmp, None)
+        self.execute(self.capparser.filt_not_icmp, None)\
+
+    def filter_arp(self):
+        self.execute(self.capparser.filt_arp, None)
+
+    def filter_not_arp(self):
+        self.execute(self.capparser.filt_not_arp, None)
+
+    def filter_dns(self):
+        self.execute(self.capparser.filt_dns, None)
+
+    def filter_not_dns(self):
+        self.execute(self.capparser.filt_not_dns, None)
 
     def filter_tcp_flags(self, target_flags):
         self.execute(self.capparser.filt_tcp_flags, target_flags)

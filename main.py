@@ -51,6 +51,10 @@ if __name__ == "__main__":
 		"not-udp": args.not_filter_udp,
 		"icmp": args.filter_icmp,
 		"not-icmp": args.not_filter_icmp,
+		"arp": args.filter_arp,
+		"not-arp": args.not_filter_arp,
+		"dns": args.filter_dns,
+		"not-dns": args.not_filter_dns,
 		"tcp-flags": args.tcp_flags,
 		"le": args.len_less_equal,
 		"ge": args.len_greater_equal,
@@ -117,6 +121,14 @@ if __name__ == "__main__":
 				read_obj.filter_icmp()
 			elif args["not-icmp"]:
 				read_obj.filter_not_icmp()
+			elif args["arp"]:
+				read_obj.filter_arp()
+			elif args["not-arp"]:
+				read_obj.filter_not_arp()
+			elif args["dns"]:
+				read_obj.filter_dns()
+			elif args["not-dns"]:
+				read_obj.filter_not_dns()
 			elif args["tcp-flags"]:
 				read_obj.filter_tcp_flags(args["tcp-flags"])
 			elif args["le"]:
@@ -210,6 +222,14 @@ if __name__ == "__main__":
 				write_obj.filter_icmp()
 			elif args["not-icmp"]:
 				write_obj.filter_not_icmp()
+			elif args["arp"]:
+				write_obj.filter_arp()
+			elif args["not-arp"]:
+				write_obj.filter_not_arp()
+			elif args["dns"]:
+				write_obj.filter_dns()
+			elif args["not-dns"]:
+				write_obj.filter_not_dns()
 			elif args["tcp-flags"]:
 				write_obj.filter_tcp_flags(args["tcp-flags"])
 			elif args["le"]:

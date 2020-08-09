@@ -42,7 +42,7 @@ class PCAPParser(NetSniff):
             src_ip = search(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", src_ip).group(0)
         except AttributeError:
             print(
-                "[ %sERROR%s ] SPECIFIED `-src-ip` MUST BE A VALID IP ADDRESSES"
+                "[ %sERROR%s ] SPECIFIED `-not-src-ip` MUST BE A VALID IP ADDRESSES"
                 % (fg(9), attr(0))
             )
             exit(1)
@@ -86,14 +86,14 @@ class PCAPParser(NetSniff):
             dst_ip = search(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", dst_ip).group(0)
         except AttributeError:
             print(
-                "[ %sERROR%s ] SPECIFIED `-dst-ip` MUST BE A VALID IP ADDRESSES"
+                "[ %sERROR%s ] SPECIFIED `-not-dst-ip` MUST BE A VALID IP ADDRESSES"
                 % (fg(9), attr(0))
             )
             exit(1)
 
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(IP) and pkt[IP].dst == dst_ip:
+            if pkt.haslayer(IP) and pkt[IP].dst != dst_ip:
                 filtered.append(pkt)
         return filtered
 
@@ -119,11 +119,11 @@ class PCAPParser(NetSniff):
         filtered = []
         for pkt in capture:
             try:
-                if pkt.haslayer(IP) and pkt[IP].sport == int(src_port):
+                if pkt.haslayer(IP) and pkt[IP].sport != int(src_port):
                     filtered.append(pkt)
             except ValueError:
                 print(
-                    "[ %sERROR%s ] SPECIFIED `-src-port` MUST BE WITHIN RANGE: 1-65535"
+                    "[ %sERROR%s ] SPECIFIED `-not-src-port` MUST BE WITHIN RANGE: 1-65535"
                     % (fg(9), attr(0))
                 )
                 exit(1)
@@ -135,7 +135,9 @@ class PCAPParser(NetSniff):
         filtered = []
         for pkt in capture:
             try:
-                if pkt.haslayer(IP) and pkt[IP].dport == int(dst_port):
+               if (pkt.haslayer(TCP) or pkt.haslayer(UDP)
+                and pkt[TCP].dport == int(dst_port)
+                or pkt[UDP].dport == int(dst_port)):
                     filtered.append(pkt)
             except ValueError:
                 print(
@@ -151,11 +153,13 @@ class PCAPParser(NetSniff):
         filtered = []
         for pkt in capture:
             try:
-                if pkt.haslayer(IP) and pkt[IP].dport == int(dst_port):
+                if (pkt.haslayer(TCP) or pkt.haslayer(UDP)
+                and pkt[TCP].dport != int(dst_port)
+                or pkt[UDP].dport != int(dst_port)):
                     filtered.append(pkt)
             except ValueError:
                 print(
-                    "[ %sERROR%s ] SPECIFIED `-dst-port` MUST BE WITHIN RANGE: 1-65535"
+                    "[ %sERROR%s ] SPECIFIED `-not-dst-port` MUST BE WITHIN RANGE: 1-65535"
                     % (fg(9), attr(0))
                 )
                 exit(1)
@@ -184,14 +188,14 @@ class PCAPParser(NetSniff):
             src_mac = search(r"\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}", src_mac).group(0)
         except AttributeError:
             print(
-                "[ %sERROR%s ] SPECIFIED `-src-mac` MUST BE A VALID MAC ADDRESS"
+                "[ %sERROR%s ] SPECIFIED `-not-src-mac` MUST BE A VALID MAC ADDRESS"
                 % (fg(9), attr(0))
                 )
             exit(1)
 
         filtered = []
         for pkt in capture:
-            if pkt[Ether].src == src_mac:
+            if pkt[Ether].src != src_mac:
                 filtered.append(pkt)
         return filtered
 
@@ -218,14 +222,14 @@ class PCAPParser(NetSniff):
             dst_mac = search(r"\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}", dst_mac).group(0)
         except AttributeError:
             print(
-                "[ %sERROR%s ] SPECIFIED `-dst-mac` MUST BE A VALID MAC ADDRESS"
+                "[ %sERROR%s ] SPECIFIED `-not-dst-mac` MUST BE A VALID MAC ADDRESS"
                 % (fg(9), attr(0))
                 )
             exit(1)
 
         filtered = []
         for pkt in capture:
-            if pkt[Ether].dst == dst_mac:
+            if pkt[Ether].dst != dst_mac:
                 filtered.append(pkt)
         return filtered
 
@@ -233,7 +237,7 @@ class PCAPParser(NetSniff):
         """ """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "TCP":
+            if pkt.haslayer(TCP) and str(pkt[IP].payload.name).upper() == "TCP":
                 filtered.append(pkt)
         return filtered
 
@@ -241,7 +245,7 @@ class PCAPParser(NetSniff):
         """ """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "TCP":
+            if pkt.haslayer(TCP):
                 filtered.append(pkt)
         return filtered
 
@@ -257,7 +261,7 @@ class PCAPParser(NetSniff):
         """ """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "UDP":
+            if pkt.haslayer(UDP):
                 filtered.append(pkt)
         return filtered
 
@@ -265,7 +269,7 @@ class PCAPParser(NetSniff):
         """ """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "ICMP":
+            if pkt.haslayer(ICMP) and str(pkt[IP].payload.name).upper() == "ICMP":
                 filtered.append(pkt)
         return filtered
 
@@ -273,9 +277,21 @@ class PCAPParser(NetSniff):
         """ """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "ICMP":
+            if not pkt.haslayer(ICMP):
                 filtered.append(pkt)
         return filtered
+
+    def filt_arp(self, capture, _):
+        """ """
+
+    def filt_not_arp(self, capture, _):
+        """ """
+
+    def filt_dns(self, capture, _):
+        """ """
+
+    def filt_not_dns(self, capture, _):
+        """ """
 
     def filt_tcp_flags(self, capture, target_flags):
         """ """
