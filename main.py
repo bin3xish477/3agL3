@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 from utils.parse_args import parse_args
 from datetime import datetime
 from src.net_sniff import NetSniff
@@ -9,9 +8,11 @@ from colored import fg, attr
 from sys import exit
 from platform import system
 from subprocess import run, PIPE
-	
+
+SYSTEM = system()
+
 if __name__ == "__main__":
-	if system() == "Linux":
+	if SYSTEM == "Linux":
 		user = run(["whoami"], stdout=PIPE, stderr=PIPE)
 		user = user.stdout.decode("utf-8").replace("\n", "")
 		if user != "root":
@@ -19,7 +20,6 @@ if __name__ == "__main__":
 			exit(1)
 
 	args = parse_args()
-
 	args = {
 		"live": args.live_mode,
 		"interf": args.interf,
