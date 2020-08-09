@@ -98,8 +98,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_src_port(self, capture, src_port):
-        """
-        """
+        """ Filter for packets with a source port that matches `src_port` """
         filtered = []
         for pkt in capture:
             try:
@@ -114,8 +113,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_not_src_port(self, capture, src_port):
-        """
-        """
+        """ Filter for packets with a source port that does not match `src_port` """
         filtered = []
         for pkt in capture:
             try:
@@ -130,8 +128,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_dst_port(self, capture, dst_port):
-        """
-        """
+        """ Filter for packets with a destination port that equals `dst_port` """
         filtered = []
         for pkt in capture:
             try:
@@ -148,8 +145,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_not_dst_port(self, capture, dst_port):
-        """
-        """
+        """ Filter for packets with destination port's that do not match `dst_port` """
         filtered = []
         for pkt in capture:
             try:
@@ -166,7 +162,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_src_mac(self, capture, src_mac):
-        """ """
+        """ Filter for packets whose source MAC address equals `src_mac` """
         try:
             src_mac = search(r"\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}", src_mac).group(0)
         except AttributeError:
@@ -183,7 +179,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_not_src_mac(self, capture, src_mac):
-        """ """
+        """ Filter for packets whose source MAC address does not equal `src_mac` """
         try:
             src_mac = search(r"\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}", src_mac).group(0)
         except AttributeError:
@@ -200,7 +196,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_dst_mac(self, capture, dst_mac):
-        """ """
+        """ Filter for packets with destination MAC address that is equal to `dst_mac` """
         try:
             dst_mac = search(r"\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}", dst_mac).group(0)
         except AttributeError:
@@ -217,7 +213,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_not_dst_mac(self, capture, dst_mac):
-        """ """
+        """ Filter for packets with destination MAC addresses not matching `dst_mac` """
         try:
             dst_mac = search(r"\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}", dst_mac).group(0)
         except AttributeError:
@@ -234,7 +230,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_tcp(self, capture, _):
-        """ """
+        """ Filter for TCP packets """
         filtered = []
         for pkt in capture:
             if pkt.haslayer(TCP) and str(pkt[IP].payload.name).upper() == "TCP":
@@ -242,7 +238,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_not_tcp(self, capture, _):
-        """ """
+        """ Filter for non-TCP packets """
         filtered = []
         for pkt in capture:
             if pkt.haslayer(TCP):
@@ -250,7 +246,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_udp(self, capture, _):
-        """ """
+        """ Filter for UDP packets """
         filtered = []
         for pkt in capture:
             if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "UDP":
@@ -258,7 +254,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_not_udp(self, capture, _):
-        """ """
+        """ Filter for non-UDP packets """
         filtered = []
         for pkt in capture:
             if pkt.haslayer(UDP):
@@ -266,7 +262,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_icmp(self, capture, _):
-        """ """
+        """ Filter for ICMP packets """
         filtered = []
         for pkt in capture:
             if pkt.haslayer(ICMP) and str(pkt[IP].payload.name).upper() == "ICMP":
@@ -274,7 +270,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_not_icmp(self, capture, _):
-        """ """
+        """ Filter for non-ICMP packets """
         filtered = []
         for pkt in capture:
             if not pkt.haslayer(ICMP):
@@ -282,19 +278,39 @@ class PCAPParser(NetSniff):
         return filtered
 
     def filt_arp(self, capture, _):
-        """ """
+        """ Filter for ARP packets """
+        filtered = []
+        for pkt in capture:
+            if pkt.haslayer(ARP):
+                filtered.append(pkt)
+        return filtered
 
     def filt_not_arp(self, capture, _):
-        """ """
+        """ Filter for non-ARP packets """
+        filtered = []
+        for pkt in capture:
+            if not pkt.haslayer(ARP):
+                filtered.append(pkt)
+        return filtered
 
     def filt_dns(self, capture, _):
-        """ """
+        """ Filter for DNS packets """
+        filtered = []
+        for pkt in capture:
+            if pkt.haslayer(DNS):
+                filtered.append(pkt)
+        return filtered
 
     def filt_not_dns(self, capture, _):
-        """ """
+        """ Filter for non-DNS packets """
+        filtered = []
+        for pkt in capture:
+            if not pkt.haslayer(DNS):
+                filtered.append(pkt)
+        return filtered
 
     def filt_tcp_flags(self, capture, target_flags):
-        """ """
+        """ Filter for packets with TCP flags in the order specified in the list `target_flags` """
         filtered = []
         target_flags = [flag.upper() for flag in target_flags]
         for pkt in capture:
@@ -305,7 +321,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def len_less_equal(self, capture, value):
-        """ """
+        """ Filter for packets with a length less than or equal to `value` """
         filtered = []
         for pkt in capture:
             if pkt.haslayer(Ether) and pkt[Ether].len <= value:
@@ -313,7 +329,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def len_greater_equal(self, capture, value):
-        """ """
+        """ Filter for packets with a length greater than or equal to `value` """
         filtered = []
         for pkt in capture:
             if pkt.haslayer(Ether) and pkt[Ether].len >= value:
@@ -321,7 +337,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def len_equal(self, capture, value):
-        """ """
+        """ Filter for packets with a length that is equal to `value` """
         filtered = []
         for pkt in capture:
             if pkt.haslayer(Ether) and pkt[Ether].len == value:
@@ -329,7 +345,7 @@ class PCAPParser(NetSniff):
         return filtered
 
     def ttl_equal(self, capture, value):
-        """ """
+        """ Filter for packets with time-to-live equal to `value` """
         filtered = []
         for pkt in capture:
             if pkt.haslayer(Ether) and pkt[Ether].ttl == value:
@@ -379,7 +395,7 @@ class PCAPParser(NetSniff):
                 print("%s > %s" % (mac, count))
             print("\n", end="")
 
-            # FILTERING PACKETS LENGTHS
+            # FILTERING PACKET LENGTHS
             i = 0
             pkt_len_sum = 0
             for pkt in capture:
@@ -427,8 +443,8 @@ class PCAPParser(NetSniff):
         ip_dict = Counter(ip_list)
         capture_summary["ip_dict"] = ip_dict
 
-        port_list = ([pkt[IP].sport for pkt in capture if pkt.haslayer(IP)]
-        + [pkt[IP].dport for pkt in capture if pkt.haslayer(IP)])
+        port_list = ([pkt[IP].sport for pkt in capture if pkt.haslayer(TCP) or pkt.haslayer(UDP)]
+        + [pkt[IP].dport for pkt in capture if pkt.haslayer(TCP) or pkt.haslayer(UDP)])
         port_dict = Counter(port_list)
         capture_summary["port_dict"] = port_dict
 

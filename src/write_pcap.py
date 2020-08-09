@@ -42,9 +42,9 @@ class WritePCAP(NetSniff):
     def execute(self, func, arg):
         """ Executes real-time capture and passes that capture to `func`
         along with `arg`. 
-            Args:
-                func (function): function defined in PCAPParser to invoke
-                arg (str|int): value to filter from packet capture
+        Args:
+            func (function): function defined in PCAPParser to invoke
+            arg (str|int): value to filter from packet capture
         """
         print("\n\t\t\t  <[ %sCAPTURE INFO%s ]>" % (fg(60), attr(0)))
         print("-"*71)
@@ -146,6 +146,7 @@ class WritePCAP(NetSniff):
 
     def len_gr_eq(self, value):
         filtered_capture = self.capparser.len_greater_equal(self.to_parse, value)
+        self.write(filtered_capture)
 
     def len_eq(self, value):
         filtered_capture = self.capparser.len_equal(self.to_parse, value)
@@ -156,18 +157,21 @@ class WritePCAP(NetSniff):
         self.write(filtered_capture)
 
     def summary(self):
+        """ Prints summary (IP:count,MAC:count,PORT:count) of PCAP file """
         if self._capture:
             self.capparser.summary(self._capture)
         elif self._filtered_capture:
             self.capparser.summary(self._filtered_capture)
 
     def to_json(self, filename):
+        """ Create JSON file PCAP data (IP:count,MAC:count,PORT:count) """
         if self._capture:
             self.capparser.json_summary(self._capture, filename)
         elif self._filtered_capture:
             self.capparser.json_summary(self._filtered_capture, filename)
 
     def log(self, filename):
+        """ Create log file containing the contents of the PCAP file """
         if not filename:
             filename = "capture.log"
         if self._capture:
@@ -183,6 +187,10 @@ class WritePCAP(NetSniff):
                         log_file.write(flow_statement + "\n")
 
     def write(self, packets):
+        """ Create PCAP file
+        Args:
+            packets (list): a list containing packets to write to PCAP file
+        """
         try:
             wrpcap(self._wfile, packets)
             print("\n[ %sSUCCESS%s ] PCAP FILE `%s` CREATED" % (fg(50), attr(0), self._wfile))

@@ -46,7 +46,7 @@ class NetSniff:
 	def echo(self, pkt):
 		""" The print message for every captured packet
 		Args:
-		pkt (scapy.layers.l2.Ether): a scapy captured packet.
+			pkt (scapy.layers.l2.Ether): a scapy captured packet.
 		"""
 		if pkt.haslayer(ICMP):
 			try:

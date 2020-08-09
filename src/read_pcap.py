@@ -174,15 +174,19 @@ class ReadPCAP:
             self.to_stdout(self.pcapfile)
     
     def packet_count(self):
+        """ Returns number of packets within a PCAP file """
         return len([cap for cap in self.pcapfile])
 
     def summary(self):
+        """ Prints summary (IP:count,MAC:count,PORT:count) of PCAP file """
         self.capparser.summary(self.pcapfile)
 
     def to_json(self, filename):
+        """ Create JSON file PCAP data (IP:count,MAC:count,PORT:count) """
         self.capparser.json_summary(self.pcapfile, filename)
 
     def log(self, filename):
+        """ Create log file containing the contents of the PCAP file """ 
         if not filename:
             filename = "capture.log"
         with open(filename, "w", encoding="utf-8") as log_file:
@@ -193,6 +197,7 @@ class ReadPCAP:
                 log_file.write(flow_statement + "\n")
 
     def to_stdout(self, capture):
+        """ Prints PCAP data to console """
         try:
             for cap in capture:
                 print_str = self.netsniff_obj.echo(cap)
