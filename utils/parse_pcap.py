@@ -5,8 +5,12 @@ from sys import exit
 from re import search
 from scapy.all import *
 from random import randint
+from src.net_sniff import NetSniff
 
-class PCAPParser:
+class PCAPParser(NetSniff):
+    def __init__(self):
+        super().__init__(None, None , None)
+        
     def filt_src_ip(self, capture, src_ip):
         """ Filter source IP addresses from capture 
         Args:
@@ -23,9 +27,9 @@ class PCAPParser:
             exit(1)
 
         filtered = []
-        for cap in capture:
-            if cap.haslayer(IP) and cap[IP].src == src_ip:
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(IP) and pkt[IP].src == src_ip:
+                filtered.append(pkt)
         return filtered
     
     def filt_not_src_ip(self, capture, src_ip):
@@ -44,9 +48,9 @@ class PCAPParser:
             exit(1)
 
         filtered = []
-        for cap in capture:
-            if cap.haslayer(IP) and cap[IP].src != src_ip:
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(IP) and pkt[IP].src != src_ip:
+                filtered.append(pkt)
         return filtered
 
     def filt_dst_ip(self, capture, dst_ip):
@@ -66,9 +70,9 @@ class PCAPParser:
             exit(1)
 
         filtered = []
-        for cap in capture:
-            if cap.haslayer(IP) and cap[IP].dst == dst_ip:
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(IP) and pkt[IP].dst == dst_ip:
+                filtered.append(pkt)
         return filtered
 
     def filt_not_dst_ip(self, capture, dst_ip):
@@ -88,19 +92,19 @@ class PCAPParser:
             exit(1)
 
         filtered = []
-        for cap in capture:
-            if cap.haslayer(IP) and cap[IP].dst == dst_ip:
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(IP) and pkt[IP].dst == dst_ip:
+                filtered.append(pkt)
         return filtered
 
     def filt_src_port(self, capture, src_port):
         """
         """
         filtered = []
-        for cap in capture:
+        for pkt in capture:
             try:
-                if cap.haslayer(IP) and cap[IP].sport == int(src_port):
-                    filtered.append(cap)
+                if pkt.haslayer(IP) and pkt[IP].sport == int(src_port):
+                    filtered.append(pkt)
             except ValueError:
                 print(
                     "[ %sERROR%s ] SPECIFIED `-src-port` MUST BE WITHIN RANGE: 1-65535"
@@ -113,10 +117,10 @@ class PCAPParser:
         """
         """
         filtered = []
-        for cap in capture:
+        for pkt in capture:
             try:
-                if cap.haslayer(IP) and cap[IP].sport == int(src_port):
-                    filtered.append(cap)
+                if pkt.haslayer(IP) and pkt[IP].sport == int(src_port):
+                    filtered.append(pkt)
             except ValueError:
                 print(
                     "[ %sERROR%s ] SPECIFIED `-src-port` MUST BE WITHIN RANGE: 1-65535"
@@ -129,10 +133,10 @@ class PCAPParser:
         """
         """
         filtered = []
-        for cap in capture:
+        for pkt in capture:
             try:
-                if cap.haslayer(IP) and cap[IP].dport == int(dst_port):
-                    filtered.append(cap)
+                if pkt.haslayer(IP) and pkt[IP].dport == int(dst_port):
+                    filtered.append(pkt)
             except ValueError:
                 print(
                     "[ %sERROR%s ] SPECIFIED `-dst-port` MUST BE WITHIN RANGE: 1-65535"
@@ -145,10 +149,10 @@ class PCAPParser:
         """
         """
         filtered = []
-        for cap in capture:
+        for pkt in capture:
             try:
-                if cap.haslayer(IP) and cap[IP].dport == int(dst_port):
-                    filtered.append(cap)
+                if pkt.haslayer(IP) and pkt[IP].dport == int(dst_port):
+                    filtered.append(pkt)
             except ValueError:
                 print(
                     "[ %sERROR%s ] SPECIFIED `-dst-port` MUST BE WITHIN RANGE: 1-65535"
@@ -169,9 +173,9 @@ class PCAPParser:
             exit(1)
 
         filtered = []
-        for cap in capture:
-            if cap[Ether].src == src_mac:
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt[Ether].src == src_mac:
+                filtered.append(pkt)
         return filtered
 
     def filt_not_src_mac(self, capture, src_mac):
@@ -186,9 +190,9 @@ class PCAPParser:
             exit(1)
 
         filtered = []
-        for cap in capture:
-            if cap[Ether].src == src_mac:
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt[Ether].src == src_mac:
+                filtered.append(pkt)
         return filtered
 
     def filt_dst_mac(self, capture, dst_mac):
@@ -203,9 +207,9 @@ class PCAPParser:
             exit(1)
 
         filtered = []
-        for cap in capture:
-            if cap[Ether].dst == dst_mac:
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt[Ether].dst == dst_mac:
+                filtered.append(pkt)
         return filtered
 
     def filt_not_dst_mac(self, capture, dst_mac):
@@ -220,92 +224,100 @@ class PCAPParser:
             exit(1)
 
         filtered = []
-        for cap in capture:
-            if cap[Ether].dst == dst_mac:
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt[Ether].dst == dst_mac:
+                filtered.append(pkt)
         return filtered
 
     def filt_tcp(self, capture, _):
         """ """
         filtered = []
-        for cap in capture:
-            if cap.haslayer(IP) and str(cap[IP].payload.name).upper() == "TCP":
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "TCP":
+                filtered.append(pkt)
         return filtered
 
     def filt_not_tcp(self, capture, _):
         """ """
         filtered = []
-        for cap in capture:
-            if cap.haslayer(IP) and str(cap[IP].payload.name).upper() == "TCP":
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "TCP":
+                filtered.append(pkt)
         return filtered
 
     def filt_udp(self, capture, _):
         """ """
         filtered = []
-        for cap in capture:
-            if cap.haslayer(IP) and str(cap[IP].payload.name).upper() == "UDP":
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "UDP":
+                filtered.append(pkt)
         return filtered
 
     def filt_not_udp(self, capture, _):
         """ """
         filtered = []
-        for cap in capture:
-            if cap.haslayer(IP) and str(cap[IP].payload.name).upper() == "UDP":
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "UDP":
+                filtered.append(pkt)
         return filtered
 
     def filt_icmp(self, capture, _):
         """ """
         filtered = []
-        for cap in capture:
-            if cap.haslayer(IP) and str(cap[IP].payload.name).upper() == "ICMP":
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "ICMP":
+                filtered.append(pkt)
         return filtered
 
     def filt_not_icmp(self, capture, _):
         """ """
         filtered = []
-        for cap in capture:
-            if cap.haslayer(IP) and str(cap[IP].payload.name).upper() == "ICMP":
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "ICMP":
+                filtered.append(pkt)
         return filtered
 
-    def filter_by_tcp_flag(self):
+    def filt_tcp_flags(self, capture, target_flags):
         """ """
+        filtered = []
+        target_flags = [flag.upper() for flag in target_flags]
+        for pkt in capture:
+            if pkt.haslayer(TCP):
+                pkt_flags = sorted([self.FLAGS[flag] for flag in pkt[TCP].flags])
+                if pkt_flags == sorted(target_flags):
+                    filtered.append(pkt)
+        return filtered
 
     def len_less_equal(self, capture, value):
         """ """
         filtered = []
-        for cap in capture:
-            if cap.haslayer(Ether) and cap[Ether].len <= value:
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(Ether) and pkt[Ether].len <= value:
+                filtered.append(pkt)
         return filtered
 
     def len_greater_equal(self, capture, value):
         """ """
         filtered = []
-        for cap in capture:
-            if cap.haslayer(Ether) and cap[Ether].len >= value:
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(Ether) and pkt[Ether].len >= value:
+                filtered.append(pkt)
         return filtered
 
     def len_equal(self, capture, value):
         """ """
         filtered = []
-        for cap in capture:
-            if cap.haslayer(Ether) and cap[Ether].len == value:
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(Ether) and pkt[Ether].len == value:
+                filtered.append(pkt)
         return filtered
 
     def ttl_equal(self, capture, value):
         """ """
         filtered = []
-        for cap in capture:
-            if cap.haslayer(Ether) and cap[Ether].ttl == value:
-                filtered.append(cap)
+        for pkt in capture:
+            if pkt.haslayer(Ether) and pkt[Ether].ttl == value:
+                filtered.append(pkt)
         return filtered
 
     def summary(self, capture):
@@ -322,8 +334,8 @@ class PCAPParser:
             print("[ %sATTENTION%s ] THIS MAY TAKE A SECOND OR TWO" % (fg(202), attr(0)))
 
             # FILTERING IP ADDRESSES
-            ip_list = ([cap[IP].src for cap in capture if cap.haslayer(IP)]
-            + [cap[IP].dst for cap in capture if cap.haslayer(IP)])
+            ip_list = ([pkt[IP].src for pkt in capture if pkt.haslayer(IP)]
+            + [pkt[IP].dst for pkt in capture if pkt.haslayer(IP)])
             ip_dict = Counter(ip_list)
             
             print("%sIP%s > COUNT" % (fg(randint(1, 254)), attr(0)))
@@ -331,8 +343,8 @@ class PCAPParser:
                 print("\'%s\' > %s" % (ip, count))
 
             # FILTERING PORT NUMBERS
-            port_list = ([cap[IP].sport for cap in capture if cap.haslayer(TCP) or cap.haslayer(UDP)]
-            + [cap[IP].dport for cap in capture if cap.haslayer(TCP) or cap.haslayer(UDP)])
+            port_list = ([pkt[IP].sport for pkt in capture if pkt.haslayer(TCP) or pkt.haslayer(UDP)]
+            + [pkt[IP].dport for pkt in capture if pkt.haslayer(TCP) or pkt.haslayer(UDP)])
             port_dict = Counter(port_list)
 
             print("\n%sPORT%s > COUNT" % (fg(randint(1, 254)), attr(0)))
@@ -342,8 +354,8 @@ class PCAPParser:
             print("\n", end="")
 
             # FILTERING MAC ADDRESSES
-            mac_list = ([cap[Ether].src for cap in capture if cap.haslayer(Ether)]
-            + [cap[Ether].dst for cap in capture if cap.haslayer(Ether)])
+            mac_list = ([pkt[Ether].src for pkt in capture if pkt.haslayer(Ether)]
+            + [pkt[Ether].dst for pkt in capture if pkt.haslayer(Ether)])
             mac_dict = Counter(mac_list)
 
             print("%sMAC%s > COUNT" % (fg(randint(1, 254)), attr(0)))
@@ -354,9 +366,10 @@ class PCAPParser:
             # FILTERING PACKETS LENGTHS
             i = 0
             pkt_len_sum = 0
-            for cap in capture:
-                i += 1
-                pkt_len_sum += len(cap)
+            for pkt in capture:
+                if pkt.haslayer(Ether):
+                    i += 1
+                    pkt_len_sum += len(pkt)
             average_pkt_len = round(pkt_len_sum / i, 1)
             print("-"*37)
             print("%sAVERAGE PACKET LENGTH%s: %s bytes" % (fg(109), attr(0), average_pkt_len))
@@ -364,11 +377,11 @@ class PCAPParser:
             # FILTERING TTL
             i = 0
             pkt_ttl_sum = 0
-            for cap in capture:
-                if cap.haslayer(Ether):
+            for pkt in capture:
+                if pkt.haslayer(IP):
                     try:
                         i += 1
-                        pkt_ttl_sum += cap[Ether].ttl
+                        pkt_ttl_sum += pkt[IP].ttl
                     except AttributeError:
                         continue
             average_pkt_ttl = round(pkt_ttl_sum / i, 1)
@@ -393,18 +406,18 @@ class PCAPParser:
         """
         capture_summary = {}
 
-        ip_list = ([cap[IP].src for cap in capture if cap.haslayer(IP)]
-        + [cap[IP].dst for cap in capture if cap.haslayer(IP)])
+        ip_list = ([pkt[IP].src for pkt in capture if pkt.haslayer(IP)]
+        + [pkt[IP].dst for pkt in capture if pkt.haslayer(IP)])
         ip_dict = Counter(ip_list)
         capture_summary["ip_dict"] = ip_dict
 
-        port_list = ([cap[IP].sport for cap in capture if cap.haslayer(IP)]
-        + [cap[IP].dport for cap in capture if cap.haslayer(IP)])
+        port_list = ([pkt[IP].sport for pkt in capture if pkt.haslayer(IP)]
+        + [pkt[IP].dport for pkt in capture if pkt.haslayer(IP)])
         port_dict = Counter(port_list)
         capture_summary["port_dict"] = port_dict
 
-        mac_list = ([cap[Ether].src for cap in capture if cap.haslayer(Ether)]
-        + [cap[Ether].dst for cap in capture if cap.haslayer(Ether)])
+        mac_list = ([pkt[Ether].src for pkt in capture if pkt.haslayer(Ether)]
+        + [pkt[Ether].dst for pkt in capture if pkt.haslayer(Ether)])
         mac_dict = Counter(mac_list)
         capture_summary["mac_dict"] = mac_dict
         

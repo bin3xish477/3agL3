@@ -51,7 +51,7 @@ if __name__ == "__main__":
 		"not-udp": args.not_filter_udp,
 		"icmp": args.filter_icmp,
 		"not-icmp": args.not_filter_icmp,
-		"tcp-f": args.tcp_flags,
+		"tcp-flags": args.tcp_flags,
 		"le": args.len_less_equal,
 		"ge": args.len_greater_equal,
 		"len-eq": args.len_equal,
@@ -117,6 +117,8 @@ if __name__ == "__main__":
 				read_obj.filter_icmp()
 			elif args["not-icmp"]:
 				read_obj.filter_not_icmp()
+			elif args["tcp-flags"]:
+				read_obj.filter_tcp_flags(args["tcp-flags"])
 			elif args["le"]:
 				read_obj.len_le_eq(args["le"])
 			elif args["ge"]:
@@ -208,6 +210,8 @@ if __name__ == "__main__":
 				write_obj.filter_icmp()
 			elif args["not-icmp"]:
 				write_obj.filter_not_icmp()
+			elif args["tcp-flags"]:
+				write_obj.filter_tcp_flags(args["tcp-flags"])
 			elif args["le"]:
 				write_obj.len_le_eq(args["le"])
 			elif args["ge"]:

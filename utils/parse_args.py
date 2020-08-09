@@ -63,7 +63,7 @@ def parse_args():
 	write_read_pcap.add_argument("-not-udp", "--not-filter-udp",action="store_true", default=False,help="Filter for non-UDP packets only")
 	write_read_pcap.add_argument("-icmp", "--filter-icmp",action="store_true",default=False,help="Filter ICMP packets only")
 	write_read_pcap.add_argument("-not-icmp", "--not-filter-icmp",action="store_true",default=False,help="Filter for non-ICMP packets only")
-	write_read_pcap.add_argument("-tcp-f", "--tcp-flags",metavar="<TCP FLAGS>",nargs="+",help="Filter packets by TCP flag. Seperate each flag by spaces.")
+	write_read_pcap.add_argument("-tf", "--tcp-flags",metavar="<TCP FLAG>",nargs="+",help="Filter packets by TCP flag. Seperate each flag by spaces.")
 	write_read_pcap.add_argument("-le", "--len-less-equal",metavar="<NUM>",type=int,help="Filters for packets with a length that is less than or equal to the specified number")
 	write_read_pcap.add_argument("-ge", "--len-greater-equal",metavar="<NUM>",type=int,help="Filters for packets with a length that is greater than or equal to the specified number")
 	write_read_pcap.add_argument("-len-eq", "--len-equal",metavar="<NUM>",type=int,help="Filters for packets with a length that is equal to the specified number")

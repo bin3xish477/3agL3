@@ -137,6 +137,9 @@ class ReadPCAP:
     def filter_not_icmp(self):
         self.execute(self.capparser.filt_not_icmp, None)
 
+    def filter_tcp_flags(self, target_flags):
+        self.execute(self.capparser.filt_tcp_flags, target_flags)
+
     def len_le_eq(self, value:int):
         filtered_capture = self.capparser.len_less_equal(self.pcapfile, value)
         self.to_stdout(filtered_capture)
@@ -179,7 +182,6 @@ class ReadPCAP:
 
     def to_stdout(self, capture):
         try:
-            print("\n", end="")
             for cap in capture:
                 print_str = self.netsniff_obj.echo(cap)
                 if not print_str:

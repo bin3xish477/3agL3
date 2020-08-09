@@ -116,6 +116,9 @@ class WritePCAP(NetSniff):
     def filter_not_icmp(self):
         self.execute(self.capparser.filt_not_icmp, None)
 
+    def filter_tcp_flags(self, target_flags):
+        self.execute(self.capparser.filt_tcp_flags, target_flags)
+
     def no_filter(self):
         print("\n\t\t\t  <[ %sCAPTURE INFO%s ]>" % (fg(60), attr(0)))
         print("-"*71)
