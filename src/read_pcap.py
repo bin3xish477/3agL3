@@ -4,6 +4,9 @@ from scapy.all import rdpcap, hexdump
 from colored import fg, attr
 from time import sleep
 from os.path import exists
+from platform import system
+
+SYSTEM = system()
 
 class ReadPCAP:
     def __init__(
@@ -74,7 +77,7 @@ class ReadPCAP:
                 arg (str|int): value to filter from packet capture
         """
         filtered_capture = func(self.pcapfile, arg)
-        if len(filtered_capture) == 0 or iltered_capture == None:
+        if len(filtered_capture) == 0 or filtered_capture == None:
             print("[ %sATTENTION%s ] NO PACKETS CONTAINED SPECIFIED FILTER" % (fg(202), attr(0)))
             exit(1)
         else:
@@ -161,25 +164,30 @@ class ReadPCAP:
     def summary(self):
         self.capparser.summary(self.pcapfile)
 
-    def to_json(self):
-        self.capparser.json_summary(self.pcapfile)
+    def to_json(self, filename):
+        self.capparser.json_summary(self.pcapfile, filename)
 
-    def log(self):
-        with open("capture.log", "w") as log_file:
+    def log(self, filename):
+        if not filename:
+            filename = "capture.log"
+        with open(filename, "w", encoding="utf-8") as log_file:
             for cap in self.pcapfile:
-                flow_statement = self.netsniff_obj.echo(cap)
+                if SYSTEM == "Windows":
+                    flow_statement = self.netsniff_obj.echo(cap).replace("\u2192", "->")
+                else: flow_statement = self.netsniff_obj.echo(cap)
                 log_file.write(flow_statement + "\n")
 
     def to_stdout(self, capture):
         try:
+            print("\n", end="")
             for cap in capture:
                 print_str = self.netsniff_obj.echo(cap)
-                if self._hex:
-                    hexdump(cap)
-                    print("_"*71)
                 if not print_str:
                     continue
                 print(print_str)
+                if self._hex:
+                    hexdump(cap)
+                    print("\n")
         except KeyboardInterrupt:
             print(
                 "\n[ %sATTENTION%s ] SIGINT INVOKED: TERMINATING PROGRAM"

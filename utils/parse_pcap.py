@@ -3,7 +3,7 @@ from colored import fg, attr
 from json import dump
 from sys import exit
 from re import search
-from scapy.all import Ether, IP, ICMP, Raw
+from scapy.all import *
 from random import randint
 
 class PCAPParser:
@@ -273,78 +273,6 @@ class PCAPParser:
                 filtered.append(cap)
         return filtered
 
-    def summary(self, capture):
-        """ Prints a summary of the data contained in a capture.
-        This summary includes:
-            - unique IP and the number of times they appear
-            - unique port number and the number of time they appear
-            - unique mac addresses and the number of times they appear
-
-        Args:
-            capture (scapy.plist.PacketList): scapy packet capture list
-        """
-        try:
-            print("[ %sATTENTION%s ] THIS MAY TAKE A SECOND OR TWO" % (fg(202), attr(0)))
-
-            # FILTERING IP ADDRESSES
-            ip_list = ([cap[IP].src for cap in capture if cap.haslayer(IP)]
-            + [cap[IP].dst for cap in capture if cap.haslayer(IP)])
-            ip_dict = Counter(ip_list)
-            
-            print("%sIP%s: COUNT" % (fg(randint(1, 254)), attr(0)))
-            for ip, count in ip_dict.most_common():
-                print("\'%s\': %s" % (ip, count))
-
-            # FILTERING PORT NUMBERS
-            port_list = ([cap[IP].sport for cap in capture if cap.haslayer(IP)]
-            + [cap[IP].dport for cap in capture if cap.haslayer(IP)])
-            port_dict = Counter(port_list)
-
-            print("\n%sPORT%s: COUNT" % (fg(randint(1, 254)), attr(0)))
-
-            for port, count in port_dict.most_common():
-                print("%s: %s" % (port, count))
-            print("\n", end="")
-
-            # FILTERING MAC ADDRESSES
-            mac_list = ([cap[Ether].src for cap in capture if cap.haslayer(IP)]
-            + [cap[Ether].dst for cap in capture if cap.haslayer(IP)])
-            mac_dict = Counter(mac_list)
-
-            print("%sMAC%s: COUNT" % (fg(randint(1, 254)), attr(0)))
-            for mac, count in mac_dict.most_common():
-                print("%s: %s" % (mac, count))
-            print("\n", end="")
-
-            # FILTERING PACKETS LENGTHS
-            i = 0
-            pkt_len_sum = 0
-            for cap in capture:
-                i += 1
-                pkt_len_sum += len(cap)
-            average_pkt_len = round(pkt_len_sum / i, 1)
-            print("-"*35)
-            print("%sAVERAGE PACKET LENGTH%s: %s bytes" % (fg(109), attr(0), average_pkt_len))
-
-            # FILTERING TTL
-            i = 0
-            pkt_ttl_sum = 0
-            for cap in capture:
-                if cap.haslayer(Ether):
-                    try:
-                        i += 1
-                        pkt_ttl_sum += cap[Ether].ttl
-                    except AttributeError:
-                        continue
-            average_pkt_ttl = round(pkt_ttl_sum / i, 1)
-            print("%sAVERAGE TTL%s: %s " % (fg(109), attr(0), average_pkt_ttl))
-        except:
-            print(
-                "[ %sERROR%s ] COULDN'T GENERATE COMPLETE CAPTURE SUMMARY"
-                % (fg(9), attr(0))
-            )
-            exit(1)
-
     def filter_by_tcp_flag(self):
         """ """
 
@@ -372,7 +300,7 @@ class PCAPParser:
                 filtered.append(cap)
         return filtered
 
-    def ttl_equal(self, capture):
+    def ttl_equal(self, capture, value):
         """ """
         filtered = []
         for cap in capture:
@@ -380,7 +308,79 @@ class PCAPParser:
                 filtered.append(cap)
         return filtered
 
-    def json_summary(self, capture):
+    def summary(self, capture):
+        """ Prints a summary of the data contained in a capture.
+        This summary includes:
+            - unique IP and the number of times they appear
+            - unique port number and the number of time they appear
+            - unique mac addresses and the number of times they appear
+
+        Args:
+            capture (scapy.plist.PacketList): scapy packet capture list
+        """
+        try:
+            print("[ %sATTENTION%s ] THIS MAY TAKE A SECOND OR TWO" % (fg(202), attr(0)))
+
+            # FILTERING IP ADDRESSES
+            ip_list = ([cap[IP].src for cap in capture if cap.haslayer(IP)]
+            + [cap[IP].dst for cap in capture if cap.haslayer(IP)])
+            ip_dict = Counter(ip_list)
+            
+            print("%sIP%s > COUNT" % (fg(randint(1, 254)), attr(0)))
+            for ip, count in ip_dict.most_common():
+                print("\'%s\' > %s" % (ip, count))
+
+            # FILTERING PORT NUMBERS
+            port_list = ([cap[IP].sport for cap in capture if cap.haslayer(TCP) or cap.haslayer(UDP)]
+            + [cap[IP].dport for cap in capture if cap.haslayer(TCP) or cap.haslayer(UDP)])
+            port_dict = Counter(port_list)
+
+            print("\n%sPORT%s > COUNT" % (fg(randint(1, 254)), attr(0)))
+
+            for port, count in port_dict.most_common():
+                print("%s > %s" % (port, count))
+            print("\n", end="")
+
+            # FILTERING MAC ADDRESSES
+            mac_list = ([cap[Ether].src for cap in capture if cap.haslayer(Ether)]
+            + [cap[Ether].dst for cap in capture if cap.haslayer(Ether)])
+            mac_dict = Counter(mac_list)
+
+            print("%sMAC%s > COUNT" % (fg(randint(1, 254)), attr(0)))
+            for mac, count in mac_dict.most_common():
+                print("%s > %s" % (mac, count))
+            print("\n", end="")
+
+            # FILTERING PACKETS LENGTHS
+            i = 0
+            pkt_len_sum = 0
+            for cap in capture:
+                i += 1
+                pkt_len_sum += len(cap)
+            average_pkt_len = round(pkt_len_sum / i, 1)
+            print("-"*37)
+            print("%sAVERAGE PACKET LENGTH%s: %s bytes" % (fg(109), attr(0), average_pkt_len))
+
+            # FILTERING TTL
+            i = 0
+            pkt_ttl_sum = 0
+            for cap in capture:
+                if cap.haslayer(Ether):
+                    try:
+                        i += 1
+                        pkt_ttl_sum += cap[Ether].ttl
+                    except AttributeError:
+                        continue
+            average_pkt_ttl = round(pkt_ttl_sum / i, 1)
+            print("%sAVERAGE TTL%s: %s " % (fg(109), attr(0), average_pkt_ttl))
+        except:
+            print(
+                "[ %sERROR%s ] COULDN'T GENERATE COMPLETE CAPTURE SUMMARY"
+                % (fg(9), attr(0))
+            )
+            exit(1)
+
+    def json_summary(self, capture, filename):
         """ Generate JSON file containing summary of packet capture.
         The JSON file will contain:
             - ip: count
@@ -389,6 +389,7 @@ class PCAPParser:
         
         Args:
             capture (scapy.plist.PacketList): scapy packet capture list
+            filename (str): name of JSON file to create
         """
         capture_summary = {}
 
@@ -408,8 +409,12 @@ class PCAPParser:
         capture_summary["mac_dict"] = mac_dict
         
         try:
-            with open("capture_summary.json", "w") as cap_sum_file:
-                dump(capture_summary, cap_sum_file, indent=4)
+            if filename:
+                with open(filename, "w") as cap_sum_file:
+                    dump(capture_summary, cap_sum_file, indent=4)
+            else:
+                with open("capture_summary.json", "w") as cap_sum_file:
+                    dump(capture_summary, cap_sum_file, indent=4)
         except:
             print(
                 "[ %sERROR%s ] THERE WAS AN ERROR CREATING SUMMARY JSON FILE... PLEASE TRY AGAIN"

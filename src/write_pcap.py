@@ -117,16 +117,6 @@ class WritePCAP(NetSniff):
         self.execute(self.capparser.filt_not_icmp, None)
 
     def no_filter(self):
-        for i in range(2, -1, -1):
-            if i != 0:
-                print(
-                    "[ %sATTENTION%s ] CAPTURE WILL BEGIN IN %s\r" % (fg(202), attr(0), i), end=""
-                )
-            else:
-                print(
-                    "[ %sATTENTION%s ] CAPTURE WILL BEGIN IN %s" % (fg(202), attr(0), i)
-                )
-            sleep(1)
         print("\n\t\t\t  <[ %sCAPTURE INFO%s ]>" % (fg(60), attr(0)))
         print("-"*71)
         print("INTERFACE \u2192 %s%s%s" % (fg(randint(50, 200)), self.interf, attr(0)))
@@ -156,24 +146,28 @@ class WritePCAP(NetSniff):
         elif self._filtered_capture:
             self.capparser.summary(self._filtered_capture)
 
-    def to_json(self):
+    def to_json(self, filename):
         if self._capture:
-            self.capparser.json_summary(self._capture)
+            self.capparser.json_summary(self._capture, filename)
         elif self._filtered_capture:
-            self.capparser.json_summary(self._filtered_capture)
+            self.capparser.json_summary(self._filtered_capture, filename)
 
-    def log(self):
+    def log(self, filename):
         if self._capture:
-            with open("capture.log", "w") as log_file:
-                for cap in self._capture:
-                    flow_statement = self.netsniff_obj.echo(cap)
-                    log_file.write(flow_statement + "\n")
+            if not filename:
+                filename = "capture.log"
+                with open(filename, "w", encoding="utf-8") as log_file:
+                    for cap in self._capture:
+                        flow_statement = self.netsniff_obj.echo(cap)
+                        log_file.write(flow_statement + "\n")
 
         elif self._filtered_capture:
-            with open("capture.log", "w") as log_file:
-                for cap in self._filtered_capture:
-                    flow_statement = self.netsniff_obj.echo(cap)
-                    log_file.write(flow_statement + "\n")
+            if not filename:
+                filename = "capture.log"
+                with open(filename, "w", encoding="utf-8") as log_file:
+                    for cap in self._filtered_capture:
+                        flow_statement = self.netsniff_obj.echo(cap)
+                        log_file.write(flow_statement + "\n")
 
     def write(self, packets):
         try:

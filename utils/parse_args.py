@@ -69,8 +69,8 @@ def parse_args():
 	write_read_pcap.add_argument("-len-eq", "--len-equal",metavar="<NUM>",type=int,help="Filters for packets with a length that is equal to the specified number")
 	write_read_pcap.add_argument("-ttl-eq", "--ttl-equal",metavar="<NUM>",type=int,help="Filters for packets with a ttl that is equal to the specified number")
 	write_read_pcap.add_argument("-sum", "--summary",action="store_true",help="Summary of the packet capture <for read & write mode>")
-	write_read_pcap.add_argument("-j", "--json",action="store_true",help="Create JSON file containing capture summary (ip:count, port:count, mac:count)")
-	write_read_pcap.add_argument("-l", "--log",action="store_true",help="Log pcap traffic flow to a txt file for external parsing")
+	write_read_pcap.add_argument("-j", "--json",metavar="<FILENAME>",type=str,help="Create JSON file containing capture summary (ip:count, port:count, mac:count)")
+	write_read_pcap.add_argument("-l", "--log",metavar="<FILENAME>",type=str,help="Log pcap traffic flow to a txt file for external parsing")
 	
 	if len(argv[1:]) == 0:
 		parser.print_help()

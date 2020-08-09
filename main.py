@@ -81,8 +81,6 @@ if __name__ == "__main__":
 			)
 			read_obj.read(count=args["rc"])
 
-			# DONT FORGET TO HANDLE READ-COUNT OPTION!!!
-
 			if args["src-ip"]:
 				read_obj.filter_src_ip()
 			elif args["not-src-ip"]:
@@ -131,15 +129,16 @@ if __name__ == "__main__":
 				read_obj.no_filter(args["no-prn"])
 
 			if args["sum"]:
-				print("\n[ %sNOTE%s ] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
+				if args["no-prn"]: print("[ %sNOTE%s ] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
+				else: print("\n[ %sNOTE%s ] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
 				read_obj.summary()
 				read_obj.packet_count()
 
 			if args["json"]:
-				read_obj.to_json()
+				read_obj.to_json(args["json"])
 				print("[ %sSUCCESS%s ] SUMMARY JSON FILE CREATED" % (fg(50), attr(0)))
 			elif args["log"]:
-				read_obj.log()
+				read_obj.log(args["log"])
 				print("[ %sSUCCESS%s ] LOG FILE CREATED" % (fg(50), attr(0)))
 			
 			if args["pkt-cnt"]:
@@ -225,10 +224,10 @@ if __name__ == "__main__":
 				write_obj.summary()
 				
 			if args["json"]:
-				write_obj.to_json()
+				write_obj.to_json(args["json"])
 				print("[ %sSUCCESS%s ] SUMMARY JSON FILE CREATED" % (fg(50), attr(0)))
 			elif args["log"]:
-				write_obj.log()
+				write_obj.log(args["log"])
 				print("[ %sSUCCESS%s ] LOG FILE CREATED" % (fg(50), attr(0)))
 		else:
 			print(
