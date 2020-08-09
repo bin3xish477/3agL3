@@ -46,7 +46,7 @@ class WritePCAP(NetSniff):
             func (function): function defined in PCAPParser to invoke
             arg (str|int): value to filter from packet capture
         """
-        print("\n\t\t\t  <[ %sCAPTURE INFO%s ]>" % (fg(60), attr(0)))
+        print("\t\t\t  <[ %sCAPTURE INFO%s ]>" % (fg(60), attr(0)))
         print("-"*71)
         print("INTERFACE \u2192 %s%s%s" % (fg(randint(50, 200)), attr(0), self.interf))
         print("BERKELEY CAPTURE FILTER APPLIED \u2192 %s%s%s" % (fg(randint(50, 200)), attr(0), self.berkeley_filter))
@@ -132,7 +132,7 @@ class WritePCAP(NetSniff):
         self.execute(self.capparser.filt_tcp_flags, target_flags)
 
     def no_filter(self):
-        print("\n\t\t\t  <[ %sCAPTURE INFO%s ]>" % (fg(60), attr(0)))
+        print("\t\t\t  <[ %sCAPTURE INFO%s ]>" % (fg(60), attr(0)))
         print("-"*71)
         print("INTERFACE \u2192 %s%s%s" % (fg(randint(50, 200)), self.interf, attr(0)))
         print("BERKELEY CAPTURE FILTER APPLIED \u2192 %s%s%s" % (fg(randint(50, 200)), self.berkeley_filter, attr(0)))
