@@ -61,7 +61,7 @@ class NetSniff:
 				elif pkt[ICMP].type == 8:
 					icmp_type = "echo"
 				return (
-					f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:25]}%s>" \
+					f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:25]}%s>" \
 					f" {src_mac} | {dst_mac} %s%s{str(pkt[IP].payload.name).upper()}%s" \
 					f" %s%s{pkt[IP].src}%s %s%s\u2192%s %s%s{pkt[IP].dst}%s" \
 					f" (TTL:{pkt[Ether].ttl} LEN:{pkt[Ether].len} TYPE:{icmp_type})"
@@ -105,7 +105,7 @@ class NetSniff:
 					pkt[Ether].src
 				)
 			return (
-				f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:25]}%s>" \
+				f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
 				f" %s%s{proto}%s{arp_str}"
 				% (
 					fg(141), attr("bold"), attr("reset"),
@@ -123,7 +123,7 @@ class NetSniff:
 				qclass = qr.get_field("qclass").i2repr(qr, qr.qclass)
 				proto = "DNS"
 				return (
-					f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:25]}%s>" \
+					f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
 					f" ;; {qname} {qclass} {qtype} ;;" \
 					f" %s%s{proto}%s" \
 					f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
@@ -148,7 +148,7 @@ class NetSniff:
 				dst_mac = pkt[Ether].dst
 				proto = str(pkt[IP].payload.name).upper()
 				return (
-					f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:25]}%s>" \
+					f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
 					f" {src_mac} | {dst_mac}" \
 					f" %s%s{proto}%s [%s%s{tcp_flag_str}%s]" \
 					f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
@@ -173,7 +173,7 @@ class NetSniff:
 				dst_mac = pkt[Ether].dst
 				proto = str(pkt[IP].payload.name).upper()
 				return (
-					f"<%s%s{date[11:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:25]}%s>" \
+					f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
 					f" {src_mac} | {dst_mac}" \
 					f" %s%s{proto}%s" \
 					f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
