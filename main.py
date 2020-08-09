@@ -59,7 +59,7 @@ if __name__ == "__main__":
 		"le": args.len_less_equal,
 		"ge": args.len_greater_equal,
 		"len-eq": args.len_equal,
-		"ttl-eq": args.len_equal,
+		"ttl-eq": args.ttl_equal,
 		"sum": args.summary,
 		"json": args.json,
 		"log": args.log
@@ -143,8 +143,6 @@ if __name__ == "__main__":
 				read_obj.no_filter(args["no-prn"])
 
 			if args["sum"]:
-				if args["no-prn"]: print("[ %sNOTE%s ] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
-				else: print("\n[ %sNOTE%s ] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
 				read_obj.summary()
 				read_obj.packet_count()
 
@@ -244,7 +242,6 @@ if __name__ == "__main__":
 				write_obj.no_filter()
 
 			if args["sum"]:
-				print("\n[ %sNOTE%s ] GENERATING PCAP SUMMARY" % (fg(226), attr(0)))
 				write_obj.summary()
 				
 			if args["json"]:

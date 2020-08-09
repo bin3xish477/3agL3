@@ -1,4 +1,2 @@
 scapy
 colored
-netifaces
-netaddr

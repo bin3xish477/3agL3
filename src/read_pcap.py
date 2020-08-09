@@ -154,18 +154,38 @@ class ReadPCAP:
 
     def len_le_eq(self, value:int):
         filtered_capture = self.capparser.len_less_equal(self.pcapfile, value)
+        if not len(filtered_capture):
+            print(
+                "[ %sATTENTION%s ] NO PACKETS CONTAINED A LENGTH LESS THAN OR EQUAL TO %s"
+                % (fg(202), attr(0), value)
+            )
         self.to_stdout(filtered_capture)
 
     def len_gr_eq(self, value:int):
         filtered_capture = self.capparser.len_greater_equal(self.pcapfile, value)
+        if not len(filtered_capture):
+            print(
+                "[ %sATTENTION%s ] NO PACKETS CONTAINED A LENGTH GREATER THAN OR EQUAL TO %s"
+                % (fg(202), attr(0), value)
+            )
         self.to_stdout(filtered_capture)
 
     def len_eq(self, value:int):
         filtered_capture = self.capparser.len_equal(self.pcapfile, value)
+        if not len(filtered_capture):
+            print(
+                "[ %sATTENTION%s ] NO PACKETS CONTAINED A LENGTH EQUAL TO %s"
+                % (fg(202), attr(0), value)
+            )
         self.to_stdout(filtered_capture)
 
     def ttl_eq(self, value:int):
         filtered_capture = self.capparser.ttl_equal(self.pcapfile, value)
+        if not len(filtered_capture):
+            print(
+                "[ %sATTENTION%s ] NO PACKETS CONTAINED A TIME-TO-LIVE VALUE EQUAL TO %s"
+                % (fg(202), attr(0), value)
+            )
         self.to_stdout(filtered_capture)
 
     def no_filter(self, no_print=False):
@@ -186,7 +206,9 @@ class ReadPCAP:
         self.capparser.json_summary(self.pcapfile, filename)
 
     def log(self, filename):
-        """ Create log file containing the contents of the PCAP file """ 
+        """ Create log file containing the contents of the PCAP file
+        Note: log file encoding is utf-8
+        """ 
         if not filename:
             filename = "capture.log"
         with open(filename, "w", encoding="utf-8") as log_file:

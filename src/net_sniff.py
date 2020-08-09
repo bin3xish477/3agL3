@@ -127,7 +127,7 @@ class NetSniff:
 					f" ;; {qname} {qclass} {qtype} ;;" \
 					f" %s%s{proto}%s" \
 					f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
-					f"  (TTL:{pkt[0].ttl} LEN:{pkt[0].len})"
+					f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
 					% (
 						fg(141), attr("bold"), attr("reset"),
 						fg(141), attr("bold"), attr("reset"),
@@ -142,7 +142,7 @@ class NetSniff:
 				return None
 		elif pkt.haslayer(TCP):
 			try:
-				tcp_flag_str = ",".join([self.FLAGS[x] for x in pkt[TCP].flags if x in self.FLAGS.keys()])
+				tcp_flag_str = ".".join([self.FLAGS[x] for x in pkt[TCP].flags])
 				date = str(datetime.now())
 				src_mac = pkt[Ether].src
 				dst_mac = pkt[Ether].dst
@@ -152,7 +152,7 @@ class NetSniff:
 					f" {src_mac} | {dst_mac}" \
 					f" %s%s{proto}%s [%s%s{tcp_flag_str}%s]" \
 					f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
-					f"  (TTL:{pkt[0].ttl} LEN:{pkt[0].len})"
+					f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
 					% (
 						fg(141), attr("bold"), attr("reset"),
 						fg(141), attr("bold"), attr("reset"),
@@ -177,7 +177,7 @@ class NetSniff:
 					f" {src_mac} | {dst_mac}" \
 					f" %s%s{proto}%s" \
 					f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
-					f"  (TTL:{pkt[0].ttl} LEN:{pkt[0].len})"
+					f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
 					% (
 						fg(141), attr("bold"), attr("reset"),
 						fg(141), attr("bold"), attr("reset"),

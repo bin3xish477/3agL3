@@ -324,7 +324,7 @@ class PCAPParser(NetSniff):
         """ Filter for packets with a length less than or equal to `value` """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(Ether) and pkt[Ether].len <= value:
+            if pkt.haslayer(Ether) and len(pkt) <= value:
                 filtered.append(pkt)
         return filtered
 
@@ -332,7 +332,7 @@ class PCAPParser(NetSniff):
         """ Filter for packets with a length greater than or equal to `value` """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(Ether) and pkt[Ether].len >= value:
+            if pkt.haslayer(Ether) and len(pkt) >= value:
                 filtered.append(pkt)
         return filtered
 
@@ -340,7 +340,7 @@ class PCAPParser(NetSniff):
         """ Filter for packets with a length that is equal to `value` """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(Ether) and pkt[Ether].len == value:
+            if pkt.haslayer(Ether) and len(pkt) == value:
                 filtered.append(pkt)
         return filtered
 
@@ -363,14 +363,13 @@ class PCAPParser(NetSniff):
             capture (scapy.plist.PacketList): scapy packet capture list
         """
         try:
-            print("[ %sATTENTION%s ] THIS MAY TAKE A SECOND OR TWO" % (fg(202), attr(0)))
-
             # FILTERING IP ADDRESSES
             ip_list = ([pkt[IP].src for pkt in capture if pkt.haslayer(IP)]
             + [pkt[IP].dst for pkt in capture if pkt.haslayer(IP)])
             ip_dict = Counter(ip_list)
             
-            print("%sIP%s > COUNT" % (fg(randint(1, 254)), attr(0)))
+            print("\n%sIP%s > COUNT" % (fg(randint(1, 254)), attr(0)))
+            print("_"*30)
             for ip, count in ip_dict.most_common():
                 print("\'%s\' > %s" % (ip, count))
 
@@ -380,7 +379,7 @@ class PCAPParser(NetSniff):
             port_dict = Counter(port_list)
 
             print("\n%sPORT%s > COUNT" % (fg(randint(1, 254)), attr(0)))
-
+            print("_"*20)
             for port, count in port_dict.most_common():
                 print("%s > %s" % (port, count))
             print("\n", end="")
@@ -391,6 +390,7 @@ class PCAPParser(NetSniff):
             mac_dict = Counter(mac_list)
 
             print("%sMAC%s > COUNT" % (fg(randint(1, 254)), attr(0)))
+            print("_"*30)
             for mac, count in mac_dict.most_common():
                 print("%s > %s" % (mac, count))
             print("\n", end="")

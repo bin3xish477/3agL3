@@ -142,18 +142,38 @@ class WritePCAP(NetSniff):
 
     def len_le_eq(self, value):
         filtered_capture = self.capparser.len_less_equal(self.to_parse, value)
+        if not len(filtered_capture):
+            print(
+                "[ %sATTENTION%s ] NO PACKETS CONTAINED A LENGTH LESS THAN OR EQUAL TO %s"
+                % (fg(202), attr(0), value)
+            )
         self.write(filtered_capture)
 
     def len_gr_eq(self, value):
         filtered_capture = self.capparser.len_greater_equal(self.to_parse, value)
+        if not len(filtered_capture):
+            print(
+                "[ %sATTENTION%s ] NO PACKETS CONTAINED A LENGTH GREATER THAN OR EQUAL TO %s"
+                % (fg(202), attr(0), value)
+            )
         self.write(filtered_capture)
 
     def len_eq(self, value):
         filtered_capture = self.capparser.len_equal(self.to_parse, value)
+        if not len(filtered_capture):
+            print(
+                "[ %sATTENTION%s ] NO PACKETS CONTAINED A LENGTH EQUAL TO %s"
+                % (fg(202), attr(0), value)
+            )
         self.write(filtered_capture)
 
     def ttl_eq(self, value):
         filtered_capture = self.capparser.ttl_equal(self.to_parse, value)
+        if not len(filtered_capture):
+            print(
+                "[ %sATTENTION%s ] NO PACKETS CONTAINED A TIME-TO-LIVE VALUE EQUAL TO %s"
+                % (fg(202), attr(0), value)
+            )
         self.write(filtered_capture)
 
     def summary(self):
@@ -171,7 +191,9 @@ class WritePCAP(NetSniff):
             self.capparser.json_summary(self._filtered_capture, filename)
 
     def log(self, filename):
-        """ Create log file containing the contents of the PCAP file """
+        """ Create log file containing the contents of the PCAP file 
+        Note: log file encoding is utf-8
+        """
         if not filename:
             filename = "capture.log"
         if self._capture:
