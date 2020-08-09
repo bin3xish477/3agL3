@@ -168,17 +168,15 @@ class WritePCAP(NetSniff):
             self.capparser.json_summary(self._filtered_capture, filename)
 
     def log(self, filename):
+        if not filename:
+            filename = "capture.log"
         if self._capture:
-            if not filename:
-                filename = "capture.log"
                 with open(filename, "w", encoding="utf-8") as log_file:
                     for cap in self._capture:
                         flow_statement = self.netsniff_obj.echo(cap)
                         log_file.write(flow_statement + "\n")
 
         elif self._filtered_capture:
-            if not filename:
-                filename = "capture.log"
                 with open(filename, "w", encoding="utf-8") as log_file:
                     for cap in self._filtered_capture:
                         flow_statement = self.netsniff_obj.echo(cap)
