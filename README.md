@@ -7,16 +7,6 @@ scapy
 colored
 ```
 
-# Installation
-### > 3agLe Installation
-```
-git clone https://github.com/binexisHATT/3agL3.git
-cd 3agL3
-pip3 install -r requirements.txt
-
-# run
-python3 main.py
-```
 ### > Npcap/Tcpdump Installation
 - Download Npcap for **Windows**:
     - https://nmap.org/download.html
@@ -24,6 +14,20 @@ python3 main.py
     - `sudo apt install tcpdump -y`
 - Install Tcpdump: **CentOS/RHEL**:
     - `yum install tcpdump -y`
+    
+# > Installation
+### Linux
+```
+wget https://raw.githubusercontent.com/binexisHATT/3agL3/master/install.sh
+chmod +x install.sh
+sudo ./install.sh
+```
+### Windows
+```
+# Run PowerShell as Administrator
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/binexisHATT/3agL3/master/install.ps1 -OutFile ".\install.ps1"
+.\install.ps1
+```
 
 # 3agL3 Modes of Operation: Live, Read, Write
 ### > Live Mode
