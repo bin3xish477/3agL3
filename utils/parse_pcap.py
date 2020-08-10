@@ -119,7 +119,7 @@ class PCAPParser(NetSniff):
         for pkt in capture:
             try:
                 if (pkt.haslayer(TCP) and pkt[TCP].sport != int(src_port)
-                or pkt.halayer(UDP) and pkt[UDP].sport != int(src_port)):
+                or pkt.haslayer(UDP) and pkt[UDP].sport != int(src_port)):
                     filtered.append(pkt)
             except ValueError:
                 print(
