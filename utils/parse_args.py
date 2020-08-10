@@ -33,6 +33,7 @@ def parse_args():
 
 	live_capture.add_argument("-c", "--count",metavar="<NUM>",type=int, default=0,help="The number of packets to capture (default = 0 = infinity)")
 	live_capture.add_argument("-f", "--filter",metavar="<BPF FITLER>",type=str, default=None,help="Berkeley packet filter to apply to capture")
+	live_capture.add_argument("-p", "--promis-off",action="store_false",help="Turn off promiscuous mode")
 
 	# -------------- Reading PCAP options ---------------
 	read_pcap.add_argument("-read", "--read-mode",action="store_true", default=False,help="Read a PCAP file for analysis")

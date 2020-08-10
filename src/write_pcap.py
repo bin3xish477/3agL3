@@ -8,13 +8,13 @@ from random import randint
 
 class WritePCAP(NetSniff):
     def __init__(
-        self, wfile, interf, berkeley_filter, count,
+        self, wfile, interf, berkeley_filter, count, promiscuous,
         src_ip, not_src_ip, dst_ip, not_dst_ip, src_port,
         not_src_port, dst_port, not_dst_port, src_mac,
         not_src_mac, dst_mac, not_dst_mac, tcp, not_tcp,
         udp, not_udp, icmp, not_icmp
     ):
-        super().__init__(interf, berkeley_filter, count)
+        super().__init__(interf, berkeley_filter, count, promiscuous)
 
         self._wfile = wfile
         self._src_ip = src_ip
@@ -37,7 +37,6 @@ class WritePCAP(NetSniff):
         self._not_icmp = not_icmp
 
         self.capparser = PCAPParser()
-        self.netsniff_obj = NetSniff(None, None, None)
 
     def execute(self, func, arg):
         """ Executes real-time capture and passes that capture to `func`
@@ -199,13 +198,13 @@ class WritePCAP(NetSniff):
         if self._capture:
                 with open(filename, "w", encoding="utf-8") as log_file:
                     for cap in self._capture:
-                        flow_statement = self.netsniff_obj.echo(cap)
+                        flow_statement = self.echo(cap)
                         log_file.write(flow_statement + "\n")
 
         elif self._filtered_capture:
                 with open(filename, "w", encoding="utf-8") as log_file:
                     for cap in self._filtered_capture:
-                        flow_statement = self.netsniff_obj.echo(cap)
+                        flow_statement = self.echo(cap)
                         log_file.write(flow_statement + "\n")
 
     def write(self, packets):

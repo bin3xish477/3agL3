@@ -8,13 +8,14 @@ from platform import system
 
 SYSTEM = system()
 
-class ReadPCAP:
+class ReadPCAP(NetSniff):
     def __init__(
         self, rfile, hexdump, src_ip, not_src_ip, dst_ip, not_dst_ip, 
         src_port, not_src_port, dst_port, not_dst_port, src_mac,
         not_src_mac, dst_mac, not_dst_mac, tcp, not_tcp,udp, 
         not_udp, icmp, not_icmp, pkt_cnt
     ):
+        super().__init__(None, None, None, None)
         self._rfile = rfile
         self._hex = hexdump
         self._pkt_cnt = pkt_cnt
@@ -38,7 +39,6 @@ class ReadPCAP:
         self._not_icmp = not_icmp
 
         self.capparser = PCAPParser()
-        self.netsniff_obj = NetSniff(None, None, None)
 
     def read(self, count=None):
         """ Read PCAP file """
@@ -214,15 +214,15 @@ class ReadPCAP:
         with open(filename, "w", encoding="utf-8") as log_file:
             for cap in self.pcapfile:
                 if SYSTEM == "Windows":
-                    flow_statement = self.netsniff_obj.echo(cap).replace("\u2192", "->")
-                else: flow_statement = self.netsniff_obj.echo(cap)
+                    flow_statement = self.echo(cap).replace("\u2192", "->")
+                else: flow_statement = self.echo(cap)
                 log_file.write(flow_statement + "\n")
 
     def to_stdout(self, capture):
         """ Prints PCAP data to console """
         try:
             for cap in capture:
-                print_str = self.netsniff_obj.echo(cap)
+                print_str = self.echo(cap)
                 if not print_str:
                     continue
                 print(print_str)

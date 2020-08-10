@@ -25,6 +25,7 @@ if __name__ == "__main__":
 		"interf": args.interf,
 		"filter": args.filter,
 		"count": args.count,
+		"promis": args.promis_off,
 		"read": args.read_mode,
 		"rfile": args.rfile,
 		"hex": args.hex_dump,
@@ -69,7 +70,7 @@ if __name__ == "__main__":
 		if not args["interf"]:
 			print("[ %sATTENTION%s ] an interface, `-i`, must be specified" % (fg(202), attr(0)))
 			exit(1)
-		capture = NetSniff(args["interf"], args["filter"], args["count"])
+		capture = NetSniff(args["interf"], args["filter"], args["count"], args["promis"])
 		print("[ %sATTENTION%s ] PLEASE WAIT A SECOND OR TWO FOR A RESPONSE" % (fg(202), attr(0)))
 		capture.capture()
 
@@ -169,7 +170,7 @@ if __name__ == "__main__":
 			exit(1)
 		if args["wfile"]:
 			write_obj = WritePCAP(
-				args["wfile"], args["interf"], args["filter"], args["count"],
+				args["wfile"], args["interf"], args["filter"], args["count"], args["promis"],
 				args["src-ip"], args["not-src-ip"], args["dst-ip"], args["not-dst-ip"],
 				args["src-port"], args["not-src-port"], args["dst-port"], args["not-dst-port"],
 				args["src-mac"], args["not-src-mac"], args["dst-mac"], args["not-dst-mac"],

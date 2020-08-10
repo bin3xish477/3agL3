@@ -9,7 +9,7 @@ from src.net_sniff import NetSniff
 
 class PCAPParser(NetSniff):
     def __init__(self):
-        super().__init__(None, None , None)
+        super().__init__(None, None , None, None)
         
     def filt_src_ip(self, capture, src_ip):
         """ Filter source IP addresses from capture 

@@ -7,16 +7,18 @@ from colored import fg, attr
 from scapy.all import *
 
 class NetSniff:
-	def __init__(self, interf, berkeley_filter, count):
+	def __init__(self, interf, berkeley_filter, count, promiscuous):
 		"""
 		Args:
 			interf (str): the infertace to capture packets on
 			apply_filter (str): apply BP filter to live capture
 			count (int): number of packets to capture, 0=infinite
+			promiscuous (bool): promiscuous mode
 		"""
 		self._interf = interf
 		self._berkeley_filter = berkeley_filter
 		self._count = count
+		self._promiscuous = promiscuous
 		self.FLAGS = {
 			'F': 'FIN',
 			'S': 'SYN',
@@ -42,6 +44,11 @@ class NetSniff:
 	def count(self):
 		""" Returns the number of packets to capture """
 		return self._count
+	
+	@property
+	def promiscuous(self):
+		""" Returns promiscuous boolean value """
+		return self._promiscuous
 	
 	def echo(self, pkt):
 		""" The print message for every captured packet
@@ -124,7 +131,7 @@ class NetSniff:
 				proto = "DNS"
 				return (
 					f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
-					f" ;; {qname} {qclass} {qtype} ;;" \
+					f" ;; {qname} {qclass} %s%s{qtype}%s ;;" \
 					f" %s%s{proto}%s" \
 					f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
 					f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
@@ -132,6 +139,7 @@ class NetSniff:
 						fg(141), attr("bold"), attr("reset"),
 						fg(141), attr("bold"), attr("reset"),
 						fg(141), attr("bold"), attr("reset"),
+						fg(201), attr("bold"), attr("reset"),
 						fg(118), attr("bold"), attr("reset"),
 						fg(208), attr("bold"), attr("reset"),
 						fg(9), attr("bold"), attr("reset"),
@@ -196,6 +204,10 @@ class NetSniff:
 		Args:
 			print (bool): display packets to screen, default=True.
 		"""
+		# if promiscuous argument is false, turn off promiscuous mode
+		if not self.promiscuous:
+			print("[ %s%sWARNING%s ] PROMISCUOUS MODE HAS BEEN TURNED OFF" % (fg(196), attr("bold"), attr("reset")))
+			conf.sniff_promisc = 0
 		if print_stdout:
 			sniff(
 				iface=self.interf, 
