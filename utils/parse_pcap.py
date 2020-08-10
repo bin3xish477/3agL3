@@ -102,7 +102,8 @@ class PCAPParser(NetSniff):
         filtered = []
         for pkt in capture:
             try:
-                if pkt.haslayer(IP) and pkt[IP].sport == int(src_port):
+                if (pkt.haslayer(TCP) and pkt[TCP].sport == int(src_port)
+                or pkt.haslayer(UDP) and pkt[UDP].sport == int(src_port)):
                     filtered.append(pkt)
             except ValueError:
                 print(
@@ -117,7 +118,8 @@ class PCAPParser(NetSniff):
         filtered = []
         for pkt in capture:
             try:
-                if pkt.haslayer(IP) and pkt[IP].sport != int(src_port):
+                if (pkt.haslayer(TCP) and pkt[TCP].sport != int(src_port)
+                or pkt.halayer(UDP) and pkt[UDP].sport != int(src_port)):
                     filtered.append(pkt)
             except ValueError:
                 print(
@@ -132,9 +134,8 @@ class PCAPParser(NetSniff):
         filtered = []
         for pkt in capture:
             try:
-               if (pkt.haslayer(TCP) or pkt.haslayer(UDP)
-                and pkt[TCP].dport == int(dst_port)
-                or pkt[UDP].dport == int(dst_port)):
+               if (pkt.haslayer(TCP) and pkt[TCP].dport == int(dst_port)
+                or pkt.haslayer(UDP) and  pkt[UDP].dport == int(dst_port)):
                     filtered.append(pkt)
             except ValueError:
                 print(
@@ -149,9 +150,8 @@ class PCAPParser(NetSniff):
         filtered = []
         for pkt in capture:
             try:
-                if (pkt.haslayer(TCP) or pkt.haslayer(UDP)
-                and pkt[TCP].dport != int(dst_port)
-                or pkt[UDP].dport != int(dst_port)):
+                if (pkt.haslayer(TCP) and pkt[TCP].dport != int(dst_port)
+                or pkt.haslayer(UDP) and pkt[UDP].dport != int(dst_port)):
                     filtered.append(pkt)
             except ValueError:
                 print(
@@ -174,7 +174,7 @@ class PCAPParser(NetSniff):
 
         filtered = []
         for pkt in capture:
-            if pkt[Ether].src == src_mac:
+            if pkt.haslayer(Ether) and pkt[Ether].src == src_mac:
                 filtered.append(pkt)
         return filtered
 
@@ -191,7 +191,7 @@ class PCAPParser(NetSniff):
 
         filtered = []
         for pkt in capture:
-            if pkt[Ether].src != src_mac:
+            if pkt.haslayer(Ether) and pkt[Ether].src != src_mac:
                 filtered.append(pkt)
         return filtered
 
@@ -208,7 +208,7 @@ class PCAPParser(NetSniff):
 
         filtered = []
         for pkt in capture:
-            if pkt[Ether].dst == dst_mac:
+            if pkt.haslayer(Ether) and pkt[Ether].dst == dst_mac:
                 filtered.append(pkt)
         return filtered
 
@@ -225,7 +225,7 @@ class PCAPParser(NetSniff):
 
         filtered = []
         for pkt in capture:
-            if pkt[Ether].dst != dst_mac:
+            if pkt.haslayer(Ether) and pkt[Ether].dst != dst_mac:
                 filtered.append(pkt)
         return filtered
 
@@ -233,7 +233,7 @@ class PCAPParser(NetSniff):
         """ Filter for TCP packets """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(TCP) and str(pkt[IP].payload.name).upper() == "TCP":
+            if pkt.haslayer(TCP):
                 filtered.append(pkt)
         return filtered
 
@@ -241,7 +241,7 @@ class PCAPParser(NetSniff):
         """ Filter for non-TCP packets """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(TCP):
+            if not pkt.haslayer(TCP):
                 filtered.append(pkt)
         return filtered
 
@@ -249,7 +249,7 @@ class PCAPParser(NetSniff):
         """ Filter for UDP packets """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(IP) and str(pkt[IP].payload.name).upper() == "UDP":
+            if pkt.haslayer(IP):
                 filtered.append(pkt)
         return filtered
 
@@ -257,7 +257,7 @@ class PCAPParser(NetSniff):
         """ Filter for non-UDP packets """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(UDP):
+            if not pkt.haslayer(UDP):
                 filtered.append(pkt)
         return filtered
 
@@ -265,7 +265,7 @@ class PCAPParser(NetSniff):
         """ Filter for ICMP packets """
         filtered = []
         for pkt in capture:
-            if pkt.haslayer(ICMP) and str(pkt[IP].payload.name).upper() == "ICMP":
+            if pkt.haslayer(ICMP):
                 filtered.append(pkt)
         return filtered
 
