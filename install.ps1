@@ -4,4 +4,3 @@ write-Output "-------------------------------------"
 Write-Output "Changing Current Directory to .\3agL3"
 Set-Location .\3agL3
 Write-Output "Type '3agL3 main.py -h' for help menu"
-
