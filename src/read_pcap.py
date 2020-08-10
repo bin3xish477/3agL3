@@ -1,6 +1,6 @@
 from utils.parse_pcap import PCAPParser
 from src.net_sniff import NetSniff
-from scapy.all import rdpcap, hexdump
+from scapy.all import rdpcap, hexdump, IP
 from colored import fg, attr
 from time import sleep
 from os.path import exists
@@ -76,12 +76,12 @@ class ReadPCAP(NetSniff):
                 func (function): function defined in PCAPParser to invoke
                 arg (str|int): value to filter from packet capture
         """
-        filtered_capture = func(self.pcapfile, arg)
-        if len(filtered_capture) == 0 or filtered_capture == None:
+        filtered_pcap = func(self.pcapfile, arg)
+        if len(filtered_pcap) == 0 or filtered_pcap == None:
             print("[ %sATTENTION%s ] NO PACKETS CONTAINED SPECIFIED FILTER" % (fg(202), attr(0)))
             exit(1)
         else:
-            self.to_stdout(filtered_capture)
+            self.to_stdout(filtered_pcap)
 
     def filter_src_ip(self):
         self.execute(self.capparser.filt_src_ip, self._src_ip)
@@ -153,41 +153,62 @@ class ReadPCAP(NetSniff):
         self.execute(self.capparser.filt_tcp_flags, target_flags)
 
     def len_le_eq(self, value:int):
-        filtered_capture = self.capparser.len_less_equal(self.pcapfile, value)
-        if not len(filtered_capture):
+        filtered_pcap = self.capparser.len_less_equal(self.pcapfile, value)
+        if not len(filtered_pcap):
             print(
                 "[ %sATTENTION%s ] NO PACKETS CONTAINED A LENGTH LESS THAN OR EQUAL TO %s"
                 % (fg(202), attr(0), value)
             )
-        self.to_stdout(filtered_capture)
+        self.to_stdout(filtered_pcap)
 
     def len_gr_eq(self, value:int):
-        filtered_capture = self.capparser.len_greater_equal(self.pcapfile, value)
-        if not len(filtered_capture):
+        filtered_pcap = self.capparser.len_greater_equal(self.pcapfile, value)
+        if not len(filtered_pcap):
             print(
                 "[ %sATTENTION%s ] NO PACKETS CONTAINED A LENGTH GREATER THAN OR EQUAL TO %s"
                 % (fg(202), attr(0), value)
             )
-        self.to_stdout(filtered_capture)
+        self.to_stdout(filtered_pcap)
 
     def len_eq(self, value:int):
-        filtered_capture = self.capparser.len_equal(self.pcapfile, value)
-        if not len(filtered_capture):
+        filtered_pcap = self.capparser.len_equal(self.pcapfile, value)
+        if not len(filtered_pcap):
             print(
                 "[ %sATTENTION%s ] NO PACKETS CONTAINED A LENGTH EQUAL TO %s"
                 % (fg(202), attr(0), value)
             )
-        self.to_stdout(filtered_capture)
+        self.to_stdout(filtered_pcap)
 
     def ttl_eq(self, value:int):
-        filtered_capture = self.capparser.ttl_equal(self.pcapfile, value)
-        if not len(filtered_capture):
+        filtered_pcap = self.capparser.ttl_equal(self.pcapfile, value)
+        if not len(filtered_pcap):
             print(
                 "[ %sATTENTION%s ] NO PACKETS CONTAINED A TIME-TO-LIVE VALUE EQUAL TO %s"
                 % (fg(202), attr(0), value)
             )
-        self.to_stdout(filtered_capture)
+        self.to_stdout(filtered_pcap)
 
+    def src_ip_count(self, ip):
+        filtered_pcap = []
+        for pkt in self.pcapfile:
+            if pkt[IP].src == ip:
+                filtered_pcap.append(pkt)
+        return len(filtered_pcap)
+
+    def dst_ip_count(self, ip):
+        filtered_pcap = []
+        for pkt in self.pcapfile:
+            if pkt[IP].dst == ip:
+                filtered_pcap.append(pkt)
+        return len(filtered_pcap)
+
+    def ip_count(self, ip):
+        filtered_pcap = []
+        for pkt in self.pcapfile:
+            if pkt[IP].src == ip or pkt[IP].dst == ip:
+                filtered_pcap.append(pkt)
+        return len(filtered_pcap)
+    
     def no_filter(self, no_print=False):
         if not no_print:
             print("[ %sNOTE%s ] NO READ FILTERS HAVE BEEN APPLIED" % (fg(226), attr(0)))

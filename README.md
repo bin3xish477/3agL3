@@ -54,10 +54,18 @@ Invoke-WebRequest -Uri https://raw.githubusercontent.com/binexisHATT/3agL3/maste
                         name of PCAP file to read for parsing
   -rc <NUM>, --read-count <NUM>
                         number of packets to read from pcap file
-  -hex, --hex-dump      Print out the hex dump of each packet along with
-                        packet flow summary
+  -hex, --hex-dump      Print out the hex dump of each packet along with packet flow summary
   -pc, --packet-count   Prints the number of the packets within a PCAP file
   -no-prn, --no-print   Do not print out traffic flow output to console
+  -src-ip-cnt <IP> [<IP> ...], --source-ip-count <IP> [<IP> ...]
+                        Prints the number of times an IP address was the source IP. Multiple IP addresses can be
+                        specified
+  -dst-ip-cnt <IP> [<IP> ...], --destination-ip-count <IP> [<IP> ...]
+                        Prints the number of times an IP addresses was the destination IP. Multiple IP addresses can
+                        be specified
+  -ip-cnt <IP> [<IP> ...], --ip-count <IP> [<IP> ...]
+                        Prints the number of times an IP address was the destination or source IP. Multiple IP
+                        addresses can be specified
 ```
 **Reading PCAP File**
 

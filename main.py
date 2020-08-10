@@ -8,6 +8,7 @@ from colored import fg, attr
 from sys import exit
 from platform import system
 from subprocess import run, PIPE
+from random import randint
 
 SYSTEM = system()
 
@@ -32,6 +33,9 @@ if __name__ == "__main__":
 		"pkt-cnt": args.packet_count,
 		"no-prn": args.no_print,
 		"rc": args.read_count,
+		"src-ip-count": args.source_ip_count,
+		"dst-ip-count": args.destination_ip_count,
+		"ip-count": args.ip_count,
 		"write": args.write_mode,
 		"wfile": args.wfile,
 		"src-ip": args.source_ip,
@@ -142,6 +146,30 @@ if __name__ == "__main__":
 				read_obj.ttl_eq(args["ttl-eq"])
 			else:
 				read_obj.no_filter(args["no-prn"])
+
+			if args["src-ip-count"] or args["dst-ip-count"] or args["ip-count"]:
+				print("-"*95)
+				if args["src-ip-count"]:
+					for ip in args["src-ip-count"]:
+						src_ip_count = read_obj.src_ip_count(ip)
+						print(
+							f"[ + ] %s%s{ip}%s appeared as the source IP address {src_ip_count} times" 
+							% (fg(randint(1, 230)), attr("bold"), attr("reset"))
+						)
+				if args["dst-ip-count"]:
+					for ip in args["dst-ip-count"]:
+						dst_ip_count = read_obj.dst_ip_count(ip)
+						print(
+							f"[ + ] %s%s{ip}%s appeared as the destination IP address {dst_ip_count} times"
+							% (fg(randint(1, 230)), attr("bold"), attr("reset"))
+						)
+				if args["ip-count"]:
+					for ip in args["ip-count"]:
+						ip_count = read_obj.ip_count(ip)
+						print(
+							f"[ + ] %s%s{ip}%s appeared either as the source or destination IP address {ip_count} times"
+							% (fg(randint(1, 230)), attr("bold"), attr("reset"))
+						)
 
 			if args["sum"]:
 				read_obj.summary()

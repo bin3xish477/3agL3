@@ -49,42 +49,40 @@ class NetSniff:
 	def promiscuous(self):
 		""" Returns promiscuous boolean value """
 		return self._promiscuous
-	
-	def echo(self, pkt):
-		""" The print message for every captured packet
-		Args:
-			pkt (scapy.layers.l2.Ether): a scapy captured packet.
-		"""
-		if pkt.haslayer(ICMP):
-			try:
-				date = str(datetime.now())
-				src_mac = pkt[Ether].src
-				dst_mac = pkt[Ether].dst
-				proto = str(pkt[IP].payload.name).upper()
 
-				icmp_type = ""
-				if pkt[ICMP].type == 0:
-					icmp_type = "echo-reply"
-				elif pkt[ICMP].type == 8:
-					icmp_type = "echo"
-				return (
-					f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
-					f" {src_mac} | {dst_mac} %s%s{str(pkt[IP].payload.name).upper()}%s" \
-					f" %s%s{pkt[IP].src}%s %s%s\u2192%s %s%s{pkt[IP].dst}%s" \
-					f" (TTL:{pkt[Ether].ttl} LEN:{pkt[Ether].len} TYPE:{icmp_type})"
-					% (
-						fg(141), attr("bold"), attr("reset"),
-						fg(141), attr("bold"), attr("reset"),
-						fg(141), attr("bold"), attr("reset"),
-						fg(118), attr("bold"), attr("reset"),
-						fg(208), attr("bold"), attr("reset"),
-						fg(9), attr("bold"), attr("reset"),
-						fg(220), attr("bold"), attr("reset"),
-					)
+	def ICMPFormatString(self, pkt):
+		""" Returns ICMP formatted string to print to console """
+		try:
+			date = str(datetime.now())
+			src_mac = pkt[Ether].src
+			dst_mac = pkt[Ether].dst
+			proto = pkt[IP].payload.name
+			icmp_type = ""
+
+			if pkt[ICMP].type == 0:
+				icmp_type = "echo-reply"
+			elif pkt[ICMP].type == 8:
+				icmp_type = "echo"
+			return (
+				f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
+				f" {src_mac} | {dst_mac} %s%s{proto}%s" \
+				f" %s%s{pkt[IP].src}%s %s%s\u2192%s %s%s{pkt[IP].dst}%s" \
+				f" (TTL:{pkt[Ether].ttl} LEN:{pkt[Ether].len} TYPE:{icmp_type})"
+				% (
+					fg(141), attr("bold"), attr("reset"),
+					fg(141), attr("bold"), attr("reset"),
+					fg(141), attr("bold"), attr("reset"),
+					fg(118), attr("bold"), attr("reset"),
+					fg(208), attr("bold"), attr("reset"),
+					fg(9), attr("bold"), attr("reset"),
+					fg(220), attr("bold"), attr("reset"),
 				)
-			except:
-				return None
-		elif pkt.haslayer(ARP):
+			)
+		except: return None
+
+	def ARPFormatString(self, pkt):
+		""" Returns formatted ARP packet string to print to console """
+		try:
 			date = str(datetime.now())
 			proto = "ARP"
 			WHO_HAS = 1
@@ -100,8 +98,8 @@ class NetSniff:
 					pkt[Ether].psrc,
 					fg(9), attr("bold"), attr("reset"),
 					pkt[Ether].src
-				)
-			# matching ARP reply
+					)
+				# matching ARP reply
 			if pkt[ARP].op == IS_AT:
 				arp_str = ": REPLY  : %s%sTell%s %s %s%sThat%s %s %s%sIs At%s %s" % (
 					fg(201), attr("bold"), attr("reset"),
@@ -121,83 +119,109 @@ class NetSniff:
 					fg(118), attr("bold"), attr("reset"),
 				)
 			)
+		except: return None
+
+	def DNSFormatString(self, pkt):
+		""" Returns DNS formatted packet string to print to console """
+		try:
+			date = str(datetime.now())
+			qname = str(pkt[DNSQR].qname)[2:-1]
+			qtype = dnsqtypes[pkt[DNSQR].qtype]
+			qr = pkt[DNSQR]
+			qclass = qr.get_field("qclass").i2repr(qr, qr.qclass)
+			proto = "DNS"
+			return (
+				f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
+				f" ;; {qname} {qclass} %s%s{qtype}%s ;;" \
+				f" %s%s{proto}%s" \
+				f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
+				f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
+				% (
+					fg(141), attr("bold"), attr("reset"),
+					fg(141), attr("bold"), attr("reset"),
+					fg(141), attr("bold"), attr("reset"),
+					fg(201), attr("bold"), attr("reset"),
+					fg(118), attr("bold"), attr("reset"),
+					fg(208), attr("bold"), attr("reset"),
+					fg(9), attr("bold"), attr("reset"),
+					fg(38), attr("bold"), attr("reset"),
+				)
+			)
+		except: return None
+
+	def TCPFormatString(self, pkt):
+		""" Returns TCP formatted packet string to print to console """
+		try:
+			tcp_flag_str = ".".join([self.FLAGS[x] for x in pkt[TCP].flags])
+			date = str(datetime.now())
+			src_mac = pkt[Ether].src
+			dst_mac = pkt[Ether].dst
+			proto = pkt[IP].payload.name
+			return (
+				f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
+				f" {src_mac} | {dst_mac}" \
+				f" %s%s{proto}%s [%s%s{tcp_flag_str}%s]" \
+				f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
+				f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
+				% (
+					fg(141), attr("bold"), attr("reset"),
+					fg(141), attr("bold"), attr("reset"),
+					fg(141), attr("bold"), attr("reset"),
+					fg(118), attr("bold"), attr("reset"),
+					fg(226), attr("bold"), attr("reset"),
+					fg(208), attr("bold"), attr("reset"),
+					fg(9), attr("bold"), attr("reset"),
+					fg(38), attr("bold"), attr("reset"),
+				)
+			)
+		except: return None
+
+	def OtherProtocol(self, pkt):
+		""" Returns formatted packet string for packets that contain protocols
+		that do not match the ones defined above (ICMP, ARP, DNS, TCP) """
+		try:
+			date = str(datetime.now())
+			src_mac = pkt[Ether].src
+			dst_mac = pkt[Ether].dst
+			proto = pkt[IP].payload.name
+			return (
+				f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
+				f" {src_mac} | {dst_mac}" \
+				f" %s%s{proto}%s" \
+				f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
+				f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
+				% (
+					fg(141), attr("bold"), attr("reset"),
+					fg(141), attr("bold"), attr("reset"),
+					fg(141), attr("bold"), attr("reset"),
+					fg(118), attr("bold"), attr("reset"),
+					fg(208), attr("bold"), attr("reset"),
+					fg(9), attr("bold"), attr("reset"),
+					fg(38), attr("bold"), attr("reset"),
+				)
+			)
+		except: return None
+
+	def echo(self, pkt):
+		""" The print message for every captured packet
+		Args:
+			pkt (scapy.layers.l2.Ether): a scapy captured packet.
+		"""
+		if pkt.haslayer(ICMP):
+			icmp_string = self.ICMPFormatString(pkt)
+			return icmp_string
+		elif pkt.haslayer(ARP):
+			arp_string = self.ARPFormatString(pkt)
+			return arp_string
 		elif pkt.haslayer(DNS):
-			try:
-				date = str(datetime.now())
-				qname = str(pkt[DNSQR].qname)[2:-1]
-				qtype = dnsqtypes[pkt[DNSQR].qtype]
-				qr = pkt[DNSQR]
-				qclass = qr.get_field("qclass").i2repr(qr, qr.qclass)
-				proto = "DNS"
-				return (
-					f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
-					f" ;; {qname} {qclass} %s%s{qtype}%s ;;" \
-					f" %s%s{proto}%s" \
-					f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
-					f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
-					% (
-						fg(141), attr("bold"), attr("reset"),
-						fg(141), attr("bold"), attr("reset"),
-						fg(141), attr("bold"), attr("reset"),
-						fg(201), attr("bold"), attr("reset"),
-						fg(118), attr("bold"), attr("reset"),
-						fg(208), attr("bold"), attr("reset"),
-						fg(9), attr("bold"), attr("reset"),
-						fg(220), attr("bold"), attr("reset"),
-					)
-				)
-			except:
-				return None
+			dns_string = self.DNSFormatString(pkt)
+			return dns_string
 		elif pkt.haslayer(TCP):
-			try:
-				tcp_flag_str = ".".join([self.FLAGS[x] for x in pkt[TCP].flags])
-				date = str(datetime.now())
-				src_mac = pkt[Ether].src
-				dst_mac = pkt[Ether].dst
-				proto = str(pkt[IP].payload.name).upper()
-				return (
-					f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
-					f" {src_mac} | {dst_mac}" \
-					f" %s%s{proto}%s [%s%s{tcp_flag_str}%s]" \
-					f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
-					f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
-					% (
-						fg(141), attr("bold"), attr("reset"),
-						fg(141), attr("bold"), attr("reset"),
-						fg(141), attr("bold"), attr("reset"),
-						fg(118), attr("bold"), attr("reset"),
-						fg(226), attr("bold"), attr("reset"),
-						fg(208), attr("bold"), attr("reset"),
-						fg(9), attr("bold"), attr("reset"),
-						fg(220), attr("bold"), attr("reset"),
-					)
-				)
-			except:
-				return None
+			tcp_string = self.TCPFormatString(pkt)
+			return tcp_string
 		else:
-			try:
-				date = str(datetime.now())
-				src_mac = pkt[Ether].src
-				dst_mac = pkt[Ether].dst
-				proto = str(pkt[IP].payload.name).upper()
-				return (
-					f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
-					f" {src_mac} | {dst_mac}" \
-					f" %s%s{proto}%s" \
-					f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
-					f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
-					% (
-						fg(141), attr("bold"), attr("reset"),
-						fg(141), attr("bold"), attr("reset"),
-						fg(141), attr("bold"), attr("reset"),
-						fg(118), attr("bold"), attr("reset"),
-						fg(208), attr("bold"), attr("reset"),
-						fg(9), attr("bold"), attr("reset"),
-						fg(220), attr("bold"), attr("reset"),
-					)
-				)
-			except:
-				return None
+			other_proto_string = self.OtherProtocol(pkt)
+			return other_proto_string
 
 	def capture(self, print_stdout=True):
 		""" Begin capturing live packets with scapy.all.sniff 
@@ -206,8 +230,9 @@ class NetSniff:
 		"""
 		# if promiscuous argument is false, turn off promiscuous mode
 		if not self.promiscuous:
-			print("[ %s%sWARNING%s ] PROMISCUOUS MODE HAS BEEN TURNED OFF" % (fg(196), attr("bold"), attr("reset")))
 			conf.sniff_promisc = 0
+			print("[ %s%sWARNING%s ] PROMISCUOUS MODE HAS BEEN TURNED OFF" % (fg(196), attr("bold"), attr("reset")))
+
 		if print_stdout:
 			sniff(
 				iface=self.interf, 

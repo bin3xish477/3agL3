@@ -42,6 +42,9 @@ def parse_args():
 	read_pcap.add_argument("-hex", "--hex-dump", action="store_true",help="Print out the hex dump of each packet along with packet flow summary")
 	read_pcap.add_argument("-pc", "--packet-count",action="store_true",default=False,help="Prints the number of the packets within a PCAP file")
 	read_pcap.add_argument("-no-prn", "--no-print",action="store_true",help="Do not print out traffic flow output to console")
+	read_pcap.add_argument("-src-ip-cnt", "--source-ip-count",metavar="<IP>",nargs="+",type=str,help="Prints the number of times an IP address was the source IP. Multiple IP addresses can be specified")
+	read_pcap.add_argument("-dst-ip-cnt", "--destination-ip-count",metavar="<IP>",nargs="+",type=str,help="Prints the number of times an IP addresses was the destination IP. Multiple IP addresses can be specified")
+	read_pcap.add_argument("-ip-cnt", "--ip-count",metavar="<IP>",nargs="+",type=str,help="Prints the number of times an IP address was the destination or source IP. Multiple IP addresses can be specified")
 
 	# -------------- Writing PCAP options ---------------
 	write_pcap.add_argument("-write", "--write-mode",action="store_true", default=None,help="capture live traffic and write to PCAP file (must specify `-c` option)")
@@ -57,7 +60,7 @@ def parse_args():
 	write_read_pcap.add_argument("-dst-port", "--destination-port",metavar="<PORT>",type=str,help="Filter packets based on a specified destination port number")
 	write_read_pcap.add_argument("-not-dst-port", "--not-destination-port",metavar="<PORT>",type=str,help="Filter packets based on a specified destination port number")
 	write_read_pcap.add_argument("-src-mac", "--source-mac",metavar="<MAC>",type=str,help="Filter packets based on a specified source mac address")
-	write_read_pcap.add_argument("-not-src-mac", "--not-source-mac",metavar="<MAC>",type=str,help="Filter packets that do not contain the specified source mac address.")
+	write_read_pcap.add_argument("-not-src-mac", "--not-source-mac",metavar="<MAC>",type=str,help="Filter packets that do not contain the specified source mac address")
 	write_read_pcap.add_argument("-dst-mac", "--destination-mac",metavar="<MAC>",type=str,help="Filter packets based on a specified destination mac address")
 	write_read_pcap.add_argument("-not-dst-mac", "--not-destination-mac",metavar="<MAC>",type=str,help="Filter packets that do not contain the specified destination mac address")
 	write_read_pcap.add_argument("-tcp", "--filter-tcp",action="store_true",default=False,help="Filter TCP packets only")
