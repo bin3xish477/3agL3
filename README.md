@@ -168,7 +168,7 @@ ether src host <MAC>
 ether dst host <MAC>
 ```
 Check out this [link](https://www.ibm.com/support/knowledgecenter/en/SS42VS_7.3.3/com.ibm.qradar.doc/c_forensics_bpf.html) for more Berkeley Packet Filters.
-## Some more example images of 3agL3
+## Some more example usage of 3agL3
 **Filtering by source IP and Destination IP**
 **Filtering PCAP by port number**
 **Filtering PCAP by MAC address**
