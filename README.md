@@ -1,13 +1,13 @@
 # 3agL3
 Sniffing network traffic with Python for live capture observation or PCAP creation and analysis.
 
-### > Pip Requirements
+### Pip Requirements
 ```
 scapy
 colored
 ```
 
-### > Npcap/Tcpdump Installation
+### Npcap/Tcpdump Installation
 - Download Npcap for **Windows**:
     - https://nmap.org/download.html
 - Install Tcpdump: **Ubuntu/Debian**:
@@ -15,7 +15,7 @@ colored
 - Install Tcpdump: **CentOS/RHEL**:
     - `yum install tcpdump -y`
     
-# > Installation
+# Installation
 ### Linux
 ```
 wget https://raw.githubusercontent.com/binexisHATT/3agL3/master/install.sh
@@ -32,7 +32,7 @@ python main.py -h
 ```
 
 # 3agL3 Modes of Operation: Live, Read, Write
-### > Live Mode
+### Live Mode
 **Usage**:
 ```
   -live, --live-mode    Perfrom live capture analysis
@@ -47,7 +47,7 @@ python main.py -h
 
 ![live_mode](images/live_capture_no_filter_30_packets.png)
 
-### > Read Mode
+### Read Mode
 **Usage**:
 ```
   -read, --read-mode    Read a PCAP file for analysis
@@ -72,7 +72,7 @@ python main.py -h
 
 ![read_mode](images/reading_pcap.png)
 
-### > Write Mode
+### Write Mode
 **Usage**:
 ```
   -write, --write-mode  capture live traffic and write to PCAP file (must
@@ -84,7 +84,7 @@ python main.py -h
 
 ![writing_pcap](images/writing_pcap.png)
 
-### > Read/Write Mode
+### Read/Write Mode
 Most arguments can be used for both Read & Write modes:
 ```
   -src-ip <IP>, --source-ip <IP>
@@ -140,7 +140,7 @@ Most arguments can be used for both Read & Write modes:
   -j <FILENAME>, --json <FILENAME>
                         Create JSON file containing capture summary (ip:count, port:count, mac:count)
 ```
-## > Berkeley Packet Filter Examples
+## Berkeley Packet Filter Examples
 Berkeley Packet Filter are for 3agle's **Live** and **Write** mode of operation. Berkeley Packet Filters are recommended to filter for content relevant to the content that the user is seeking. Python is no where near as fast at C at parsing network packets so it wouldn't be effective to capture in Live or Write Mode without an appropiate BP filter. 
 ```
 # Matching IP
