@@ -27,8 +27,7 @@ sudo ./install.sh
 # Run PowerShell as Administrator
 Invoke-WebRequest -Uri https://raw.githubusercontent.com/binexisHATT/3agL3/master/install.ps1 -OutFile ".\install.ps1"
 .\install.ps1
-
-# run python main.py
+python main.py
 ```
 
 # 3agL3 Modes of Operation: Live, Read, Write
