@@ -65,7 +65,7 @@ python main.py -h
                         Prints the number of times an IP addresses was the destination IP. Multiple IP addresses can
                         be specified
   -ip-cnt <IP> [<IP> ...], --ip-count <IP> [<IP> ...]
-                        Prints the number of times an IP address was the destination or source IP. Multiple IP
+                        Prints the number of times an IP address was the source or destination IP. Multiple IP
                         addresses can be specified
 ```
 **Reading PCAP File**
