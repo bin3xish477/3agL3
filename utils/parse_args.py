@@ -44,7 +44,7 @@ def parse_args():
 	read_pcap.add_argument("-no-prn", "--no-print",action="store_true",help="Do not print out traffic flow output to console")
 	read_pcap.add_argument("-src-ip-cnt", "--source-ip-count",metavar="<IP>",nargs="+",type=str,help="Prints the number of times an IP address was the source IP. Multiple IP addresses can be specified")
 	read_pcap.add_argument("-dst-ip-cnt", "--destination-ip-count",metavar="<IP>",nargs="+",type=str,help="Prints the number of times an IP addresses was the destination IP. Multiple IP addresses can be specified")
-	read_pcap.add_argument("-ip-cnt", "--ip-count",metavar="<IP>",nargs="+",type=str,help="Prints the number of times an IP address was the destination or source IP. Multiple IP addresses can be specified")
+	read_pcap.add_argument("-ip-cnt", "--ip-count",metavar="<IP>",nargs="+",type=str,help="Prints the number of times an IP address was the source or destination IP. Multiple IP addresses can be specified")
 
 	# -------------- Writing PCAP options ---------------
 	write_pcap.add_argument("-write", "--write-mode",action="store_true", default=None,help="capture live traffic and write to PCAP file (must specify `-c` option)")
