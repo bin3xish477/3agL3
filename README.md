@@ -38,8 +38,7 @@ python main.py -h
   -i [INTERF [INTERF ...]], --interf [INTERF [INTERF ...]]
                         The interface to listen on (more than one is allowed)
   -c <NUM>, --count <NUM>
-                        The number of packets to capture (default = 0 =
-                        infinity)
+                        The number of packets to capture (default = 0 = infinity)
   -f <BPF FITLER>, --filter <BPF FITLER>
                         Berkeley packet filter to apply to capture
 ```
