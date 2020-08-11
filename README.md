@@ -59,14 +59,14 @@ python main.py -h
   -pc, --packet-count   Prints the number of the packets within a PCAP file
   -no-prn, --no-print   Do not print out traffic flow output to console
   -src-ip-cnt <IP> [<IP> ...], --source-ip-count <IP> [<IP> ...]
-                        Prints the number of times an IP address was the source IP. Multiple IP addresses can be
-                        specified
+                        Prints the number of times an IP address was the source IP.
+                        Multiple IP addresses can be specified
   -dst-ip-cnt <IP> [<IP> ...], --destination-ip-count <IP> [<IP> ...]
-                        Prints the number of times an IP addresses was the destination IP. Multiple IP addresses can
-                        be specified
+                        Prints the number of times an IP addresses was the destination IP.
+                        Multiple IP addresses can be specified
   -ip-cnt <IP> [<IP> ...], --ip-count <IP> [<IP> ...]
-                        Prints the number of times an IP address was the source or destination IP. Multiple IP
-                        addresses can be specified
+                        Prints the number of times an IP address was the source or destination IP.
+                        Multiple IP addresses can be specified
 ```
 **Reading PCAP File**
 
