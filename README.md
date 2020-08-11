@@ -166,24 +166,6 @@ tcp portrange 1501-1549
 ether host <MAC>
 ether src host <MAC>
 ether dst host <MAC>
-
-# All supported protocols to filter by
----------------------------------------
-arp
-ether
-fddi
-icmp
-ip
-ip6
-link
-ppp
-radio
-rarp
-slip
-tcp
-tr
-udp
-wlan
 ```
 Check out this [link](https://www.ibm.com/support/knowledgecenter/en/SS42VS_7.3.3/com.ibm.qradar.doc/c_forensics_bpf.html) for more Berkeley Packet Filters.
 Check out docs/3agL3.pdf for more documentation on 3agL3!
