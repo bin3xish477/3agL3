@@ -226,19 +226,6 @@ class ReadPCAP(NetSniff):
         """ Create JSON file PCAP data (IP:count,MAC:count,PORT:count) """
         self.capparser.json_summary(self.pcapfile, filename)
 
-    def log(self, filename):
-        """ Create log file containing the contents of the PCAP file
-        Note: log file encoding is utf-8
-        """ 
-        if not filename:
-            filename = "capture.log"
-        with open(filename, "w", encoding="utf-8") as log_file:
-            for cap in self.pcapfile:
-                if SYSTEM == "Windows":
-                    flow_statement = self.echo(cap).replace("\u2192", "->")
-                else: flow_statement = self.echo(cap)
-                log_file.write(flow_statement + "\n")
-
     def to_stdout(self, capture):
         """ Prints PCAP data to console """
         try:

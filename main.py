@@ -67,7 +67,6 @@ if __name__ == "__main__":
 		"ttl-eq": args.ttl_equal,
 		"sum": args.summary,
 		"json": args.json,
-		"log": args.log
 	}
 
 	if args["live"]:
@@ -178,9 +177,6 @@ if __name__ == "__main__":
 			if args["json"]:
 				read_obj.to_json(args["json"])
 				print("[ %sSUCCESS%s ] SUMMARY JSON FILE CREATED" % (fg(50), attr(0)))
-			elif args["log"]:
-				read_obj.log(args["log"])
-				print("[ %sSUCCESS%s ] LOG FILE CREATED" % (fg(50), attr(0)))
 			
 			if args["pkt-cnt"]:
 				pkt_count = read_obj.packet_count()
@@ -276,9 +272,6 @@ if __name__ == "__main__":
 			if args["json"]:
 				write_obj.to_json(args["json"])
 				print("[ %sSUCCESS%s ] SUMMARY JSON FILE CREATED" % (fg(50), attr(0)))
-			elif args["log"]:
-				write_obj.log(args["log"])
-				print("[ %sSUCCESS%s ] LOG FILE CREATED" % (fg(50), attr(0)))
 		else:
 			print(
 				"[ %sATTENTION%s ] MUST PROVIDE `-c` ARGUMENT FOR WRITE MODE"

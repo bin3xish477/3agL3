@@ -189,24 +189,6 @@ class WritePCAP(NetSniff):
         elif self._filtered_capture:
             self.capparser.json_summary(self._filtered_capture, filename)
 
-    def log(self, filename):
-        """ Create log file containing the contents of the PCAP file 
-        Note: log file encoding is utf-8
-        """
-        if not filename:
-            filename = "capture.log"
-        if self._capture:
-                with open(filename, "w", encoding="utf-8") as log_file:
-                    for cap in self._capture:
-                        flow_statement = self.echo(cap)
-                        log_file.write(flow_statement + "\n")
-
-        elif self._filtered_capture:
-                with open(filename, "w", encoding="utf-8") as log_file:
-                    for cap in self._filtered_capture:
-                        flow_statement = self.echo(cap)
-                        log_file.write(flow_statement + "\n")
-
     def write(self, packets):
         """ Create PCAP file
         Args:
