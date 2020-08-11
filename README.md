@@ -168,4 +168,14 @@ ether src host <MAC>
 ether dst host <MAC>
 ```
 Check out this [link](https://www.ibm.com/support/knowledgecenter/en/SS42VS_7.3.3/com.ibm.qradar.doc/c_forensics_bpf.html) for more Berkeley Packet Filters.
-Check out docs/3agL3.pdf for more documentation on 3agL3!
+## Some more example images of 3agL3
+**Filtering by source IP and Destination IP**
+**Filtering PCAP by port number**
+**Filtering PCAP by MAC address**
+**Filtering PCAP by TCP Flags**
+**Creating PCAP file with packets that have TCP SYN flags only**
+**Creating PCAP file and applying a Berkeley Packet Filter**
+**Getting the number of times an IP address appeared as the source and destination IP address**
+**Getting a summary of the PCAP file**
+**Creating a JSON file containing the a summary of the PCAP file**
+
