@@ -33,7 +33,7 @@ python main.py -h
 
 # 3agL3 Modes of Operation: Live, Read, Write
 ### > Live Mode
-**Arguments**:
+**Usage**:
 ```
   -live, --live-mode    Perfrom live capture analysis
   -i [INTERF [INTERF ...]], --interf [INTERF [INTERF ...]]
@@ -48,7 +48,7 @@ python main.py -h
 ![live_mode](images/live_capture_no_filter_30_packets.png)
 
 ### > Read Mode
-**Arguments**:
+**Usage**:
 ```
   -read, --read-mode    Read a PCAP file for analysis
   -r <FILENAME>, --rfile <FILENAME>
@@ -73,7 +73,7 @@ python main.py -h
 ![read_mode](images/reading_pcap.png)
 
 ### > Write Mode
-**Arguments**:
+**Usage**:
 ```
   -write, --write-mode  capture live traffic and write to PCAP file (must
                         specify `-c` option)
