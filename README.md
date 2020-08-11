@@ -43,7 +43,7 @@ python main.py -h
   -f <BPF FITLER>, --filter <BPF FITLER>
                         Berkeley packet filter to apply to capture
 ```
-**Capturing 30 Packets In Real-time**
+**Capturing 30 Packets in real-time**
 
 ![live_mode](images/live_capture_no_filter_30_packets.png)
 
@@ -80,7 +80,7 @@ python main.py -h
   -w <FILENAME>, --wfile <FILENAME>
                         name of PCAP file to create
 ```
-**Capturing 100 Packets and Creating PCAP File Containing These Packets**
+**Capturing 100 packets and creating PCAP file containing these packets**
 
 ![writing_pcap](images/writing_pcap.png)
 
@@ -141,7 +141,7 @@ Most arguments can be used for both Read & Write modes:
                         Create JSON file containing capture summary (ip:count, port:count, mac:count)
 ```
 ## > Berkeley Packet Filter Examples
-Berkeley Packet Filter are for 3agle's **Live** and **Write** Mode of Operation. Berkeley Packet Filters are recommended to filter for content relevant to the content that the user is seeking. Python is no where near as fast at C at parsing network packets so it wouldn't be effective to capture in Live or Write Mode without an appropiate BP filter. 
+Berkeley Packet Filter are for 3agle's **Live** and **Write** mode of operation. Berkeley Packet Filters are recommended to filter for content relevant to the content that the user is seeking. Python is no where near as fast at C at parsing network packets so it wouldn't be effective to capture in Live or Write Mode without an appropiate BP filter. 
 ```
 # Matching IP
 -------------
