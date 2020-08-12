@@ -16,7 +16,7 @@ function install_3agl3 {
 	GIT_INSTALLED=$?
 	if [[ "$GIT_INSTALLED" -eq "0" ]]
 	then
-		echo "[+] Cloning 3agl3 repository"
+		echo "[+] Successfully Cloned 3agl3 repository"
 	else
 		echo "[-] Git is not installed. Please install Git and run 'install.sh' again"
 		exit 1
