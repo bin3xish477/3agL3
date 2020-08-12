@@ -82,6 +82,10 @@ python main.py -h
                         specify `-c` option)
   -w <FILENAME>, --wfile <FILENAME>
                         name of PCAP file to create
+  -f <BPF FITLER>, --filter <BPF FITLER>
+                        Berkeley packet filter to apply to capture
+  -c <NUM>, --count <NUM>
+                        The number of packets to capture (default = 0 = infinity)
 ```
 **Capturing 100 packets and creating PCAP file containing these packets**
 
