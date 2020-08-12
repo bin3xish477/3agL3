@@ -69,6 +69,7 @@ class NetSniff:
 				f" %s%s{pkt[IP].src}%s %s%s\u2192%s %s%s{pkt[IP].dst}%s" \
 				f" (TTL:{pkt[Ether].ttl} LEN:{pkt[Ether].len} TYPE:{icmp_type})"
 				% (
+					fg(165), attr("bold"), attr("reset"),
 					fg(118), attr("bold"), attr("reset"),
 					fg(208), attr("bold"), attr("reset"),
 					fg(9), attr("bold"), attr("reset"),
@@ -132,6 +133,7 @@ class NetSniff:
 				f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
 				f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
 				% (
+					fg(165), attr("bold"), attr("reset"),
 					fg(201), attr("bold"), attr("reset"),
 					fg(118), attr("bold"), attr("reset"),
 					fg(208), attr("bold"), attr("reset"),
@@ -181,6 +183,7 @@ class NetSniff:
 				f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
 				f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
 				% (
+					fg(165), attr("bold"), attr("reset"),
 					fg(118), attr("bold"), attr("reset"),
 					fg(208), attr("bold"), attr("reset"),
 					fg(9), attr("bold"), attr("reset"),
