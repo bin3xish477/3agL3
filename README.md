@@ -77,6 +77,7 @@ python main.py -h
 
 ### Write Mode
 The arguments provided by the Live mode should be used with Write mode as capturing packets requires packet sniffing.
+
 **Usage**:
 ```
   -write, --write-mode  capture live traffic and write to PCAP file (must
