@@ -26,6 +26,7 @@ sudo ./install.sh
 ```powershell
 # Run PowerShell as Administrator
 iwr "https://raw.githubusercontent.com/binexisHATT/3agL3/master/install/install.ps1" -out ".\install.ps1"
+./install.ps1
 pip3 install -r requirements.txt
 python main.py -h
 ```
