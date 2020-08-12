@@ -25,7 +25,7 @@ sudo ./install.sh
 ### Windows
 ```
 # Run PowerShell as Administrator
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/binexisHATT/3agL3/master/install/install.ps1" -OutFile ".\install.ps1"
+curl -Uri "https://raw.githubusercontent.com/binexisHATT/3agL3/master/install/install.ps1" -OutFile ".\install.ps1"
 .\install.ps1
 pip3 install -r requirements.txt
 python main.py -h
