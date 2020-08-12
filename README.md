@@ -86,6 +86,8 @@ python main.py -h
                         Berkeley packet filter to apply to capture
   -c <NUM>, --count <NUM>
                         The number of packets to capture (default = 0 = infinity)
+  -i [INTERF [INTERF ...]], --interf [INTERF [INTERF ...]]
+                        The interface to listen on (more than one is allowed)
 ```
 **Capturing 100 packets and creating PCAP file containing these packets**
 
