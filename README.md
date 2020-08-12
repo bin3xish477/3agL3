@@ -76,18 +76,13 @@ python main.py -h
 ![read_mode](images/reading_pcap.png)
 
 ### Write Mode
+The arguments provided by the Live mode should be used with Write mode as capturing packets requires packet sniffing.
 **Usage**:
 ```
   -write, --write-mode  capture live traffic and write to PCAP file (must
                         specify `-c` option)
   -w <FILENAME>, --wfile <FILENAME>
                         name of PCAP file to create
-  -f <BPF FITLER>, --filter <BPF FITLER>
-                        Berkeley packet filter to apply to capture
-  -c <NUM>, --count <NUM>
-                        The number of packets to capture (default = 0 = infinity)
-  -i [INTERF [INTERF ...]], --interf [INTERF [INTERF ...]]
-                        The interface to capture packets on on (more than one is allowed)
 ```
 **Capturing 100 packets and creating PCAP file containing these packets**
 
