@@ -17,13 +17,13 @@ colored
     
 # Installation
 ### Linux
-```
+```bash
 wget https://raw.githubusercontent.com/binexisHATT/3agL3/master/install/install.sh
 chmod +x install.sh
 sudo ./install.sh
 ```
 ### Windows
-```
+```powershell
 # Run PowerShell as Administrator
 iwr "https://raw.githubusercontent.com/binexisHATT/3agL3/master/install/install.ps1" -out ".\install.ps1"
 pip3 install -r requirements.txt
