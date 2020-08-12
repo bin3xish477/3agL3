@@ -29,7 +29,7 @@ iwr "https://raw.githubusercontent.com/binexisHATT/3agL3/master/install/install.
 ./install.ps1
 
 # the following commands will only work if you have
-# pip3.exe and python.exe as part of your enviromath path variable
+# pip3.exe and python.exe as part of your environment path variable
 pip3 install -r requirements.txt
 python main.py -h
 ```
