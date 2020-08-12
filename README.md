@@ -1,13 +1,13 @@
 # 3agL3
 Sniffing network traffic with Python for live capture observation or PCAP creation and analysis.
 
-### > Pip Requirements
+### Pip Requirements
 ```
 scapy
 colored
 ```
 
-### > Npcap/Tcpdump Installation
+### Npcap/Tcpdump Installation
 - Download Npcap for **Windows**:
     - https://nmap.org/download.html
 - Install Tcpdump: **Ubuntu/Debian**:
@@ -15,7 +15,7 @@ colored
 - Install Tcpdump: **CentOS/RHEL**:
     - `yum install tcpdump -y`
     
-# > Installation
+# Installation
 ### Linux
 ```
 wget https://raw.githubusercontent.com/binexisHATT/3agL3/master/install.sh
@@ -32,8 +32,8 @@ python main.py -h
 ```
 
 # 3agL3 Modes of Operation: Live, Read, Write
-### > Live Mode
-**Arguments**:
+### Live Mode
+**Usage**:
 ```
   -live, --live-mode    Perfrom live capture analysis
   -i [INTERF [INTERF ...]], --interf [INTERF [INTERF ...]]
@@ -43,12 +43,12 @@ python main.py -h
   -f <BPF FITLER>, --filter <BPF FITLER>
                         Berkeley packet filter to apply to capture
 ```
-**Capturing 30 Packets In Real-time**
+**Capturing 30 Packets in real-time**
 
 ![live_mode](images/live_capture_no_filter_30_packets.png)
 
-### > Read Mode
-**Arguments**:
+### Read Mode
+**Usage**:
 ```
   -read, --read-mode    Read a PCAP file for analysis
   -r <FILENAME>, --rfile <FILENAME>
@@ -59,32 +59,32 @@ python main.py -h
   -pc, --packet-count   Prints the number of the packets within a PCAP file
   -no-prn, --no-print   Do not print out traffic flow output to console
   -src-ip-cnt <IP> [<IP> ...], --source-ip-count <IP> [<IP> ...]
-                        Prints the number of times an IP address was the source IP. Multiple IP addresses can be
-                        specified
+                        Prints the number of times an IP address was the source IP.
+                        Multiple IP addresses can be specified
   -dst-ip-cnt <IP> [<IP> ...], --destination-ip-count <IP> [<IP> ...]
-                        Prints the number of times an IP addresses was the destination IP. Multiple IP addresses can
-                        be specified
+                        Prints the number of times an IP addresses was the destination IP.
+                        Multiple IP addresses can be specified
   -ip-cnt <IP> [<IP> ...], --ip-count <IP> [<IP> ...]
-                        Prints the number of times an IP address was the source or destination IP. Multiple IP
-                        addresses can be specified
+                        Prints the number of times an IP address was the source or destination IP.
+                        Multiple IP addresses can be specified
 ```
 **Reading PCAP File**
 
 ![read_mode](images/reading_pcap.png)
 
-### > Write Mode
-**Arguments**:
+### Write Mode
+**Usage**:
 ```
   -write, --write-mode  capture live traffic and write to PCAP file (must
                         specify `-c` option)
   -w <FILENAME>, --wfile <FILENAME>
                         name of PCAP file to create
 ```
-**Capturing 100 Packets and Creating PCAP File Containing These Packets**
+**Capturing 100 packets and creating PCAP file containing these packets**
 
 ![writing_pcap](images/writing_pcap.png)
 
-### > Read/Write Mode
+### Read/Write Mode
 Most arguments can be used for both Read & Write modes:
 ```
   -src-ip <IP>, --source-ip <IP>
@@ -140,8 +140,8 @@ Most arguments can be used for both Read & Write modes:
   -j <FILENAME>, --json <FILENAME>
                         Create JSON file containing capture summary (ip:count, port:count, mac:count)
 ```
-## > Berkeley Packet Filter Examples
-Berkeley Packet Filter are for 3agle's **Live** and **Write** Mode of Operation. Berkeley Packet Filters are recommended to filter for content relevant to the content that the user is seeking. Python is no where near as fast at C at parsing network packets so it wouldn't be effective to capture in Live or Write Mode without an appropiate BP filter. 
+## Berkeley Packet Filter Examples
+Berkeley Packet Filter are for 3agle's **Live** and **Write** mode of operation. Berkeley Packet Filters are recommended to filter for content relevant to the content that the user is seeking. Python is no where near as fast at C at parsing network packets so it wouldn't be effective to capture in Live or Write Mode without an appropiate BP filter. 
 ```
 # Matching IP
 -------------
@@ -166,24 +166,16 @@ tcp portrange 1501-1549
 ether host <MAC>
 ether src host <MAC>
 ether dst host <MAC>
-
-# All supported protocols to filter by
----------------------------------------
-arp
-ether
-fddi
-icmp
-ip
-ip6
-link
-ppp
-radio
-rarp
-slip
-tcp
-tr
-udp
-wlan
 ```
 Check out this [link](https://www.ibm.com/support/knowledgecenter/en/SS42VS_7.3.3/com.ibm.qradar.doc/c_forensics_bpf.html) for more Berkeley Packet Filters.
-Check out docs/3agL3.pdf for more documentation on 3agL3!
+## Some more example usage of 3agL3
+**Filtering by source IP and Destination IP**
+**Filtering PCAP by port number**
+**Filtering PCAP by MAC address**
+**Filtering PCAP by TCP Flags**
+**Creating PCAP file with packets that have TCP SYN flags only**
+**Creating PCAP file and applying a Berkeley Packet Filter**
+**Getting the number of times an IP address appeared as the source and destination IP address**
+**Getting a summary of the PCAP file**
+**Creating a JSON file containing the a summary of the PCAP file**
+
