@@ -180,9 +180,3 @@ Check out this [link](https://www.ibm.com/support/knowledgecenter/en/SS42VS_7.3.
 ![filter_pcap_by_src_mac.png](images/filter_pcap_by_src_mac.png)
 **Filtering PCAP by TCP Flags**
 ![filter_pcap_by_tcp_flags](images/filter_pcap_by_tcp_flags.png)
-**Creating PCAP file with packets that have TCP SYN flags only**
-**Creating PCAP file and applying a Berkeley Packet Filter**
-**Getting the number of times an IP address appeared as the source and destination IP address**
-**Getting a summary of the PCAP file**
-**Creating a JSON file containing the a summary of the PCAP file**
-
