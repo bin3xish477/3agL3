@@ -53,7 +53,7 @@ class NetSniff:
 	def ICMPFormatString(self, pkt):
 		""" Returns ICMP formatted string to print to console """
 		try:
-			date = str(datetime.now())
+			date = datetime.fromtimestamp(pkt.time).strftime('%H:%M:%S %Y/%m/%d')
 			src_mac = pkt[Ether].src
 			dst_mac = pkt[Ether].dst
 			proto = pkt[IP].payload.name
@@ -64,14 +64,11 @@ class NetSniff:
 			elif pkt[ICMP].type == 8:
 				icmp_type = "echo"
 			return (
-				f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
+				f"%s%s@%s{date}" \
 				f" {src_mac} | {dst_mac} %s%s{proto}%s" \
 				f" %s%s{pkt[IP].src}%s %s%s\u2192%s %s%s{pkt[IP].dst}%s" \
 				f" (TTL:{pkt[Ether].ttl} LEN:{pkt[Ether].len} TYPE:{icmp_type})"
 				% (
-					fg(141), attr("bold"), attr("reset"),
-					fg(141), attr("bold"), attr("reset"),
-					fg(141), attr("bold"), attr("reset"),
 					fg(118), attr("bold"), attr("reset"),
 					fg(208), attr("bold"), attr("reset"),
 					fg(9), attr("bold"), attr("reset"),
@@ -83,7 +80,7 @@ class NetSniff:
 	def ARPFormatString(self, pkt):
 		""" Returns formatted ARP packet string to print to console """
 		try:
-			date = str(datetime.now())
+			date = datetime.fromtimestamp(pkt.time).strftime('%H:%M:%S %Y/%m/%d')
 			proto = "ARP"
 			WHO_HAS = 1
 			IS_AT = 2
@@ -110,12 +107,10 @@ class NetSniff:
 					pkt[Ether].src
 				)
 			return (
-				f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
+				f"%s%s@%s{date}" \
 				f" %s%s{proto}%s{arp_str}"
 				% (
-					fg(141), attr("bold"), attr("reset"),
-					fg(141), attr("bold"), attr("reset"),
-					fg(141), attr("bold"), attr("reset"),
+					fg(165), attr("bold"), attr("reset"),
 					fg(118), attr("bold"), attr("reset"),
 				)
 			)
@@ -124,22 +119,19 @@ class NetSniff:
 	def DNSFormatString(self, pkt):
 		""" Returns DNS formatted packet string to print to console """
 		try:
-			date = str(datetime.now())
+			date = datetime.fromtimestamp(pkt.time).strftime('%H:%M:%S %Y/%m/%d')
 			qname = str(pkt[DNSQR].qname)[2:-1]
 			qtype = dnsqtypes[pkt[DNSQR].qtype]
 			qr = pkt[DNSQR]
 			qclass = qr.get_field("qclass").i2repr(qr, qr.qclass)
 			proto = "DNS"
 			return (
-				f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
+				f"%s%s@%s{date}" \
 				f" ;; {qname} {qclass} %s%s{qtype}%s ;;" \
 				f" %s%s{proto}%s" \
 				f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
 				f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
 				% (
-					fg(141), attr("bold"), attr("reset"),
-					fg(141), attr("bold"), attr("reset"),
-					fg(141), attr("bold"), attr("reset"),
 					fg(201), attr("bold"), attr("reset"),
 					fg(118), attr("bold"), attr("reset"),
 					fg(208), attr("bold"), attr("reset"),
@@ -152,21 +144,19 @@ class NetSniff:
 	def TCPFormatString(self, pkt):
 		""" Returns TCP formatted packet string to print to console """
 		try:
+			date = datetime.fromtimestamp(pkt.time).strftime('%H:%M:%S %Y/%m/%d')
 			tcp_flag_str = ".".join([self.FLAGS[x] for x in pkt[TCP].flags])
-			date = str(datetime.now())
 			src_mac = pkt[Ether].src
 			dst_mac = pkt[Ether].dst
 			proto = pkt[IP].payload.name
 			return (
-				f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
+				f"%s%s@%s{date}" \
 				f" {src_mac} | {dst_mac}" \
 				f" %s%s{proto}%s [%s%s{tcp_flag_str}%s]" \
 				f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
 				f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
 				% (
-					fg(141), attr("bold"), attr("reset"),
-					fg(141), attr("bold"), attr("reset"),
-					fg(141), attr("bold"), attr("reset"),
+					fg(165), attr("bold"), attr("reset"),
 					fg(118), attr("bold"), attr("reset"),
 					fg(226), attr("bold"), attr("reset"),
 					fg(208), attr("bold"), attr("reset"),
@@ -180,20 +170,17 @@ class NetSniff:
 		""" Returns formatted packet string for packets that contain protocols
 		that do not match the ones defined above (ICMP, ARP, DNS, TCP) """
 		try:
-			date = str(datetime.now())
+			date = datetime.fromtimestamp(pkt.time).strftime('%H:%M:%S %Y/%m/%d')
 			src_mac = pkt[Ether].src
 			dst_mac = pkt[Ether].dst
 			proto = pkt[IP].payload.name
 			return (
-				f"<%s%s{date[:13]}%s:%s%s{date[14:16]}%s:%s%s{date[17:23]}%s>" \
+				f"%s%s@%s{date}" \
 				f" {src_mac} | {dst_mac}" \
 				f" %s%s{proto}%s" \
 				f" {pkt[IP].src}%s%s:{pkt[IP].sport}%s %s%s\u2192%s {pkt[IP].dst}%s%s:{pkt[IP].dport}%s" \
 				f" (TTL:{pkt[IP].ttl} LEN:{len(pkt)})"
 				% (
-					fg(141), attr("bold"), attr("reset"),
-					fg(141), attr("bold"), attr("reset"),
-					fg(141), attr("bold"), attr("reset"),
 					fg(118), attr("bold"), attr("reset"),
 					fg(208), attr("bold"), attr("reset"),
 					fg(9), attr("bold"), attr("reset"),
