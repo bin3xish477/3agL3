@@ -1,10 +1,7 @@
 from argparse import ArgumentParser
 from colored import fg, attr
-from platform import system
 from sys import exit, argv
 from colored import fg, attr
-
-SYSTEM = system()
 
 def parse_args():
 	""" Program arguments """
@@ -25,12 +22,7 @@ def parse_args():
 
 	# -------------- Live Capture Options ---------------
 	live_capture.add_argument("-live", "--live-mode",action="store_true",default=False,help="Perfrom live capture analysis")
-
-	if SYSTEM == "Windows":
-		live_capture.add_argument("-i", "--interf",nargs="*",help="The interface to listen on (more than one can be specified)")
-	else:
-		live_capture.add_argument("-i", "--interf",nargs="*",help="The interface to listen on (more than one is allowed)")
-
+	live_capture.add_argument("-i", "--interf",nargs="+",help="The interface to listen on (more than one can be specified)")
 	live_capture.add_argument("-c", "--count",metavar="<NUM>",type=int, default=0,help="The number of packets to capture (default = 0 = infinity)")
 	live_capture.add_argument("-f", "--filter",metavar="<BPF FITLER>",type=str, default=None,help="Berkeley packet filter to apply to capture")
 	live_capture.add_argument("-p", "--promis-off",action="store_false",help="Turn off promiscuous mode")
