@@ -224,9 +224,9 @@ class ReadPCAP(NetSniff):
 
     def time_range(self, time_range):
         """Filter packets based on a specified time range"""
-        if len(time_range) < 1 or len(time_range) > 2:
+        if len(time_range) <= 1 or len(time_range) > 2:
             print(
-                "\n[ %sATTENTION%s ] `-tr` requires a time start and a time end value"
+                "[ %sATTENTION%s ] `-tr` requires a time start and a time end value"
                 % (fg(202), attr(0))
             )
             exit(1)
@@ -235,14 +235,21 @@ class ReadPCAP(NetSniff):
         print(start_time, end_time)
 
     def start_date(self, date):
-        pass
+        print(date)
 
     def end_date(self, date):
-        pass
+        print(date)
 
     def date_range(self, dates):
+        if len(dates) <= 1 or len(dates) > 2:
+            print(
+                "[ %sATTENTION%s ] `-dr` requires a start date and an end date"
+                % (fg(202), attr(0))
+            )
+            exit(1)
         start_date = dates[0]
         end_date = dates[1]
+        print(start_date, end_date)
 
     def packet_count(self):
         """Returns number of packets within a PCAP file"""

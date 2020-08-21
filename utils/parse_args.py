@@ -40,9 +40,9 @@ def parse_args():
 	read_pcap.add_argument("-ts", "--time-start",metavar="<HOUR:MINUTE>",help="Filter for packets that start from the specified hour:minute value and onwards")
 	read_pcap.add_argument("-te", "--time-end",metavar="<HOUR:MINUTE>",help="Filter for packets whose hour:minute value does not go beyond the specified hour:minute value provided")
 	read_pcap.add_argument("-tr", "--time-range",nargs="+",metavar="<HOUR:MINUTE>",help="Filter for packets whose hour:minute value falls in between the desired time range")
-        read_pcap.add_argument("-sd", "--start-date",metavar="<YEAR/MONTH/DAY",help="Filter for packet with a date up to and including the date specified")
-        read_pcap.add_argument("-ed", "--end-date",metavar="<YEAR/MONTH/DAY",help="Filter for packets with a date that includes the date specified and onwards")
-        read_pcap.add_argument("-dr","--date-range",metavar="<YEAR/MONTH/DAY",help="Filter for packets with a date that falls in between the two chronological dates specified")
+	read_pcap.add_argument("-sd", "--start-date",metavar="<YEAR/MONTH/DAY",help="Filter for packet with a date up to and including the date specified")
+	read_pcap.add_argument("-ed", "--end-date",metavar="<YEAR/MONTH/DAY",help="Filter for packets with a date that includes the date specified and onwards")
+	read_pcap.add_argument("-dr","--date-range",nargs="+",metavar="<YEAR/MONTH/DAY",help="Filter for packets with a date that falls in between the two chronological dates specified")
 
 	# -------------- Writing PCAP options ---------------
 	write_pcap.add_argument("-write", "--write-mode",action="store_true", default=None,help="capture live traffic and write to PCAP file (must specify `-c` option)")
