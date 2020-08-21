@@ -36,8 +36,8 @@ if __name__ == "__main__":
         "src-ip-count": args.source_ip_count,
         "dst-ip-count": args.destination_ip_count,
         "ip-count": args.ip_count,
-        "time-start": args.time_start,
-        "time-end": args.time_end,
+        "before": args.before,
+        "after": args.after,
         "time-range": args.time_range,
         "start-date":args.start_date,
         "end-date": args.end_date,
@@ -149,10 +149,10 @@ if __name__ == "__main__":
                 read_obj.len_eq(args["len-eq"])
             elif args["ttl-eq"]:
                 read_obj.ttl_eq(args["ttl-eq"])
-            elif args["time-start"]:
-                read_obj.time_start(args["time-start"])
-            elif args["time-end"]:
-                read_obj.time_end(args["time-end"])
+            elif args["before"]:
+                read_obj.before(args["before"])
+            elif args["after"]:
+                read_obj.after(args["after"])
             elif args["time-range"]:
                 read_obj.time_range(args["time-range"])
             elif args["start-date"]:

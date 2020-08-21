@@ -5,6 +5,8 @@ from colored import fg, attr
 from time import sleep
 from os.path import exists
 from platform import system
+from re import search
+from datetime import datetime
 
 SYSTEM = system()
 
@@ -39,6 +41,7 @@ class ReadPCAP(NetSniff):
         self._not_icmp = not_icmp
 
         self.capparser = PCAPParser()
+        self.filtered_packets = []
 
     def read(self, count=None):
         """Read PCAP file """
@@ -76,12 +79,12 @@ class ReadPCAP(NetSniff):
                 func (function): function defined in PCAPParser to invoke
                 arg (str|int): value to filter from packet capture
         """
-        filtered_pcap = func(self.pcapfile, arg)
-        if len(filtered_pcap) == 0 or filtered_pcap == None:
+        self.filtered_packets = func(self.pcapfile, arg)
+        if len(self.filtered_packets) == 0 or self.filtered_packets == None:
             print("[ %sATTENTION%s ] NO PACKETS CONTAINED SPECIFIED FILTER" % (fg(202), attr(0)))
             exit(1)
         else:
-            self.to_stdout(filtered_pcap)
+            self.to_stdout(self.filtered_packets)
 
     def filter_src_ip(self):
         self.execute(self.capparser.filt_src_ip, self._src_ip)
@@ -158,70 +161,115 @@ class ReadPCAP(NetSniff):
             self.to_stdout(self.pcapfile)
 
     def len_le_eq(self, value:int):
-        filtered_pcap = self.capparser.len_less_equal(self.pcapfile, value)
-        if not len(filtered_pcap):
+        self.filtered_packets = self.capparser.len_less_equal(self.pcapfile, value)
+        if not len(self.filtered_packets):
             print(
                 "[ %sATTENTION%s ] NO PACKETS CONTAINED A LENGTH LESS THAN OR EQUAL TO %s"
                 % (fg(202), attr(0), value)
             )
-        self.to_stdout(filtered_pcap)
+        self.to_stdout(self.filtered_packets)
 
     def len_gr_eq(self, value:int):
-        filtered_pcap = self.capparser.len_greater_equal(self.pcapfile, value)
-        if not len(filtered_pcap):
+        self.filtered_packets = self.capparser.len_greater_equal(self.pcapfile, value)
+        if not len(self.filtered_packets):
             print(
                 "[ %sATTENTION%s ] NO PACKETS CONTAINED A LENGTH GREATER THAN OR EQUAL TO %s"
                 % (fg(202), attr(0), value)
             )
-        self.to_stdout(filtered_pcap)
+        self.to_stdout(self.filtered_packets)
 
     def len_eq(self, value:int):
-        filtered_pcap = self.capparser.len_equal(self.pcapfile, value)
-        if not len(filtered_pcap):
+        self.filtered_packets = self.capparser.len_equal(self.pcapfile, value)
+        if not len(self.filtered_packets):
             print(
                 "[ %sATTENTION%s ] NO PACKETS CONTAINED A LENGTH EQUAL TO %s"
                 % (fg(202), attr(0), value)
             )
-        self.to_stdout(filtered_pcap)
+        self.to_stdout(self.filtered_packets)
 
     def ttl_eq(self, value:int):
-        filtered_pcap = self.capparser.ttl_equal(self.pcapfile, value)
-        if not len(filtered_pcap):
+        self.filtered_packets = self.capparser.ttl_equal(self.pcapfile, value)
+        if not len(self.filtered_packets):
             print(
                 "[ %sATTENTION%s ] NO PACKETS CONTAINED A TIME-TO-LIVE VALUE EQUAL TO %s"
                 % (fg(202), attr(0), value)
             )
-        self.to_stdout(filtered_pcap)
+        self.to_stdout(self.filtered_packets)
 
     def src_ip_count(self, ip):
-        filtered_pcap = []
         for pkt in self.pcapfile:
             if pkt[IP].src == ip:
-                filtered_pcap.append(pkt)
-        return len(filtered_pcap)
+                self.filtered_packets.append(pkt)
+        return len(self.filtered_packets)
 
     def dst_ip_count(self, ip):
-        filtered_pcap = []
         for pkt in self.pcapfile:
             if pkt[IP].dst == ip:
-                filtered_pcap.append(pkt)
-        return len(filtered_pcap)
+                self.filtered_packets.append(pkt)
+        return len(self.filtered_packets)
 
     def ip_count(self, ip):
-        filtered_pcap = []
         for pkt in self.pcapfile:
             if pkt[IP].src == ip or pkt[IP].dst == ip:
-                filtered_pcap.append(pkt)
-        return len(filtered_pcap)
+                self.filtered_packets.append(pkt)
+        return len(self.filtered_packets)
     
-    def time_start(self, time):
+    def before(self, time):
         """Filter packets with a time value that starts at `time` and onwards"""
-        print(time)
-
-    def time_end(self, time):
+        try:
+            target_start_time = search(r"(\d{2}:\d{2})",
+                    time).group(0).lstrip("0")
+        except AttributeError:
+            print(
+                "[ %sERROR%s ] SPECIFIED `-ts` MUST BE IN HOUR:MINUTE FORMAT"
+                % (fg(9), attr(0))
+            )
+            exit(1)
+        for pkt in self.pcapfile:
+            time = datetime.fromtimestamp(pkt.time).strftime("%H:%M").lstrip("0")
+            filtered_colon = time.find(":")
+            target_colon = target_start_time.find(":")
+            if int(time[:filtered_colon]) < int(target_start_time[:target_colon]):
+                self.filtered_packets.append(pkt)
+            elif (
+                    int(time[:filtered_colon]) == \
+                    int(target_start_time[:target_colon])
+            ):
+                if (
+                        int(time[filtered_colon+1:].lstrip("0")) <= \
+                        int(target_start_time[target_colon+1:].lstrip("0"))
+                ):
+                        self.filtered_packets.append(pkt)
+        self.to_stdout(self.filtered_packets) 
+        
+    def after(self, time):
         """Filter packets that contain a time value up to and including the `time` value"""
-        print(time)
-
+        try:
+            target_end_time = search(r"(\d{2}:\d{2})",
+            time).group(0).lstrip("0")
+        except AttributeError:
+            print(
+                "[ %sERROR%s ] SPECIFIED `-te` MUST BE IN HOUR:MINUTE FORMAT"
+                % (fg(9), attr(0))
+            )
+            exit(1)
+        for pkt in self.pcapfile:
+            time = datetime.fromtimestamp(pkt.time).strftime("%H:%M").lstrip("0")
+            filtered_colon = time.find(":")
+            target_colon = target_end_time.find(":")
+            if int(time[:filtered_colon]) > int(target_end_time[:target_colon]):
+                self.filtered_packets.append(pkt)
+            elif (
+                    int(time[:filtered_colon]) == \
+                    int(target_end_time[:target_colon])
+            ):
+                if (
+                        int(time[filtered_colon+1:].lstrip("0")) >= \
+                        int(target_end_time[target_colon+1:].lstrip("0"))
+                ):
+                        self.filtered_packets.append(pkt)
+        self.to_stdout(self.filtered_packets) 
+        
     def time_range(self, time_range):
         """Filter packets based on a specified time range"""
         if len(time_range) <= 1 or len(time_range) > 2:
@@ -230,12 +278,24 @@ class ReadPCAP(NetSniff):
                 % (fg(202), attr(0))
             )
             exit(1)
+
         start_time = time_range[0]
         end_time = time_range[1]
-        print(start_time, end_time)
+        try:
+            target_start_time = search(r"(\d{2}:\d{2})",
+                    start_time).group(0).lstrip("0")
+            target_end_time = search(r"(\d{2}:\d{2})",
+                    end_time).group(0).lstrip("0")
+        except AttributeError:
+            print(
+               "[ %sERROR%s ] SPECIFIED `-tr` VALUES MUST BE IN HOUR:MINUTE FORMAT"
+                % (fg(9), attr(0))
+            )
+            exit(1)
+        print(target_start_time, target_end_time)
 
     def start_date(self, date):
-        print(date)
+        pass
 
     def end_date(self, date):
         print(date)
