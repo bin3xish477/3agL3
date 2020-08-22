@@ -198,7 +198,8 @@ if __name__ == "__main__":
             
             if args["pkt-cnt"]:
                 pkt_count = read_obj.packet_count()
-                print("[ %s+%s ] Number of packets in PCAP: " % (fg(50), attr(0)), pkt_count)
+                print("[ %s+%s ] Number of packets in \"%s\": %s" 
+                        % (fg(50), attr(0), args["rfile"], pkt_count))
         else:
             print(
                 "[ %sERROR%s ] MUST PROVIDE `-r` ARGUMENTS FOR READ MODE"

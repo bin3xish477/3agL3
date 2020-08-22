@@ -217,59 +217,55 @@ class ReadPCAP(NetSniff):
     def before(self, time):
         """Filter packets with a time value that starts at `time` and onwards"""
         try:
-            target_start_time = search(r"(\d{2}:\d{2})",
-                    time).group(0).lstrip("0")
+            _ = search(r"(\d{2}:\d{2})", time).group(0)
         except AttributeError:
             print(
-                "[ %sERROR%s ] SPECIFIED `-ts` MUST BE IN HOUR:MINUTE FORMAT"
+                "[ %sERROR%s ] SPECIFIED `-b` MUST BE IN HOUR:MINUTE FORMAT"
                 % (fg(9), attr(0))
             )
             exit(1)
+
+        time = time.strip()
+        c = time.find(":")
+        hour, minute = int(time[:c].lstrip("0")), int(time[c+1:].lstrip("0"))
+
         for pkt in self.pcapfile:
-            time = datetime.fromtimestamp(pkt.time).strftime("%H:%M").lstrip("0")
-            filtered_colon = time.find(":")
-            target_colon = target_start_time.find(":")
-            if int(time[:filtered_colon]) < int(target_start_time[:target_colon]):
+            pkt_time = datetime.fromtimestamp(pkt.time).strftime("%H:%M").lstrip("0")
+            c = pkt_time.find(":")
+            pkt_hour, pkt_minute = int(pkt_time[:c]), int(pkt_time[c+1:])
+            if pkt_hour < hour:
                 self.filtered_packets.append(pkt)
-            elif (
-                    int(time[:filtered_colon]) == \
-                    int(target_start_time[:target_colon])
-            ):
-                if (
-                        int(time[filtered_colon+1:].lstrip("0")) <= \
-                        int(target_start_time[target_colon+1:].lstrip("0"))
-                ):
-                        self.filtered_packets.append(pkt)
+            elif pkt_hour == hour:
+                if pkt_minute <= minute:
+                    self.filtered_packets.append(pkt)
         self.to_stdout(self.filtered_packets) 
         
     def after(self, time):
         """Filter packets that contain a time value up to and including the `time` value"""
         try:
-            target_end_time = search(r"(\d{2}:\d{2})",
-            time).group(0).lstrip("0")
+            _ = search(r"(\d{2}:\d{2})", time).group(0)
         except AttributeError:
             print(
-                "[ %sERROR%s ] SPECIFIED `-te` MUST BE IN HOUR:MINUTE FORMAT"
+                "[ %sERROR%s ] SPECIFIED `-a` MUST BE IN HOUR:MINUTE FORMAT"
                 % (fg(9), attr(0))
             )
             exit(1)
+
+        time = time.strip()
+        c = time.find(":")
+        hour, minute = int(time[:c].lstrip("0")), int(time[c+1:].lstrip("0"))
+
         for pkt in self.pcapfile:
-            time = datetime.fromtimestamp(pkt.time).strftime("%H:%M").lstrip("0")
-            filtered_colon = time.find(":")
-            target_colon = target_end_time.find(":")
-            if int(time[:filtered_colon]) > int(target_end_time[:target_colon]):
+            pkt_time = datetime.fromtimestamp(pkt.time).strftime("%H:%M").lstrip("0")
+            c = pkt_time.find(":")
+            pkt_hour, pkt_minute = int(pkt_time[:c]), int(pkt_time[c+1:])
+            if pkt_hour > hour:
                 self.filtered_packets.append(pkt)
-            elif (
-                    int(time[:filtered_colon]) == \
-                    int(target_end_time[:target_colon])
-            ):
-                if (
-                        int(time[filtered_colon+1:].lstrip("0")) >= \
-                        int(target_end_time[target_colon+1:].lstrip("0"))
-                ):
-                        self.filtered_packets.append(pkt)
+            elif pkt_hour == hour:
+                if pkt_minute >= minute:
+                    self.filtered_packets.append(pkt)
         self.to_stdout(self.filtered_packets) 
-        
+ 
     def time_range(self, time_range):
         """Filter packets based on a specified time range"""
         if len(time_range) <= 1 or len(time_range) > 2:
@@ -279,26 +275,48 @@ class ReadPCAP(NetSniff):
             )
             exit(1)
 
-        start_time = time_range[0]
-        end_time = time_range[1]
         try:
-            target_start_time = search(r"(\d{2}:\d{2})",
-                    start_time).group(0).lstrip("0")
-            target_end_time = search(r"(\d{2}:\d{2})",
-                    end_time).group(0).lstrip("0")
+           _ = search(r"(\d{2}:\d{2})", time_range[0]).group(0)
+           _ = search(r"(\d{2}:\d{2})", time_range[1]).group(0)
         except AttributeError:
             print(
                "[ %sERROR%s ] SPECIFIED `-tr` VALUES MUST BE IN HOUR:MINUTE FORMAT"
                 % (fg(9), attr(0))
             )
             exit(1)
-        print(target_start_time, target_end_time)
+
+        c = time_range[0].find(":")
+        start_hour, start_min = int(time_range[0][:c].lstrip("0")), \
+                int(time_range[0][c+1:].lstrip("0"))
+        c = time_range[1].find(":")
+        end_hour, end_min = int(time_range[1][:c].lstrip("0")), \
+                int(time_range[1][c+1:].lstrip("0"))
+ 
+        for pkt in self.pcapfile:
+            pkt_time = datetime.fromtimestamp(pkt.time).strftime("%H:%M").lstrip("0")
+            c = pkt_time.find(":")
+            pkt_hour, pkt_minute = int(pkt_time[:c]), int(pkt_time[c+1:])
+            if pkt_hour > start_hour and pkt_hour < end_hour:
+                self.filtered_packets.append(pkt)
+            elif pkt_hour == start_hour:
+                if pkt_min > start_min:
+                    self.filtered_packets.append(pkt)
+            elif pkt_hour == end_hour:
+                if pkt_min < end_min:
+                    self.filtered_packets.append(pkt)
+        self.to_stdout(self.filtered_packets)
 
     def start_date(self, date):
-        pass
+        try:
+            _ = search(r"(\d{4}/\d{2}/\d{2})", date).group(0)
+        except AttributeError:
+          print("start date error...") 
 
     def end_date(self, date):
-        print(date)
+        try:
+            _ = search(r"(\d{4}/\d{2}/\d{2})", date).group(0)
+        except AttributeError:
+            print("end date error...")
 
     def date_range(self, dates):
         if len(dates) <= 1 or len(dates) > 2:
