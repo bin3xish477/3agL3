@@ -35,6 +35,7 @@ python main.py -h
 ```
 
 # 3agL3 Modes of Operation: Live, Read, Write
+**NOTE**: Read and write modes were not created to handle large pcap files but rather for parsing and creating small files. It large files file are used, memory overflow exceptions will be raised. Live mode does not have this limitation. 
 ### Live Mode
 **Usage**:
 ```
