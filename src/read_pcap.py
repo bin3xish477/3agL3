@@ -227,10 +227,10 @@ class ReadPCAP(NetSniff):
 
         time = time.strip()
         c = time.find(":")
-        hour, minute = int(time[:c].lstrip("0")), int(time[c+1:].lstrip("0"))
+        hour, minute = int(time[:c]), int(time[c+1:])
 
         for pkt in self.pcapfile:
-            pkt_time = datetime.fromtimestamp(pkt.time).strftime("%H:%M").lstrip("0")
+            pkt_time = datetime.fromtimestamp(pkt.time).strftime("%H:%M")
             c = pkt_time.find(":")
             pkt_hour, pkt_minute = int(pkt_time[:c]), int(pkt_time[c+1:])
             if pkt_hour < hour:
@@ -253,10 +253,10 @@ class ReadPCAP(NetSniff):
 
         time = time.strip()
         c = time.find(":")
-        hour, minute = int(time[:c].lstrip("0")), int(time[c+1:].lstrip("0"))
+        hour, minute = int(time[:c]), int(time[c+1:])
 
         for pkt in self.pcapfile:
-            pkt_time = datetime.fromtimestamp(pkt.time).strftime("%H:%M").lstrip("0")
+            pkt_time = datetime.fromtimestamp(pkt.time).strftime("%H:%M")
             c = pkt_time.find(":")
             pkt_hour, pkt_minute = int(pkt_time[:c]), int(pkt_time[c+1:])
             if pkt_hour > hour:
@@ -286,14 +286,12 @@ class ReadPCAP(NetSniff):
             exit(1)
 
         c = time_range[0].find(":")
-        start_hour, start_min = int(time_range[0][:c].lstrip("0")), \
-                int(time_range[0][c+1:].lstrip("0"))
+        start_hour, start_min = int(time_range[0][:c]), int(time_range[0][c+1:])
         c = time_range[1].find(":")
-        end_hour, end_min = int(time_range[1][:c].lstrip("0")), \
-                int(time_range[1][c+1:].lstrip("0"))
+        end_hour, end_min = int(time_range[1][:c]), int(time_range[1][c+1:])
  
         for pkt in self.pcapfile:
-            pkt_time = datetime.fromtimestamp(pkt.time).strftime("%H:%M").lstrip("0")
+            pkt_time = datetime.fromtimestamp(pkt.time).strftime("%H:%M")
             c = pkt_time.find(":")
             pkt_hour, pkt_minute = int(pkt_time[:c]), int(pkt_time[c+1:])
             if pkt_hour > start_hour and pkt_hour < end_hour:
@@ -310,24 +308,75 @@ class ReadPCAP(NetSniff):
         try:
             _ = search(r"(\d{4}/\d{2}/\d{2})", date).group(0)
         except AttributeError:
-          print("start date error...") 
+            print(
+                    "[ %sERROR%s ] SPECIFIED `-sd` MUST BE IN YEAR/MONTH/DAY FORMAT"
+                % (fg(9), attr(0))
+            )
+            exit(1)
+
+        year, month, day = date.split("/")
+        date = datetime(int(year), int(month), int(day))
+
+        for pkt in self.pcapfile:
+            pkt_date = datetime.fromtimestamp(pkt.time).strftime("%Y/%m/%d")
+            year, month, day = pkt_date.split("/")
+            pkt_date = datetime(int(year), int(month), int(day))
+
+            if pkt_date > date:
+                self.filtered_packets.append(pkt)
+        if len(self.filtered_packets) == 0:
+            print(
+                    f"[ %sATTENTION%s ] No packets occured after {date.date()}"
+                    % (fg(202), attr(0))
+            )
+            exit(1)
+        self.to_stdout(self.filtered_packets)
 
     def end_date(self, date):
         try:
             _ = search(r"(\d{4}/\d{2}/\d{2})", date).group(0)
         except AttributeError:
-            print("end date error...")
+            print(
+                "[ %sERROR%s ] SPECIFIED `-ed` MUST BE IN YEAR/MONTH/DAY FORMAT"
+                % (fg(9), attr(0))
+            )
+            exit(1)
+
+        year, month, day = date.split("/")
+        date = datetime(int(year), int(month), int(day))
+
+        for pkt in self.pcapfile:
+            pkt_date = datetime.fromtimestamp(pkt.time).strftime("%Y/%m/%d")
+            year, month, day = pkt_date.split("/")
+            pkt_date = datetime(int(year), int(month), int(day))
+            
+            if pkt_date < date:
+                self.filtered_packets.append(pkt)
+        if len(self.filtered_packets) == 0:
+            print(
+                    f"[ %sATTENTION%s ] No packets occured before {date.date()}"
+                    % (fg(202), attr(0))
+            )
+            exit(1)
+        self.to_stdout(self.filtered_packets)
 
     def date_range(self, dates):
         if len(dates) <= 1 or len(dates) > 2:
             print(
-                "[ %sATTENTION%s ] `-dr` requires a start date and an end date"
-                % (fg(202), attr(0))
+                    "[ %sATTENTION%s ] `-dr` requires a start date and an end date"
+                    % (fg(202), attr(0))
             )
             exit(1)
-        start_date = dates[0]
-        end_date = dates[1]
-        print(start_date, end_date)
+        try:
+            start_date = search(r"(\d{4}/\d{2}/\d{2})", dates[0]).group(0)
+            end_date = search(r"(\d{4}/\d{2}/\d{2})", dates[1]).group(0)
+        except AttributeError:
+            print(
+                    "[ %sATTENTION%s ] `-dr` DATES SHOULD BE IN YEAR/MONTH/DAY FORMAT"
+                    % (fg(202), attr(0)))
+        
+        for pkt in self.pcapfile:
+            pass
 
     def packet_count(self):
         """Returns number of packets within a PCAP file"""
