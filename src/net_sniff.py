@@ -62,7 +62,7 @@ class NetSniff:
 			if pkt[ICMP].type == 0:
 				icmp_type = "ECHO-REPLY"
 			elif pkt[ICMP].type == 8:
-				icmp_type = "ECHO-REQUEST"
+				icmp_type = "ECHO-REQ"
 			return (
 				f"%s%s@%s{date}" \
 				f" {src_mac} | {dst_mac} %s%s{proto}%s" \
