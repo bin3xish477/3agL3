@@ -375,10 +375,26 @@ class ReadPCAP(NetSniff):
                     "[ %sATTENTION%s ] `-dr` DATES SHOULD BE IN YEAR/MONTH/DAY FORMAT"
                     % (fg(202), attr(0)))
         
-        for pkt in self.pcapfile:
-            pass
+        start_year, start_month, start_day = dates[0].split("/")
+        start_date = datetime(int(start_year), int(start_month), int(start_day))
+        end_year, end_month, end_day = dates[1].split("/")
+        end_date = datetime(int(end_year), int(end_month), int(end_day))
 
-    def packet_count(self):
+        for pkt in self.pcapfile:
+            pkt_date = datetime.fromtimestamp(pkt.time).strftime("%Y/%m/%d")
+            year, month, day = pkt_date.split("/")
+            pkt_date = datetime(int(year), int(month), int(day))
+            
+            if pkt_date >= start_date and pkt_date <= end_date:
+                self.filtered_packets.append(pkt)
+        if len(self.filtered_packets) == 0:
+            print(
+                    "[ %sATTENTION%s ] No packets occured after %s or before %s"
+                    % (fg(202), attr(0), start_date.date(), end_date.date())
+            )
+            exit(1)
+        self.to_stdout(self.filtered_packets)
+
         """Returns number of packets within a PCAP file"""
         return len([cap for cap in self.pcapfile])
 
