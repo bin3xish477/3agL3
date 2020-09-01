@@ -5,6 +5,7 @@ from sys import exit
 from re import search
 from scapy.all import *
 from random import randint
+from prettytable import PrettyTable
 from src.net_sniff import NetSniff
 
 class PCAPParser(NetSniff):
@@ -339,33 +340,37 @@ class PCAPParser(NetSniff):
             ip_list = ([pkt[IP].src for pkt in capture if pkt.haslayer(IP)]
             + [pkt[IP].dst for pkt in capture if pkt.haslayer(IP)])
             ip_dict = Counter(ip_list)
-            
-            print("\n%sIP%s > COUNT" % (fg(randint(1, 254)), attr(0)))
-            print("_"*30)
+
+            column_header_1 = "%sIP Address%s" % (fg(75), attr(0))
+            column_header_2 = "Count"
+            t = PrettyTable([column_header_1, column_header_2], padding_width=3)
             for ip, count in ip_dict.most_common():
-                print("\'%s\' > %s" % (ip, count))
+                t.add_row([ip, count])
+            print(t)
 
-            # FILTERING PORT NUMBERS
-            port_list = ([pkt[IP].sport for pkt in capture if pkt.haslayer(TCP) or pkt.haslayer(UDP)]
-            + [pkt[IP].dport for pkt in capture if pkt.haslayer(TCP) or pkt.haslayer(UDP)])
-            port_dict = Counter(port_list)
-
-            print("\n%sPORT%s > COUNT" % (fg(randint(1, 254)), attr(0)))
-            print("_"*20)
+            try:
+                # FILTERING PORT NUMBERS
+                port_list = ([pkt[0].sport for pkt in capture if TCP in pkt or
+                    UDP in pkt]
+                + [pkt[0].dport for pkt in capture if TCP in pkt or UDP in pkt])
+                port_dict = Counter(port_list)
+            except Exception as err:
+                print(err)
+                
+            column_header_1 = "%sPORT%s" % (fg(75), attr(0))
+            column_header_2 = "Count"
+            t = PrettyTable([column_header_1, column_header_2], padding_width=3)
             for port, count in port_dict.most_common():
-                print("%s > %s" % (port, count))
-            print("\n", end="")
+                t.add_row([port, count])
+            print(t)
 
             # FILTERING MAC ADDRESSES
             mac_list = ([pkt[Ether].src for pkt in capture if pkt.haslayer(Ether)]
             + [pkt[Ether].dst for pkt in capture if pkt.haslayer(Ether)])
             mac_dict = Counter(mac_list)
 
-            print("%sMAC%s > COUNT" % (fg(randint(1, 254)), attr(0)))
-            print("_"*30)
             for mac, count in mac_dict.most_common():
-                print("%s > %s" % (mac, count))
-            print("\n", end="")
+                pass
 
             # FILTERING PACKET LENGTHS
             i = 0
@@ -375,7 +380,6 @@ class PCAPParser(NetSniff):
                     i += 1
                     pkt_len_sum += len(pkt)
             average_pkt_len = round(pkt_len_sum / i, 1)
-            print("-"*37)
             print("%sAVERAGE PACKET LENGTH%s: %s bytes" % (fg(109), attr(0), average_pkt_len))
 
             # FILTERING TTL

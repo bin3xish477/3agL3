@@ -395,6 +395,7 @@ class ReadPCAP(NetSniff):
             exit(1)
         self.to_stdout(self.filtered_packets)
 
+    def packet_count(self):
         """Returns number of packets within a PCAP file"""
         return len([cap for cap in self.pcapfile])
 
