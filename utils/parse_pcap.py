@@ -337,40 +337,47 @@ class PCAPParser(NetSniff):
         """
         try:
             # FILTERING IP ADDRESSES
-            ip_list = ([pkt[IP].src for pkt in capture if pkt.haslayer(IP)]
-            + [pkt[IP].dst for pkt in capture if pkt.haslayer(IP)])
+            ip_list = (
+                [pkt[IP].src for pkt in capture if pkt.haslayer(IP)]
+                + [pkt[IP].dst for pkt in capture if pkt.haslayer(IP)]
+            )
             ip_dict = Counter(ip_list)
 
-            column_header_1 = "%sIP Address%s" % (fg(75), attr(0))
-            column_header_2 = "Count"
-            t = PrettyTable([column_header_1, column_header_2], padding_width=3)
+            header_1, header_2 = "%sIP Address%s"%(fg(75), attr(0)), "Count"
+            t = PrettyTable([header_1, header_2], padding_width=3)
             for ip, count in ip_dict.most_common():
                 t.add_row([ip, count])
             print(t)
 
             try:
                 # FILTERING PORT NUMBERS
-                port_list = ([pkt[0].sport for pkt in capture if TCP in pkt or
-                    UDP in pkt]
-                + [pkt[0].dport for pkt in capture if TCP in pkt or UDP in pkt])
-                port_dict = Counter(port_list)
+                port_list = (
+                    [pkt[1].sport for pkt in capture if TCP in pkt or UDP in pkt]
+                    + [pkt[1].dport for pkt in capture if TCP in pkt or UDP in pkt]
+                )
             except Exception as err:
                 print(err)
                 
-            column_header_1 = "%sPORT%s" % (fg(75), attr(0))
-            column_header_2 = "Count"
-            t = PrettyTable([column_header_1, column_header_2], padding_width=3)
+            port_dict = Counter(port_list)
+            
+            header_1, header_2 = "%sPORT%s"%(fg(75), attr(0)), "Count"
+            t = PrettyTable([header_1, header_2], padding_width=3)
             for port, count in port_dict.most_common():
                 t.add_row([port, count])
             print(t)
 
             # FILTERING MAC ADDRESSES
-            mac_list = ([pkt[Ether].src for pkt in capture if pkt.haslayer(Ether)]
-            + [pkt[Ether].dst for pkt in capture if pkt.haslayer(Ether)])
+            mac_list = (
+                [pkt[Ether].src for pkt in capture if pkt.haslayer(Ether)]
+                + [pkt[Ether].dst for pkt in capture if pkt.haslayer(Ether)]
+            )
             mac_dict = Counter(mac_list)
 
+            header_1, header_2 = "%sMAC Address%s"%(fg(75), attr(0)), "Count"
+            t = PrettyTable([header_1, header_2], padding_width=3)
             for mac, count in mac_dict.most_common():
-                pass
+               t.add_row([mac, count]) 
+            print(t)
 
             # FILTERING PACKET LENGTHS
             i = 0
