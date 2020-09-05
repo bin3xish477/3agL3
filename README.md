@@ -5,6 +5,7 @@ Sniffing network traffic with Python for live capture observation or PCAP creati
 ```
 scapy
 colored
+prettytable
 ```
 
 ### Npcap/Tcpdump Installation
